@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.eenot.apps",
+      "sha256_cert_fingerprints": [
+        "0A:86:C0:01:72:75:D9:93:5F:C5:2B:15:F9:EA:4D:36:4D:87:02:F7:BD:DF:D9:04:3A:BF:C6:12:BB:9C:CB:24"
+      ]
+    }
+  }
+]
