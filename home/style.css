@@ -236,14 +236,13 @@ iframe {
 /* Увеличение размера контейнера iframe-wrapper */
 #iframe-wrapper {
     width: 100%;
-    height: 90%;
+    height: 95%;
 	max-width: 1000px;
-/*	overflow: hidden; */
 }
 
 /* Увеличение размера iframe */
 #iframe-display {
-    width: 100%;
-    height: 100%;
+    width: 99%;
+    height: 99%;
 	scrolling: yes;
 }
