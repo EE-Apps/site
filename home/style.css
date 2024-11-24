@@ -278,4 +278,5 @@ iframe {
 	left: 50px;
     width: 97%;
     height: 100%;
+	scrolling: yes;
 }
