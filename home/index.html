@@ -44,20 +44,29 @@
     <main class="main-content">
         <div class="search-container">
             <div class="search-bar-wrapper">
-                <!-- Search engine selection -->
-                <select id="search-engine-select" class="search-dropdown">
-                    <option value="google" selected>Google</option>
-                    <option value="bing">Bing</option>
-                    <option value="yandex">Yandex</option>
-                </select>
+				<div class="search-main">
+					<!-- Search engine selection -->
+					<select id="search-engine-select" class="search-dropdown">
+						<option value="google" selected>Google</option>
+						<option value="bing">Bing</option>
+						<option value="yandex">Yandex</option>
+						<option value="openai">Open AI</option>
+						<option value="wru">Wiki RU</option>
+						<option value="wen">Wiki EN</option>
+						<option value="wua">Wiki UA</option>
+					</select>
 
-                <!-- Search input -->
-                <input type="text" id="search-bar" placeholder="Search the web..." autocomplete="off">
+					<!-- Search input -->
+					<input type="text" id="search-bar" placeholder="Search the web..." autocomplete="off">
 
-                <!-- AI Assistant Button -->
-                <button id="assistant-btn">
-                    <img id="assistant-icon" src="./icons/gemini.png" alt="AI">
-                </button>
+					<!-- AI Assistant Button -->
+					<button id="assistant-btn">
+						<img id="assistant-icon" src="./icons/gemini.png" alt="AI">
+					</button>
+				</div>
+				<div class="update-extension" id="update-extension">
+					<a href="https://google.com" class="update-link">Click to download new version of extension</a>
+				</div>
             </div>
         </div>
     </main>

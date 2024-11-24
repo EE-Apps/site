@@ -22,9 +22,9 @@ body {
 body.dark {
     --bg-color: #2c2c2c;
     --text-color: #f1f1f1;
-    --card-bg: #444;
-    --search-bar-bg: #444;
-    --search-engine-bg: #444;
+    --card-bg: #565656;
+    --search-bar-bg: #565656;
+    --search-engine-bg: #565656;
 }
 
 /* Dark theme toggle button */
@@ -78,10 +78,44 @@ body.dark {
     justify-content: center;
     align-items: center;
     position: relative;
+	flex-direction: column;
+	
+}
+
+.update-extension {
+	
+    display: none;
+    align-items: center;
+    overflow: hidden;
+    height: 35px;
+	
+	margin: 10px 0;
+}
+
+.update-link {
+	color: inherit;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.update-link:hover {
+	text-decoration: underline;
 }
 
 /* Search bar styles */
 .search-bar-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--card-bg);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	margin: 10px 0;
+	flex-direction: column;
+}
+
+.search-main {
     display: flex;
     align-items: center;
     background: var(--card-bg);
