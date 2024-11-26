@@ -1,5 +1,5 @@
 // alert("1914")
-let thisversion = "1.1.0";
+let thisversion = "1.0.0";
 const searchEngines = {
     google: {
         url: "https://www.google.com/search?q=",
@@ -157,3 +157,22 @@ function compareVersions(version1, version2) {
 
     return 0;
 }
+
+function checkBrowserAndRedirect() {
+    // Получаем информацию о браузере
+    const userAgent = navigator.userAgent;
+
+    // Проверяем, используется ли браузер Mozilla Firefox
+    if (userAgent.indexOf("Firefox") !== -1) {
+        window.location.href = "https://raw.githubusercontent.com/EE-Apps/site/refs/heads/main/home/ee-new-tab-extension-firefox.zip";
+    } else {
+        window.location.href = "https://raw.githubusercontent.com/EE-Apps/site/refs/heads/main/home/ee-new-tab-extension-chromium.zip";
+    }
+}
+
+// Обработчик события для ссылки
+document.getElementById("update-link").addEventListener("click", function(event) {
+	console.log("download update")
+    event.preventDefault(); // Предотвращает переход по ссылке
+    checkBrowserAndRedirect(); // Вызывает функцию для проверки браузера и перенаправления
+});
