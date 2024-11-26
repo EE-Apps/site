@@ -133,7 +133,7 @@ body.dark {
     background: var(--search-engine-bg);
     cursor: pointer;
     appearance: none;
-    width: 150px;
+	width: 150px;
     color: var(--text-color);
 }
 
@@ -233,15 +233,11 @@ body.dark {
 .iframe-wrapper {
     position: absolute;
     top: 10px;  /* Adjust as needed */
-    left: 90px;  /* Adjust to be right of sidebar */
-    width: 400px;  /* Adjust width as needed */
-    height: 300px;  /* Adjust height as needed */
+    left: 10px;  /* Adjust to be right of sidebar */
     background: var(--card-bg);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border: none;
     border-radius: 8px;
-    pointer-events: auto;  /* Enable interaction */
-    overflow: auto;  /* или visible, если нужно, чтобы прокрутка была у контейнера */
     z-index: 9999;  /* Make sure this is the highest z-index on the page */
 }
 
@@ -262,21 +258,18 @@ body.dark {
 	overflow: hidden;
 }
 
-/* Для iframe, чтобы они были рядом с кнопкой */
-iframe {
-    margin-left: 10px; /* Расстояние между кнопкой и iframe */
-}
-
 /* Увеличение размера контейнера iframe-wrapper */
 #iframe-wrapper {
     width: 100%;
-    height: 95%;
+    height: 90%;
 	max-width: 1000px;
+	max-width: 100%
+	max-height: 90%
 }
 
 /* Увеличение размера iframe */
 #iframe-display {
-    width: 99%;
-    height: 99%;
+    width: 100w%;
+    height: 100%;
 	scrolling: yes;
 }
