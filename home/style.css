@@ -82,6 +82,7 @@ body.dark {
 	
 }
 
+/* YOUR VERSION IS OLD */
 .update-extension {
 	
     display: none;
@@ -99,6 +100,27 @@ body.dark {
 }
 
 .update-link:hover {
+	text-decoration: underline;
+}
+
+/* YOUR VERSION IS VERY-VERY-VERY NEW */
+.dev-extension {
+	
+    display: none;
+    align-items: center;
+    overflow: hidden;
+    height: 35px;
+	
+	margin: 10px 0;
+}
+
+.dev-link {
+	color: inherit;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.dev-link:hover {
 	text-decoration: underline;
 }
 
@@ -270,4 +292,5 @@ body.dark {
 
 .search-container {
 	width: 75%;
+	max-width: 1000px;
 }

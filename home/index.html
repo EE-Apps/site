@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EE Home Page</title>
     <link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="apps/themes.css">
+	<link rel="icon" href="ico.png">
 </head>
 <body>
     <!-- Button for Dark Theme Toggle -->
@@ -12,6 +14,9 @@
 
     <!-- Sidebar for app buttons -->
     <aside class="sidebar">
+        <button class="app-btn" data-company="ee">
+            <img src="./icons/ee.svg" alt="EE">
+        </button>
         <button class="app-btn" data-company="microsoft">
             <img src="./icons/microsoft.svg" alt="Microsoft">
         </button>
@@ -23,9 +28,6 @@
         </button>
         <button class="app-btn" data-company="vk">
             <img src="./icons/vk.svg" alt="VContacte">
-        </button>
-        <button class="app-btn" data-company="ee">
-            <img src="./icons/ee.svg" alt="EE">
         </button>
     </aside>
 
@@ -59,6 +61,9 @@
 				</div>
 				<div class="update-extension" id="update-extension">
 					<a href="https://google.com" class="update-link">Click to download new version of extension</a>
+				</div>
+				<div class="dev-extension" id="dev-extension">
+					<a class="dev-link">This is dev-version</a>
 				</div>
             </div>
         </div>

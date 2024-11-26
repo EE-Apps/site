@@ -14,6 +14,28 @@ body {
     padding: 20px;
 }
 
+body.dark {
+    --bg-color: #2c2c2c;
+    --text-color: #f1f1f1;
+    --card-bg: #565656;
+    --search-bar-bg: #565656;
+    --search-engine-bg: #565656;
+}
+
+body.dark {
+    background-color: #3c3c3c;
+    color: #f1f1f1;
+}
+
+body.dark .app-item {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+body.dark .app-item p {
+    color: var(--text-color);
+}
+
 header h1 {
     font-size: 36px;
     font-weight: 500;
@@ -26,6 +48,7 @@ header h1 {
     gap: 20px;
     width: 100%;
     max-width: 800px;
+	color: #ffffff;
 }
 
 .app-item {

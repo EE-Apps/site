@@ -1,4 +1,5 @@
 // alert("1914")
+let thisversion = "1.1.0";
 const searchEngines = {
     google: {
         url: "https://www.google.com/search?q=",
@@ -38,6 +39,7 @@ const themeToggle = document.getElementById("theme-toggle");
 const iframeWrapper = document.getElementById("iframe-wrapper");
 const iframeDisplay = document.getElementById("iframe-display");
 const updateExtension = document.getElementById("update-extension");
+const devExtension = document.getElementById("dev-extension");
 
 document.addEventListener("DOMContentLoaded", () => {
     // Retrieve and apply saved search engine settings
@@ -113,7 +115,11 @@ function toggleTheme() {
     document.body.classList.toggle("dark");
     const newTheme = document.body.classList.contains("dark") ? "dark" : "light";
     localStorage.setItem("theme", newTheme);
+    
+    const iframe = document.getElementById('iframe-display');
+    iframe.contentWindow.postMessage({ type: 'themeChanged', theme: newTheme }, '*');
 }
+
 
 fetch("https://raw.githubusercontent.com/EE-Apps/site/refs/heads/main/home/ver.txt")
     .then(response => response.text())
@@ -125,7 +131,11 @@ fetch("https://raw.githubusercontent.com/EE-Apps/site/refs/heads/main/home/ver.t
         if (compareVersions(thisversion, version) < 0) {
             updateExtension.style.display = 'block'; 
         } else {
-            updateExtension.style.display = 'none'; 
+			if (compareVersions(thisversion, version) > 0) {
+				devExtension.style.display = 'block'; 
+			} else {
+				updateExtension.style.display = 'none'; 
+			}
         }
     })
     .catch(error => {
