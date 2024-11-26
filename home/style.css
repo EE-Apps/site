@@ -3,28 +3,9 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background: var(--bg-color);
-    color: var(--text-color);
     display: flex;
     height: 100vh;
     transition: background 0.3s ease, color 0.3s ease;
-}
-
-/* Theme variables */
-:root {
-    --bg-color: #f9f9f9;
-    --text-color: #333;
-    --card-bg: #fff;
-    --search-bar-bg: #fff;
-    --search-engine-bg: #fff;
-}
-
-body.dark {
-    --bg-color: #2c2c2c;
-    --text-color: #f1f1f1;
-    --card-bg: #565656;
-    --search-bar-bg: #565656;
-    --search-engine-bg: #565656;
 }
 
 /* Dark theme toggle button */
