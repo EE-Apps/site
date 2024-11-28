@@ -1,5 +1,5 @@
 // alert("1914")
-let thisversion = "1.1.0";
+let thisversion = "1.2.0";
 const searchEngines = {
     google: {
         url: "https://www.google.com/search?q=",
@@ -51,9 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Apply saved theme (light or dark)
     const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-        document.body.classList.add("dark");
-    }
+	document.body.classList.add(savedTheme);
 });
 
 // Event listeners
@@ -112,8 +110,17 @@ function loadIframe(company) {
 
 // Toggle between light and dark themes
 function toggleTheme() {
-    document.body.classList.toggle("dark");
-    const newTheme = document.body.classList.contains("dark") ? "dark" : "light";
+	
+	
+	
+	if (navigator.userAgent.indexOf('Firefox') !== -1) {
+		document.body.classList.toggle("moziladark"); // Браузер - Firefox
+	} else {
+		document.body.classList.toggle("dark"); // Другой браузер
+	}
+	let newTheme;
+	newTheme = document.body.classList.value;
+	console.log(newTheme)
     localStorage.setItem("theme", newTheme);
     
     const iframe = document.getElementById('iframe-display');
