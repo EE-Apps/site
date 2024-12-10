@@ -30,8 +30,7 @@ async function getWeatherData({ lat, lon, metric = false }) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         console.error("Error fetching weather data:", error);
         return { error: "Failed to fetch weather data." };
@@ -91,7 +90,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     const daysOfWeek = ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"];
-
     const hoursContainer = document.getElementById("hours-container");
     const daysContainer = document.getElementById("days-container");
 
@@ -113,12 +111,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
+    // Clear previous data
     hoursContainer.innerHTML = "";
     daysContainer.innerHTML = "";
 
+    // Display hourly data
     data.hourly.time.slice(closestHourIndex).forEach((time, index) => {
         const actualIndex = closestHourIndex + index;
-        const temperature = Math.round(data.hourly.temperature_2m?.[actualIndex]); // Округление температуры
+        const temperature = Math.round(data.hourly.temperature_2m?.[actualIndex]); // Rounded temperature
         const weatherCode = data.hourly.weather_code?.[actualIndex];
         const weatherIcon = weatherIcons[weatherCode] || "default.png";
 
@@ -136,10 +136,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         hoursContainer.appendChild(card);
     });
 
+    // Display daily forecast data
     data.daily.time.forEach((time, index) => {
         const dayOfWeek = daysOfWeek[new Date(time).getDay()];
-        const minTemp = Math.round(data.daily.temperature_2m_min?.[index]); // Округление температуры
-        const maxTemp = Math.round(data.daily.temperature_2m_max?.[index]); // Округление температуры
+        const minTemp = Math.round(data.daily.temperature_2m_min?.[index]); // Rounded min temperature
+        const maxTemp = Math.round(data.daily.temperature_2m_max?.[index]); // Rounded max temperature
         const weatherCode = data.daily.weather_code?.[index];
         const weatherIcon = weatherIcons[weatherCode] || "default.png";
 
@@ -157,6 +158,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         daysContainer.appendChild(card);
     });
 
+    // Display current weather
     if (data.current_weather) {
         const temperature = data.current_weather.temperature;
         const windSpeed = data.current_weather.wind_speed;
