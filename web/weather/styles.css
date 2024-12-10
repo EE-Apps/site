@@ -18,7 +18,7 @@ body, html {
     border-radius: 20px;
     background-color: #2e2e2e;
     max-width: 500px;
-    width: 70%;
+    width: 100%;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
