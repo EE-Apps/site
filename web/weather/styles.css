@@ -71,6 +71,7 @@ body, html {
 
 .div-now {
     width: 100%;
+	max-width: 500px;
     aspect-ratio: 1;
     background-image: url('sunrise.png');
     background-size: cover;
