@@ -208,3 +208,20 @@ document.addEventListener("DOMContentLoaded", function () {
     // Вызываем обновление погоды для выбранного города
     updateAll(globalLat, globalLon);
 });
+
+
+
+// Получаем элемент выпадающего списка
+const dropdownCity = document.getElementById('city-select');
+
+// Проверяем, если значение сохранено в localStorage, устанавливаем его в качестве выбранного
+const savedCity = localStorage.getItem('selectedCity');
+if (savedCity) {
+    dropdownCity.value = savedCity;
+}
+
+// Слушаем изменение выбора в выпадающем списке
+dropdownCity.addEventListener('change', function () {
+    localStorage.setItem('selectedCity', dropdownCity.value);
+    console.log("сохранён город:", dropdownCity.value)
+});
