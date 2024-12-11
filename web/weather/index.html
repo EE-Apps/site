@@ -9,49 +9,79 @@
 </head>
 <body>
     <div class="container">
-            <div class="div-now">
+
+        <div class="div-now">
+            <div class="bar">
+                <select id="city-select" class="city-select">
+                    <option value="Tiraspol" data-lat="46.8406" data-lon="29.4744">Тирасполь</option>
+                    <option value="Bender" data-lat="46.1833" data-lon="29.0833">Бендеры</option>
+                    <option value="Kiev" data-lat="50.4501" data-lon="30.5236">Киев</option>
+                    <option value="Odessa" data-lat="46.4825" data-lon="30.7233">Одесса</option>
+                    <option value="Brovary" data-lat="50.4542" data-lon="30.8625">Бровары</option>
+                    <option value="Moscow" data-lat="55.7558" data-lon="37.6173">Москва</option>
+                    <option value="Leningrad" data-lat="59.9343" data-lon="30.3351">Ленинград</option>
+                    <option value="Krasnodar" data-lat="45.0355" data-lon="38.9753">Краснодар</option>
+                    <option value="Yekaterinburg" data-lat="56.8389" data-lon="60.6057">Екатеринбург</option>
+                    <option value="Kemerovo" data-lat="55.3543" data-lon="86.0789">Кемерово</option>
+                    <option value="Novokuznetsk" data-lat="53.7566" data-lon="87.0977">Новокузнецк</option>
+                    <option value="Astana" data-lat="51.1694" data-lon="71.4491">Астана</option>
+                    <option value="Minsk" data-lat="53.9" data-lon="27.5667">Минск</option>
+                    <option value="Bobruisk" data-lat="53.1500" data-lon="29.2333">Бобруйск</option>
+                    <option value="Gomel" data-lat="52.4443" data-lon="30.9754">Гомель</option>
+                </select>
                 <button class="settings" id="settings">⚙️</button>
-                <a class="temperature" id="temperature">   </a>
-                <div class="div-detalis" id="div-detalis">
-                    <div class="detalis" id="water">
-                        <img src="water.png" class="detalis-ico" />
-                        <a class="detalis-text" id="humidity">%</a>
-                    </div>
-                    <div class="detalis" id="wind">
-                        <img src="wind.png" class="detalis-ico" />
-                        <a class="detalis-text" id="wind-speed">м/с</a>
-                    </div>
-                    <div class="detalis" id="mmrrst">
-                        <img src="mmrtst.png" class="detalis-ico" />
-                        <a class="detalis-text" id="pressure">мм рт ст</a>
-                    </div>
+            </div>
+            <a class="temperature" id="temperature">   </a>
+            <div class="div-detalis" id="div-detalis">
+                <div class="detalis" id="water">
+                    <img src="water.png" class="detalis-ico" />
+                    <a class="detalis-text" id="humidity">%</a>
+                </div>
+                <div class="detalis" id="wind">
+                    <img src="wind.png" class="detalis-ico" />
+                    <a class="detalis-text" id="wind-speed">м/с</a>
+                </div>
+                <div class="detalis" id="mmrrst">
+                    <img src="mmrtst.png" class="detalis-ico" />
+                    <a class="detalis-text" id="pressure">мм рт ст</a>
                 </div>
             </div>
+        </div>
 
-            <!-- Почасовой прогноз (48 часов) -->
-            <div class="div-hours cards" id="div-hours">
-                <div class="scroll-container" id="hours-container">
-                    <div class="card hide" id="hour-1">
-                        <a class="c-time" id="time-1">8:00</a>
-                        <img class="c-img" src="sun.svg" />
-                        <a class="c-temp" id="temp-1">5°</a>
-                    </div>
+        <!-- Почасовой прогноз (48 часов) -->
+        <div class="div-hours cards" id="div-hours">
+            <div class="scroll-container" id="hours-container">
+                <div class="card hide" id="hour-1">
+                    <a class="c-time" id="time-1">8:00</a>
+                    <img class="c-img" src="sun.svg" />
+                    <a class="c-temp" id="temp-1">5°</a>
                 </div>
             </div>
+        </div>
 
-            <!-- Подневной прогноз (на сегодня и ближайшие 10 дней) -->
-            <div class="div-detalis cards" id="div-days">
-                <div class="scroll-container" id="days-container">
-                    <div class="card hide" id="day-1">
-                        <a class="c-time" id="day-name-1">ПН</a>
-                        <img class="c-img" src="sun.svg" />
-                        <a class="c-temp" id="day-temp-1">1° - 15°</a>
-                    </div>
+        <!-- Подневной прогноз (на сегодня и ближайшие 10 дней) -->
+        <div class="div-detalis cards" id="div-days">
+            <div class="scroll-container" id="days-container">
+                <div class="card hide" id="day-1">
+                    <a class="c-time" id="day-name-1">ПН</a>
+                    <img class="c-img" src="sun.svg" />
+                    <a class="c-temp" id="day-temp-1">1° - 15°</a>
                 </div>
             </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
     <script src="now.js"></script>
-</body>
-</html>
+
+    <script>
+        document.getElementById("city-select").addEventListener("change", async function () {
+            const selectedOption = this.options[this.selectedIndex];
+            const lat = selectedOption.getAttribute("data-lat");
+            const lon = selectedOption.getAttribute("data-lon");
+
+            const data = await getWeatherData({ lat, lon, metric: true });
+
+            // Обновляем данные на странице в зависимости от выбранного города
+            document.getElementById("temperature").innerText = data.current_weather.temperature + "°";
+            document.getElementById("hu

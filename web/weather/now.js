@@ -1,5 +1,5 @@
 // URL API
-const NOWapiUrl = "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=Europe%2FMoscow&forecast_days=1";
+let NOWapiUrl = "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=Europe%2FMoscow&forecast_days=1";
 
 // Получение элементов DOM
 const NOWtemperatureElement = document.getElementById("temperature");
@@ -18,7 +18,12 @@ function NOWconvertWindSpeedToMps(kmh) {
 }
 
 // Функция для получения данных и обновления элементов
-async function NOWupdateWeatherData() {
+async function NOWupdateWeatherData(lat, lon) {
+    console.log("NOWupdateAll");
+
+    // Формируем URL API с использованием переданных lat и lon
+    let NOWapiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=Europe%2FMoscow&forecast_days=1`;
+
     try {
         const NOWresponse = await fetch(NOWapiUrl);
         if (!NOWresponse.ok) {
@@ -42,5 +47,5 @@ async function NOWupdateWeatherData() {
     }
 }
 
+
 // Вызов функции для обновления данных
-NOWupdateWeatherData();

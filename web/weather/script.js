@@ -1,3 +1,7 @@
+// Создаём глобальную переменную
+let globalLat = 0;
+let globalLon = 0;
+
 async function getWeatherData({ lat, lon, metric = false }) {
     const weatherCodes = [
         "Cloud development not observed or not observable",
@@ -37,21 +41,25 @@ async function getWeatherData({ lat, lon, metric = false }) {
     }
 }
 
-async function updateWeather() {
-    const lat = 46.8406; // Latitude
-    const lon = 29.4744; // Longitude
+async function updateWeather(lat, lon) {
     const metric = true; // Metric units
+    console.log("lat:", globalLat, "lon:", globalLon);
 
+    // Передаем lat и lon в getWeatherData
     return await getWeatherData({ lat, lon, metric });
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
+async function updateAll(lat, lon) {
+    // Обновляем погоду с переданными lat и lon
+    NOWupdateWeatherData(globalLat, globalLon);
+    const data = await updateWeather(globalLat, globalLon);
+
+    console.log("updateAll");
+
     const temperatureElement = document.getElementById("temperature");
     const windSpeedElement = document.getElementById("wind-speed");
     const humidityElement = document.getElementById("humidity");
     const pressureElement = document.getElementById("pressure");
-
-    const data = await updateWeather();
 
     if (!data || data.error) {
         console.error("Error: Weather data is unavailable or invalid.");
@@ -127,7 +135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const card = document.createElement("div");
         card.className = "card";
 
-        card.innerHTML = `
+        card.innerHTML = ` 
             <a class="c-time">${new Date(time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</a>
             <img class="c-img" src="${weatherIcon}" />
             <a class="c-temp">${temperature}°C</a>
@@ -149,7 +157,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const card = document.createElement("div");
         card.className = "card";
 
-        card.innerHTML = `
+        card.innerHTML = ` 
             <a class="c-time">${dayOfWeek}</a>
             <img class="c-img" src="${weatherIcon}" />
             <a class="c-temp">${minTemp}°C - ${maxTemp}°C</a>
@@ -157,7 +165,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         daysContainer.appendChild(card);
     });
-});
+};
 
 const hourscontainer = document.getElementById('hours-container');
 hourscontainer.addEventListener('wheel', (evt) => {
@@ -169,4 +177,34 @@ const dayscontainer = document.getElementById('days-container');
 dayscontainer.addEventListener('wheel', (evt) => {
     evt.preventDefault();
     dayscontainer.scrollLeft += evt.deltaY;
+});
+
+document.getElementById("city-select").addEventListener("change", async function () {
+    const selectElement = document.getElementById("city-select");
+
+    // Получаем выбранный option
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+    // Извлекаем данные из атрибутов
+    globalLat = selectedOption.getAttribute('data-lat');
+    globalLon = selectedOption.getAttribute('data-lon');
+
+    console.log(`Latitude: ${globalLat}, Longitude: ${globalLon}`);
+
+    // Передаем lat и lon в updateAll
+    await updateAll(globalLat, globalLon);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const selectElement = document.getElementById("city-select");
+
+    // Получаем первый город в списке
+    const firstOption = selectElement.options[0];
+
+    // Извлекаем данные первого города
+    globalLat = firstOption.getAttribute('data-lat');
+    globalLon = firstOption.getAttribute('data-lon');
+
+    // Вызываем обновление погоды для выбранного города
+    updateAll(globalLat, globalLon);
 });
