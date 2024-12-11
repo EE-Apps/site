@@ -5,24 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Прогноз погоды</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="scroll.css">
 </head>
 <body>
     <div class="container">
             <div class="div-now">
                 <button class="settings" id="settings">⚙️</button>
-                <a class="temperature" id="temperature">4°</a>
+                <a class="temperature" id="temperature">   </a>
                 <div class="div-detalis" id="div-detalis">
                     <div class="detalis" id="water">
                         <img src="water.png" class="detalis-ico" />
-                        <a class="detalis-text" id="humidity">ВЛ%</a>
+                        <a class="detalis-text" id="humidity">%</a>
                     </div>
                     <div class="detalis" id="wind">
                         <img src="wind.png" class="detalis-ico" />
-                        <a class="detalis-text" id="wind-speed">- м/с</a>
+                        <a class="detalis-text" id="wind-speed">м/с</a>
                     </div>
                     <div class="detalis" id="mmrrst">
                         <img src="mmrtst.png" class="detalis-ico" />
-                        <a class="detalis-text" id="pressure">- мм рт ст</a>
+                        <a class="detalis-text" id="pressure">мм рт ст</a>
                     </div>
                 </div>
             </div>
@@ -30,7 +31,7 @@
             <!-- Почасовой прогноз (48 часов) -->
             <div class="div-hours cards" id="div-hours">
                 <div class="scroll-container" id="hours-container">
-                    <div class="card" id="hour-1">
+                    <div class="card hide" id="hour-1">
                         <a class="c-time" id="time-1">8:00</a>
                         <img class="c-img" src="sun.svg" />
                         <a class="c-temp" id="temp-1">5°</a>
@@ -41,7 +42,7 @@
             <!-- Подневной прогноз (на сегодня и ближайшие 10 дней) -->
             <div class="div-detalis cards" id="div-days">
                 <div class="scroll-container" id="days-container">
-                    <div class="card" id="day-1">
+                    <div class="card hide" id="day-1">
                         <a class="c-time" id="day-name-1">ПН</a>
                         <img class="c-img" src="sun.svg" />
                         <a class="c-temp" id="day-temp-1">1° - 15°</a>
@@ -51,5 +52,6 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="now.js"></script>
 </body>
 </html>

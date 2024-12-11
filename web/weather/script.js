@@ -157,29 +157,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         daysContainer.appendChild(card);
     });
+});
 
-    // Display current weather
-    if (data.current_weather) {
-        const temperature = data.current_weather.temperature;
-        const windSpeed = data.current_weather.wind_speed;
-        const closestHourIndex = findClosestFutureHourIndex(data.hourly.time);
-        const currentHumidity = data.hourly.relative_humidity_2m?.[closestHourIndex];
-        const currentPressure = data.hourly.surface_pressure?.[closestHourIndex];
+const hourscontainer = document.getElementById('hours-container');
+hourscontainer.addEventListener('wheel', (evt) => {
+    evt.preventDefault();
+    hourscontainer.scrollLeft += evt.deltaY;
+});
 
-        if (temperatureElement) {
-            temperatureElement.textContent = `${Math.round(temperature)}°`;
-        }
-
-        if (windSpeedElement) {
-            windSpeedElement.textContent = `Скорость ветра: ${windSpeed} м/с`;
-        }
-
-        if (humidityElement && currentHumidity !== undefined) {
-            humidityElement.textContent = `Влажность: ${currentHumidity}%`;
-        }
-
-        if (pressureElement && currentPressure !== undefined) {
-            pressureElement.textContent = `Давление: ${Math.round(currentPressure)} гПа`;
-        }
-    }
+const dayscontainer = document.getElementById('days-container');
+dayscontainer.addEventListener('wheel', (evt) => {
+    evt.preventDefault();
+    dayscontainer.scrollLeft += evt.deltaY;
 });
