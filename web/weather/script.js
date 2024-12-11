@@ -3,49 +3,40 @@ let globalLat = 0;
 let globalLon = 0;
 
 async function getWeatherData({ lat, lon, metric = false }) {
-    const weatherCodes = [
-        "Cloud development not observed or not observable",
-        "Clouds generally dissolving or becoming less developed",
-        "State of sky on the whole unchanged",
-        "Clouds generally forming or developing",
-        "Visibility reduced by smoke",
-        "Haze",
-        "Widespread dust in suspension",
-        "Dust or sand raised by wind",
-        "Well developed dust whirl(s) or sand whirl(s)",
-        "Duststorm or sandstorm within sight",
-        "Mist",
-        "Patches of shallow fog or ice fog",
-        "More or less continuous fog or ice fog",
-        "Lightning visible, no thunder heard",
-        "Precipitation within sight, not reaching the ground",
-        "Precipitation within sight, reaching the ground or sea, distant",
-        "Precipitation within sight, reaching the ground or sea, near",
-        "Thunderstorm, no precipitation",
-        "Squalls",
-        "Funnel cloud (tornado cloud or water-spout)",
-    ];
+    if (navigator.onLine) {
+        const units = metric ? "metric" : "imperial";
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max&timezone=auto&units=${units}&forecast_days=14`;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const prognozVremenno = await response.json();
 
-    const units = metric ? "metric" : "imperial";
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max&timezone=auto&units=${units}&forecast_days=14`;
-
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            // Сохраняем данные в localStorage
+            localStorage.setItem('Prognoz', JSON.stringify(prognozVremenno));
+            return prognozVremenno;
+        } catch (error) {
+            console.error("Error fetching weather data:", error);
+            // Возвращаем данные из localStorage в случае ошибки
+            const savedData = localStorage.getItem('Prognoz');
+            if (savedData) {
+                return JSON.parse(savedData);
+            }
+            return { error: "Failed to fetch weather data and no saved data available." };
         }
-        return await response.json();
-    } catch (error) {
-        console.error("Error fetching weather data:", error);
-        return { error: "Failed to fetch weather data." };
+    } else {
+        // Возвращаем данные из localStorage, если нет интернета
+        const savedData = localStorage.getItem('Prognoz');
+        if (savedData) {
+            return JSON.parse(savedData);
+        }
+        return { error: "No internet and no saved weather data." };
     }
 }
 
 async function updateWeather(lat, lon) {
     const metric = true; // Metric units
-    console.log("lat:", globalLat, "lon:", globalLon);
-
-    // Передаем lat и lon в getWeatherData
     return await getWeatherData({ lat, lon, metric });
 }
 
