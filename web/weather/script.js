@@ -219,10 +219,12 @@ dropdownCity.addEventListener('change', function () {
 
 function setBackground(className) {
     const divNow = document.querySelector('.div-now');
+    console.log(className);
 
     // Удаляем все возможные фоны
-    divNow.classList.remove('weather-sun', 'weather-cloude', 'weather-rain', 'weather-snow');
+    divNow.classList.remove('weather-sun', 'weather-cloudy', 'weather-rain', 'weather-snow');
 
+    console.log(className);
     className = "weather-" + className;
 
     // Добавляем новый класс
