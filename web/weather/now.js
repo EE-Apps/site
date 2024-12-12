@@ -21,9 +21,13 @@ function NOWconvertWindSpeedToMps(kmh) {
 async function NOWupdateWeatherData(lat, lon) {
     console.log("NOWupdateAll");
 
+    // Формируем URL с координатами
+    const NOWapiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=Europe%2FMoscow&forecast_days=1`;
+
     // Проверка наличия данных в localStorage
     const savedWeatherData = localStorage.getItem('currentWeatherData');
-    console.log("load from LS")
+    console.log("load from LS");
+
     if (savedWeatherData && !navigator.onLine) {
         // Если данные есть в localStorage и нет интернета, показываем сохраненные данные
         const savedData = JSON.parse(savedWeatherData);
@@ -54,7 +58,7 @@ async function NOWupdateWeatherData(lat, lon) {
 
                 // Сохраняем данные в localStorage
                 localStorage.setItem('currentWeatherData', JSON.stringify(NOWcurrentWeather));
-                console.log("save on LS")
+                console.log("save on LS");
             } else {
                 console.error("Нет данных о текущей погоде");
             }
@@ -66,6 +70,7 @@ async function NOWupdateWeatherData(lat, lon) {
         console.log("Нет подключения к интернету. Показаны данные из локального хранилища.");
     }
 }
+
 
 // Вызов функции для обновления данных
 NOWupdateWeatherData(46.8406, 29.4744);
