@@ -11,6 +11,7 @@
     <div class="container">
 
         <div class="div-now">
+            <!-- <img src="back/rain.png" class="div-back-img"> -->
             <div class="bar">
                 <select id="city-select" class="city-select">
                     <option value="Tiraspol" data-lat="46.8406" data-lon="29.4744">[ПМР] Тирасполь</option>
@@ -73,15 +74,5 @@
 
     <script src="script.js"></script>
     <script src="now.js"></script>
-
-    <script>
-        document.getElementById("city-select").addEventListener("change", async function () {
-            const selectedOption = this.options[this.selectedIndex];
-            const lat = selectedOption.getAttribute("data-lat");
-            const lon = selectedOption.getAttribute("data-lon");
-
-            const data = await getWeatherData({ lat, lon, metric: true });
-
-            // Обновляем данные на странице в зависимости от выбранного города
-            document.getElementById("temperature").innerText = data.current_weather.temperature + "°";
-            document.getElementById("hu
+</body>
+</html>

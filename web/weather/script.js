@@ -216,3 +216,17 @@ dropdownCity.addEventListener('change', function () {
     localStorage.setItem('selectedCity', dropdownCity.value);
     console.log("сохранён город:", dropdownCity.value)
 });
+
+function setBackground(className) {
+    const divNow = document.querySelector('.div-now');
+
+    // Удаляем все возможные фоны
+    divNow.classList.remove('weather-sun', 'weather-cloude', 'weather-rain', 'weather-snow');
+
+    className = "weather-" + className;
+
+    // Добавляем новый класс
+    divNow.classList.add(className);
+}
+
+setBackground('rain')
