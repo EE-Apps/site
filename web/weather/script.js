@@ -230,5 +230,3 @@ function setBackground(className) {
     // Добавляем новый класс
     divNow.classList.add(className);
 }
-
-setBackground('rain')
