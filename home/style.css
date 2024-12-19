@@ -8,9 +8,13 @@ body {
     transition: background 0.3s ease, color 0.3s ease;
 }
 
+.all {
+    height: 100%;
+    width: 100%;
+}
+
 /* Dark theme toggle button */
 .theme-toggle {
-    position: absolute;
     top: 10px;
     right: 10px;
     background: var(--card-bg);
@@ -28,15 +32,61 @@ body {
     z-index: 10;
 }
 
+/* Quick Bar */
+.qbar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 40px;
+    justify-content: center; /* Центрирование по вертикали */
+    transition: background 0.3s ease, color 0.3s ease;
+    z-index: 10;
+    display: flex; /* Используется flexbox */
+    flex-direction: column; /* Расположение элементов в колонку */
+    align-items: center; /* Центрирование по горизонтали */
+    padding: 10px 10px 10px 10px;
+    flex-shrink: 0;
+}
+
+.ais {
+    width: 100%;
+    justify-content: center; /* Центрирование по вертикали */
+    transition: background 0.3s ease, color 0.3s ease;
+    z-index: 10;
+    display: flex; /* Используется flexbox */
+    flex-direction: column; /* Расположение элементов в колонку */
+    align-items: center; /* Центрирование по горизонтали */
+    flex-shrink: 0;
+    margin: 10px;
+}
+
+.ais-ai {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+}
+
+    .ais-ai img {
+        width: 40px;
+        height: 40px;
+    }
+
 /* Sidebar styles */
 .sidebar {
-    width: 80px;
+    width: 40px;
     background: var(--card-bg);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 0;
+    padding: 20px 20px;
     gap: 20px;
     flex-shrink: 0;
 }
@@ -273,8 +323,14 @@ body {
 }
 
 .search-container {
-	width: 75%;
-	max-width: 1000px;
+    width: 75%;
+    max-width: 1000px;
+    position: fixed; /* Используем fixed, чтобы элемент оставался по центру экрана */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Смещение на половину размера элемента */
+    z-index: 10; /* Для того чтобы элемент был поверх других */
 }
+
 
 

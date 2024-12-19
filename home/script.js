@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Event listeners
 searchEngineSelect.addEventListener("change", updateSearchSettings);
-assistantBtn.addEventListener("click", () => window.open(getAssistantUrl(), "_blank"));
+assistantBtn.addEventListener("click", () => window.location.href = getAssistantUrl(), "_blank");
 themeToggle.addEventListener("click", toggleTheme);
 searchBar.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
@@ -64,7 +64,7 @@ searchBar.addEventListener("keydown", (event) => {
         if (query) {
             const engine = searchEngineSelect.value;
             const searchUrl = searchEngines[engine].url + encodeURIComponent(query);
-            window.open(searchUrl, "_blank"); // Открыть результаты поиска в новой вкладке
+            window.location.href = searchUrl, "_blank"; // Открыть результаты поиска в новой вкладке
         }
     }
 });
