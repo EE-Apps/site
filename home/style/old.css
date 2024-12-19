@@ -8,6 +8,11 @@ body {
     transition: background 0.3s ease, color 0.3s ease;
 }
 
+.all {
+    height: 100%;
+    width: 100%;
+}
+
 /* Dark theme toggle button */
 .theme-toggle {
     top: 10px;
@@ -318,20 +323,11 @@ body {
 }
 
 .search-container {
-    position: absolute; /* Позиционируем относительно родительского контейнера */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Смещаем на половину ширины и высоты элемента */
     width: 75%;
     max-width: 1000px;
+    position: fixed; /* Используем fixed, чтобы элемент оставался по центру экрана */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Смещение на половину размера элемента */
     z-index: 10; /* Для того чтобы элемент был поверх других */
 }
-
-.all {
-    position: relative; /* Контейнер для позиционирования */
-    width: 100%; /* Или задайте конкретные размеры */
-    height: 100vh; /* Высота на весь экран или заданная */
-}
-
-
-

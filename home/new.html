@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EE Home Page</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="apps/themes.css">
-    <link rel="stylesheet" href="style/weather.css">
-    <link rel="stylesheet" href="weather.css">
-    <link rel="icon" href="ico.png">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>EE Home Page</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="apps/themes.css">
+	<link rel="stylesheet" href="weather.css">
+	<link rel="icon" href="ico.png">
 </head>
 <body>
+
     <!-- Sidebar for app buttons -->
     <aside class="sidebar">
         <button class="app-btn" data-company="ee">
@@ -30,9 +30,7 @@
         </button>
     </aside>
 
-    <!-- Main content -->
-    <main class="main-content all">
-
+    <div class="all">
         <div class="qbar" id="qbar">
             <!-- Button for Dark Theme Toggle -->
             <button id="theme-toggle" class="theme-toggle">🌙</button>
@@ -89,42 +87,45 @@
             </div>
         </div>
 
-        <!-- New container for iframe -->
-        <div class="iframe-wrapper" id="iframe-wrapper" style="display: none;">
-            <iframe id="iframe-display" src="" frameborder="0"></iframe>
-        </div>
-        <div class="search-container">
-            <div class="search-bar-wrapper">
-                <div class="search-main">
-                    <!-- Search engine selection -->
-                    <select id="search-engine-select" class="search-dropdown">
-                        <option value="google" selected>Google</option>
-                        <option value="bing">Bing</option>
-                        <option value="yandex">Yandex</option>
-                        <option value="openai">Open AI</option>
-                        <option value="wru">Wiki RU</option>
-                        <option value="wen">Wiki EN</option>
-                        <option value="wua">Wiki UA</option>
-                    </select>
 
-                    <!-- Search input -->
-                    <input type="text" id="search-bar" placeholder="Search the web..." autocomplete="off">
+        <!-- Main content -->
+        <main class="main-content">
+            <!-- New container for iframe -->
+            <div class="iframe-wrapper" id="iframe-wrapper" style="display: none;">
+                <iframe id="iframe-display" src="" frameborder="0"></iframe>
+            </div>
+            <div class="search-container">
+                <div class="search-bar-wrapper">
+                    <div class="search-main">
+                        <!-- Search engine selection -->
+                        <select id="search-engine-select" class="search-dropdown">
+                            <option value="google" selected>Google</option>
+                            <option value="bing">Bing</option>
+                            <option value="yandex">Yandex</option>
+                            <option value="openai">Open AI</option>
+                            <option value="wru">Wiki RU</option>
+                            <option value="wen">Wiki EN</option>
+                            <option value="wua">Wiki UA</option>
+                        </select>
 
-                    <!-- AI Assistant Button -->
-                    <button id="assistant-btn">
-                        <img id="assistant-icon" src="./icons/gemini.png" alt="AI">
-                    </button>
-                </div>
-                <div class="update-extension" id="update-extension">
-                    <a class="update-link" id="update-link">Click to download new version of extension</a>
-                </div>
-                <div class="dev-extension" id="dev-extension">
-                    <a class="dev-link">This is dev-version</a>
+                        <!-- Search input -->
+                        <input type="text" id="search-bar" placeholder="Search the web..." autocomplete="off">
+
+                        <!-- AI Assistant Button -->
+                        <button id="assistant-btn">
+                            <img id="assistant-icon" src="./icons/gemini.png" alt="AI">
+                        </button>
+                    </div>
+                    <div class="update-extension" id="update-extension">
+                        <a class="update-link" id="update-link">Click to download new version of extension</a>
+                    </div>
+                    <div class="dev-extension" id="dev-extension">
+                        <a class="dev-link">This is dev-version</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
-
+        </main>
+    </div>
 
     <script src="script.js"></script>
     <script src="weather.js"></script>
