@@ -51,12 +51,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Apply saved theme (light or dark)
     const savedTheme = localStorage.getItem("theme");
-	document.body.classList.add(savedTheme);
+    document.body.classList.add(savedTheme);
 });
 
 // Event listeners
 searchEngineSelect.addEventListener("change", updateSearchSettings);
-assistantBtn.addEventListener("click", () => window.location.href = getAssistantUrl(), "_blank");
+assistantBtn.addEventListener("click", () => window.open(getAssistantUrl(), "_blank"));
 themeToggle.addEventListener("click", toggleTheme);
 searchBar.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
@@ -64,7 +64,7 @@ searchBar.addEventListener("keydown", (event) => {
         if (query) {
             const engine = searchEngineSelect.value;
             const searchUrl = searchEngines[engine].url + encodeURIComponent(query);
-            window.location.href = searchUrl, "_blank"; // Открыть результаты поиска в новой вкладке
+            window.open(searchUrl, "_blank"); // Открыть результаты поиска в новой вкладке
         }
     }
 });
@@ -110,39 +110,37 @@ function loadIframe(company) {
 
 // Toggle between light and dark themes
 function toggleTheme() {
-	
-	
-	
-	if (navigator.userAgent.indexOf('Firefox') !== -1) {
-		document.body.classList.toggle("moziladark"); // Браузер - Firefox
-	} else {
-		document.body.classList.toggle("dark"); // Другой браузер
-	}
-	let newTheme;
-	newTheme = document.body.classList.value;
-	console.log(newTheme)
-    localStorage.setItem("theme", newTheme);
-    
-    const iframe = document.getElementById('iframe-display');
-    iframe.contentWindow.postMessage({ type: 'themeChanged', theme: newTheme }, '*');
-}
+    const newTheme = document.body.classList.contains("dark") ? "light" : "dark";
 
+    if (navigator.userAgent.indexOf('Firefox') !== -1) {
+        document.body.classList.toggle("moziladark"); // Браузер - Firefox
+    } else {
+        document.body.classList.toggle("dark"); // Другой браузер
+    }
+
+    // Save theme to localStorage
+    localStorage.setItem("theme", newTheme);
+
+    const iframe = document.getElementById('iframe-display');
+    // Post message to iframe with specific origin (example: your site's domain)
+    iframe.contentWindow.postMessage({ type: 'themeChanged', theme: newTheme }, 'https://your-website.com');
+}
 
 fetch("https://raw.githubusercontent.com/EE-Apps/site/refs/heads/main/home/ver.txt")
     .then(response => response.text())
     .then(data => {
         let version = data.trim(); // Получение и очистка данных версии
         console.log("Актуальная версия:", version);
-        
+
         // Сравнение версий
         if (compareVersions(thisversion, version) < 0) {
-            updateExtension.style.display = 'block'; 
+            updateExtension.style.display = 'block';
         } else {
-			if (compareVersions(thisversion, version) > 0) {
-				devExtension.style.display = 'block'; 
-			} else {
-				updateExtension.style.display = 'none'; 
-			}
+            if (compareVersions(thisversion, version) > 0) {
+                devExtension.style.display = 'block';
+            } else {
+                updateExtension.style.display = 'none';
+            }
         }
     })
     .catch(error => {
@@ -178,8 +176,8 @@ function checkBrowserAndRedirect() {
 }
 
 // Обработчик события для ссылки
-document.getElementById("update-link").addEventListener("click", function(event) {
-	console.log("download update")
+document.getElementById("update-link").addEventListener("click", function (event) {
+    console.log("download update")
     event.preventDefault(); // Предотвращает переход по ссылке
     checkBrowserAndRedirect(); // Вызывает функцию для проверки браузера и перенаправления
 });

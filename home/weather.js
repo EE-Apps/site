@@ -87,18 +87,34 @@ async function updateWeather(lat, lon) {
     }
 }
 
+// Функция для сохранения выбранного города в localStorage
+function saveSelectedCity(cityIndex) {
+    localStorage.setItem("selectedCity", cityIndex);
+}
+
+// Функция для восстановления выбранного города
+function restoreSelectedCity() {
+    const selectedCityIndex = localStorage.getItem("selectedCity");
+    if (selectedCityIndex) {
+        const selectElement = document.getElementById("city-select");
+        selectElement.selectedIndex = selectedCityIndex; // Восстанавливаем выбранный индекс
+    }
+}
+
 document.getElementById("update-weather").addEventListener("click", () => {
     const selectElement = document.getElementById("city-select");
     const selectedOption = selectElement.options[selectElement.selectedIndex];
     const lat = selectedOption.getAttribute("data-lat");
     const lon = selectedOption.getAttribute("data-lon");
+    saveSelectedCity(selectElement.selectedIndex); // Сохраняем выбранный город
     updateWeather(lat, lon);
 });
 
 // Автоматическое обновление при загрузке страницы
 document.addEventListener("DOMContentLoaded", () => {
+    restoreSelectedCity(); // Восстанавливаем выбранный город
     const selectElement = document.getElementById("city-select");
-    const firstOption = selectElement.options[0];
+    const firstOption = selectElement.options[selectElement.selectedIndex];
     const lat = firstOption.getAttribute("data-lat");
     const lon = firstOption.getAttribute("data-lon");
     updateWeather(lat, lon);
