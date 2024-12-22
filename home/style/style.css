@@ -1,3 +1,102 @@
+/* Basic styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    height: 100vh;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Dark theme toggle button */
+.theme-toggle {
+    top: 10px;
+    right: 10px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s ease, color 0.3s ease;
+    z-index: 10;
+}
+
+/* Quick Bar */
+.qbar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 40px;
+    justify-content: center; /* Центрирование по вертикали */
+    transition: background 0.3s ease, color 0.3s ease;
+    z-index: 10;
+    display: flex; /* Используется flexbox */
+    flex-direction: column; /* Расположение элементов в колонку */
+    align-items: center; /* Центрирование по горизонтали */
+    padding: 10px 10px 10px 10px;
+    flex-shrink: 0;
+}
+
+.ais {
+    width: 100%;
+    justify-content: center; /* Центрирование по вертикали */
+    transition: background 0.3s ease, color 0.3s ease;
+    z-index: 10;
+    display: flex; /* Используется flexbox */
+    flex-direction: column; /* Расположение элементов в колонку */
+    align-items: center; /* Центрирование по горизонтали */
+    flex-shrink: 0;
+    margin: 10px;
+}
+
+.ais-ai {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+}
+
+    .ais-ai img {
+        width: 40px;
+        height: 40px;
+    }
+
+/* Sidebar styles */
+.sidebar {
+    width: 40px;
+    background: var(--card-bg);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 20px;
+    gap: 20px;
+    flex-shrink: 0;
+}
+
+.app-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.app-btn img {
+    width: 40px;
+    height: 40px;
+}
+
 /* Main content */
 .main-content {
     flex: 1;
@@ -5,43 +104,234 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    flex-direction: column;
+	flex-direction: column;
+	
 }
 
 /* YOUR VERSION IS OLD */
 .update-extension {
+	
     display: none;
     align-items: center;
     overflow: hidden;
     height: 35px;
-    margin: 10px 0;
+	
+	margin: 10px 0;
 }
 
 .update-link {
-    color: inherit;
-    text-decoration: none;
-    cursor: pointer;
+	color: inherit;
+	text-decoration: none;
+	cursor: pointer;
 }
 
 .update-link:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 /* YOUR VERSION IS VERY-VERY-VERY NEW */
 .dev-extension {
+	
     display: none;
     align-items: center;
     overflow: hidden;
     height: 35px;
-    margin: 10px 0;
+	
+	margin: 10px 0;
 }
 
 .dev-link {
-    color: inherit;
-    text-decoration: none;
-    cursor: pointer;
+	color: inherit;
+	text-decoration: none;
+	cursor: pointer;
 }
 
 .dev-link:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
+
+/* Search bar styles */
+.search-bar-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--card-bg);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	margin: 10px 0;
+	flex-direction: column;
+	width: 100%;
+}
+
+.search-main {
+    display: flex;
+    align-items: center;
+    background: var(--card-bg);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	width: 100%;
+}
+
+.search-dropdown {
+    padding: 8px;
+    font-size: 1rem;
+    border: none;
+    border-right: 1px solid #ccc;
+    background: var(--search-engine-bg);
+    cursor: pointer;
+    appearance: none;
+	max-width: 150px;
+    color: var(--text-color);
+}
+
+#search-bar {
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+    height: 40px;
+    background: var(--search-bar-bg);
+    color: var(--text-color);
+	width: 100%;
+	max-width: 90%;
+}
+
+ #search-bar:focus {
+    width: calc(100% - 20px);
+	width: 500px;
+} 
+
+/* AI Assistant button */
+#assistant-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    height: 50px;
+    width: 50px;
+}
+
+#assistant-icon {
+    width: 80%;
+    height: 80%;
+}
+
+/* App list container styles */
+.app-list-container {
+    position: absolute;
+    top: 50px;
+    left: 100px;
+    background: var(--card-bg);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    width: 2000px; /* Increased width */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.app-list-container.hidden {
+    display: none;
+}
+
+.app-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+    gap: 20px;
+    width: 100%;
+}
+
+.app-list li {
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 8px;
+    transition: transform 0.2s;
+    background: var(--card-bg);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+}
+
+.app-list li:hover {
+    transform: scale(1.05);
+}
+
+.app-list li a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.app-list li .app-icon {
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+/* New styles for iframe container */
+.iframe-wrapper {
+    position: absolute;
+    top: 10px;  /* Adjust as needed */
+    left: 10px;  /* Adjust to be right of sidebar */
+    background: var(--card-bg);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 8px;
+    z-index: 9999;  /* Make sure this is the highest z-index on the page */
+    width: 100%;
+    height: 90%;
+	max-width: 1000px;
+	max-width: 90%;
+	max-height: 90%;
+    display: flex;
+    flex-direction: column;
+	overflow: hidden;
+}
+
+.iframe-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    overflow: auto;  /* Allow scrolling */
+    pointer-events: auto;  /* Enable interaction */
+}
+
+/* Увеличение размера iframe */
+#iframe-display {
+    width: 100w%;
+    height: 100%;
+	scrolling: yes;
+}
+
+.search-container {
+    position: absolute; /* Позиционируем относительно родительского контейнера */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Смещаем на половину ширины и высоты элемента */
+    width: 75%;
+    max-width: 1000px;
+    z-index: 10; /* Для того чтобы элемент был поверх других */
+}
+
+.all {
+    position: relative; /* Контейнер для позиционирования */
+    width: 100%; /* Или задайте конкретные размеры */
+    height: 100vh; /* Высота на весь экран или заданная */
+}
+
+
+

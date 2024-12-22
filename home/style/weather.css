@@ -1,8 +1,18 @@
-/* Основной стиль для блока погоды */
+/* �������� ����� ��� ����������, � ������� ��������� ������ */
+.weather-widget-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* �������� ����� ��� ����� ������ */
 .weather-widget {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 300px;
-    height: 150px; /* Уменьшаем высоту блока */
-    padding: 8px; /* Уменьшаем отступы */
+    height: 150px;
+    padding: 8px;
     background-color: var(--card-bg);
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -11,10 +21,10 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin: 10px; /* Уменьшаем отступ */
+    margin: 10px;
 }
 
-/* Стили для тёмной темы */
+/* ����� ��� ����� ���� */
 body.dark-theme .weather-widget {
     background-color: var(--dark-bg);
     color: var(--light-text-color);
@@ -34,17 +44,17 @@ body.dark-theme .weather-widget {
             background-color: var(--dark-btn-hover-bg);
         }
 
-/* Общие стили для погоды */
+/* ����� ����� ��� ������ */
 .weather-widget .current-weather {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 5px; /* Уменьшаем отступ между элементами */
-    height: 60%; /* Устанавливаем общую высоту для текущей погоды */
+    margin-bottom: 5px;
+    height: 60%;
 }
 
 .weather-widget .weather-icon {
-    width: 40px; /* Уменьшаем размер иконки */
+    width: 40px;
     height: 40px;
     background-size: cover;
     background-position: center;
@@ -53,42 +63,42 @@ body.dark-theme .weather-widget {
 .weather-widget .weather-info {
     flex-grow: 1;
     text-align: left;
-    font-size: 12px; /* Уменьшаем размер текста */
+    font-size: 12px;
 }
 
     .weather-widget .weather-info h2 {
-        font-size: 20px; /* Уменьшаем размер заголовка */
+        font-size: 20px;
         margin: 0;
     }
 
     .weather-widget .weather-info p {
-        font-size: 12px; /* Уменьшаем размер текста */
-        margin: 3px 0; /* Уменьшаем отступы */
+        font-size: 12px;
+        margin: 3px 0;
     }
 
-/* Стили для блока с данными о ветре и влажности */
+/* ����� ��� ����� � ������� � ����� � ��������� */
 .weather-widget .weather-details {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    text-align: right; /* Выравниваем текст справа */
-    font-size: 12px; /* Уменьшаем размер текста */
-    height: 100%; /* Устанавливаем 100% высоты */
+    text-align: right;
+    font-size: 12px;
+    height: 100%;
 }
 
     .weather-widget .weather-details .wind,
     .weather-widget .weather-details .humidity {
-        margin: 3px 0; /* Уменьшаем отступы */
+        margin: 3px 0;
     }
 
 .weather-widget .additional-info {
-    margin-top: 3px; /* Уменьшаем отступ */
-    font-size: 12px; /* Уменьшаем размер текста */
+    margin-top: 3px;
+    font-size: 12px;
 }
 
-/* Стили для блока выбора города */
+/* ����� ��� ����� ������ ������ */
 .weather-widget .city-select {
-    margin-top: 5px; /* Уменьшаем отступ */
+    margin-top: 5px;
     text-align: left;
     display: flex;
     justify-content: space-between;
@@ -96,21 +106,21 @@ body.dark-theme .weather-widget {
 }
 
     .weather-widget .city-select select {
-        width: 70%; /* Уменьшаем ширину select */
+        width: 70%;
         padding: 6px;
-        font-size: 12px; /* Уменьшаем размер текста */
+        font-size: 12px;
     }
 
     .weather-widget .city-select button {
-        width: 20%; /* Уменьшаем ширину кнопки */
+        width: 20%;
         padding: 6px;
-        font-size: 12px; /* Уменьшаем размер текста */
+        font-size: 12px;
         cursor: pointer;
         background-color: var(--primary-btn-bg);
         color: var(--primary-btn-text-color);
         border: none;
         border-radius: 5px;
-        margin-left: 5px; /* Уменьшаем отступ между select и кнопкой */
+        margin-left: 5px;
     }
 
 body.dark-theme .theme-toggle {

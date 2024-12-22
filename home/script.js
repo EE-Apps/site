@@ -1,5 +1,5 @@
-// alert("1914")
-let thisversion = "1.3.0";
+// alert("1917")
+let thisversion = "1.3.1";
 const searchEngines = {
     google: {
         url: "https://www.google.com/search?q=",
@@ -110,13 +110,36 @@ function loadIframe(company) {
 
 // Toggle between light and dark themes
 function toggleTheme() {
-    const newTheme = document.body.classList.contains("dark") ? "light" : "dark";
+    let newTheme = document.body.classList.contains("dark") ? "light" : "dark";
 
     if (navigator.userAgent.indexOf('Firefox') !== -1) {
+        if (document.body.classList.contains("dark")) {
+            document.body.classList.toggle("dark");
+        }
         document.body.classList.toggle("moziladark"); // Браузер - Firefox
     } else {
+        if (document.body.classList.contains("moziladark")) {
+            document.body.classList.toggle("moziladark");
+        }
         document.body.classList.toggle("dark"); // Другой браузер
     }
+
+
+//    let newTheme;
+//
+//    if (navigator.userAgent.indexOf('Firefox') !== -1) {
+//        document.body.classList.toggle("moziladark"); // Браузер - Firefox
+//        newTheme = localStorage.getItem("theme") == "moziladark" ? "light" : "moziladark";
+//        if (document.body.classList.contains("dark")) {
+//            document.body.classList.toggle("dark");
+//        }
+//    } else {
+//        document.body.classList.toggle("dark"); // Другой браузер
+//        newTheme = localStorage.getItem("theme") == "dark" ? "light" : "dark";
+//        if (document.body.classList.contains("moziladark")) {
+//            document.body.classList.toggle("moziladark");
+//        }
+//    }
 
     // Save theme to localStorage
     localStorage.setItem("theme", newTheme);
