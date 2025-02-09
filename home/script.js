@@ -1,5 +1,5 @@
 // alert("1917")
-let thisversion = "1.3.2";
+let thisversion = "1.3.3";
 const searchEngines = {
     google: {
         url: "https://www.google.com/search?q=",
@@ -19,15 +19,15 @@ const searchEngines = {
     },
     wru: {
         url: "https://ru.wikipedia.org/w/index.php?search=",
-        assistant: { url: "https://ru.wikipedia.org/wiki/", icon: "./icons/none.svg" }
+        assistant: { url: "https://ru.wikipedia.org/wiki/", icon: "./icons/wikipedia.svg" }
     },
     wen: {
         url: "https://en.wikipedia.org/w/index.php?search=",
-        assistant: { url: "https://en.wikipedia.org/wiki/", icon: "./icons/none.svg" }
+        assistant: { url: "https://en.wikipedia.org/wiki/", icon: "./icons/wikipedia.svg" }
     },
     wua: {
         url: "https://uk.wikipedia.org/w/index.php?search=",
-        assistant: { url: "https://uk.wikipedia.org/wiki/", icon: "./icons/none.svg" }
+        assistant: { url: "https://uk.wikipedia.org/wiki/", icon: "./icons/wikipedia.svg" }
     }
 };
 
