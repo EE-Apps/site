@@ -4,17 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Periodic Table | Таблица Менделеева</title>
+    <link rel="icon" href="ico2.svg" type="image/svg+xml">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <div class="search-section">
             <input type="text" id="searchInput" placeholder="Search elements...">
-            <select class="lang" id="searchLanguage">
+            <select class="lang" id="searchLanguage" title="Select language">
                 <option value="en">English</option>
                 <option value="ru">Русский</option>
                 <option value="ua">Українська</option>
             </select>
+            <select class="lang" id="colorScheme" title="Select color scheme">
+                <option value="default">Default</option>
+                <option value="metal">Metals</option>
+                <!--option value="groups">Groups</option-->
+                <option value="blocks">SPDF</option>
+                <option value="types">Types</option>
+            </select>
+        </div>
+        <div class="type-legend" id="typeLegend" style="display: none;">
+            <div class="type-legend-item">
+                <div class="type-legend-color alkali-metal"></div>
+                <span>Alkali Metals</span>
+            </div>
+            <div class="type-legend-item">
+                <div class="type-legend-color alkaline-earth-metal"></div>
+                <span>Alkaline Earth Metals</span>
+            </div>
+            <div class="type-legend-item">
+                <div class="type-legend-color transition-metal"></div>
+                <span>Transition Metals</span>
+            </div>
+            <div class="type-legend-item">
+                <div class="type-legend-color post-transition-metal"></div>
+                <span>Post-transition Metals</span>
+            </div>
+            <div class="type-legend-item">
+                <div class="type-legend-color metalloid"></div>
+                <span>Metalloids</span>
+            </div>
+            <div class="type-legend-item">
+                <div class="type-legend-color nonmetal"></div>
+                <span>Nonmetals</span>
+            </div>
+            <div class="type-legend-item">
+                <div class="type-legend-color halogen"></div>
+                <span>Halogens</span>
+            </div>
+            <div class="type-legend-item">
+                <div class="type-legend-color noble-gas"></div>
+                <span>Noble Gases</span>
+            </div>
+            <div class="type-legend-item">
+                <div class="type-legend-color lanthanide"></div>
+                <span>Lanthanides</span>
+            </div>
+            <div class="type-legend-item">
+                <div class="type-legend-color actinide"></div>
+                <span>Actinides</span>
+            </div>
         </div>
         <div class="periodic-table-container">
             <div id="periodicTable" class="periodic-table">

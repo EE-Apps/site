@@ -2,10 +2,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const periodicTable = document.getElementById('periodicTable');
     const searchInput = document.getElementById('searchInput');
     const searchLanguage = document.getElementById('searchLanguage');
+    const colorScheme = document.getElementById('colorScheme');
+    
+    // Restore saved language
+    const savedLanguage = localStorage.getItem('preferredLanguage');
+    if (savedLanguage) {
+        searchLanguage.value = savedLanguage;
+    }
+
+    // Restore saved color scheme
+    const savedColorScheme = localStorage.getItem('preferredColorScheme') || 'default';
+    colorScheme.value = savedColorScheme;
     
     function isGroupB(element) {
         const col = element.position.col;
         return col >= 3 && col <= 12;
+    }
+    
+    function determineBlock(element) {
+        const col = element.position.col;
+        if (col <= 2) return 's-block';
+        if (col >= 13) return 'p-block';
+        if (col >= 3 && col <= 12) return 'd-block';
+        return 'f-block';
     }
     
     function formatValences(valences, group) {
@@ -40,9 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             
+            elementDiv._data = element; // Attach element data to the div
             elementDiv.addEventListener('click', () => showElementDetails(element));
             periodicTable.appendChild(elementDiv);
         });
+        updateColorScheme(Array.from(periodicTable.children)); // Apply initial color scheme
     }
     
     function updateElementNames() {
@@ -78,18 +99,62 @@ document.addEventListener('DOMContentLoaded', () => {
         const details = document.getElementById('elementDetails');
         details.innerHTML = `
             <h2>${element.symbol} - ${element.names[lang]}</h2>
-            <p>Атомный номер: ${element.atomic}</p>
-            <p>Атомная масса: ${element.mass}</p>
-            <p>Группа: ${isGroupB(element) ? 'B (побочная)' : 'A (главная)'}</p>
-            <p>Тип: ${element.isMetallic ? 'Металл' : 'Неметалл'}</p>
-            ${element.valences ? `<p>Валентность: ${element.valences.join(', ')}</p>` : ''}
+            <p>Atomic number: ${element.atomic}</p>
+            <p>Atomic mass: ${element.mass}</p>
+            <p>Group: ${isGroupB(element) ? 'B (побочная)' : 'A (главная)'}</p>
+            <p>Metal?: ${element.isMetallic ? 'Металл' : 'Неметалл'}</p>
+            ${element.valences ? `<p>Valence: ${element.valences.join(', ')}</p>` : ''}
+            <p>Category: ${element.category}</p>
+            <p>Block: ${determineBlock(element)}</p>
         `;
+    }
+
+    function updateColorScheme(elements) {
+        const scheme = colorScheme.value;
+        localStorage.setItem('preferredColorScheme', scheme);
+        
+        elements.forEach(elementDiv => {
+            const element = elementDiv._data;
+            elementDiv.dataset.scheme = scheme;
+            
+            // Remove existing scheme classes
+            elementDiv.classList.remove(
+                'metallic', 'nonmetallic', 
+                'group-a', 'group-b', 
+                's-block', 'p-block', 'd-block', 'f-block',
+                'alkali-metal', 'alkaline-earth-metal', 'lanthanide', 
+                'actinide', 'transition-metal', 'post-transition-metal',
+                'metalloid', 'nonmetal', 'noble-gas', 'halogen'
+            );
+            
+            // Apply new scheme classes
+            switch(scheme) {
+                case 'metal':
+                    elementDiv.classList.add(element.isMetallic ? 'metallic' : 'nonmetallic');
+                    break;
+                case 'groups':
+                    elementDiv.classList.add(isGroupB(element) ? 'group-b' : 'group-a');
+                    break;
+                case 'blocks':
+                    elementDiv.classList.add(`${element.group}-block`);
+                    break;
+                case 'types':
+                    elementDiv.classList.add(element.category);
+                    break;
+            }
+        });
     }
     
     searchInput.addEventListener('input', (e) => searchElements(e.target.value));
     searchLanguage.addEventListener('change', () => {
         updateElementNames();
         searchElements(searchInput.value);
+        localStorage.setItem('preferredLanguage', searchLanguage.value);
+    });
+
+    colorScheme.addEventListener('change', () => {
+        updateColorScheme(Array.from(periodicTable.children));
+        localStorage.setItem('preferredColorScheme', colorScheme.value);
     });
     
     createPeriodicTable();
