@@ -18,7 +18,7 @@ body {
 }
 
 .container {
-    max-width: calc(10 * (var(--element-width) + 8px) + 40px);
+    /* max-width: calc(10 * (var(--element-width) + 8px) + 40px); */
     margin: 0 auto;
     /* padding: 20px; */
 }
@@ -73,7 +73,7 @@ body {
     background-color: var(--card-background);
     border-radius: 12px;
     margin: 0 auto;
-    max-width: calc(10 * (var(--element-width) + 8px));
+    /* max-width: calc(10 * (var(--element-width) + 8px)); */
     margin-bottom: 40px;
 }
 
