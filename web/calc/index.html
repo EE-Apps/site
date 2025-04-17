@@ -1,0 +1,146 @@
+<html>
+    <head>
+        <title>Calc EE</title>
+        <link rel="icon" href="img/ico.svg" type="image/svg">
+        <link rel="stylesheet" type="text/css" href="css/theme/dark.css">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="css/calc.css">
+        <link rel="stylesheet" type="text/css" href="css/conv.css">
+        <link rel="stylesheet" type="text/css" href="css/sett.css">
+        <link rel="stylesheet" type="text/css" href="css/head.css">
+        <script src="js/main.js"></script>
+        <script src="js/calc.js"></script>
+        <script src="js/conv.js"></script>
+        <script src="js/sett.js"></script>
+    </head>
+    <body>
+        <nav class="header">
+            <button class="tab-nav activepage" onclick="openPage('calc')">Home</button>
+            <button class="tab-nav" onclick="openPage('conv')">Converter</button>
+            <button class="tab-nav" onclick="openPage('sett')">Settings</button>
+        </nav>
+        <div class="page active" id="calc">
+            <div class="calculator">
+                <div class="system-type">
+                    <span class="active">DEC</span>
+                    <span>HEX</span>
+                    <span>OCT</span>
+                    <span>BIN</span>
+                </div>
+
+                <div class="calculator-display">
+                    <div class="expression">0</div>
+                    <div class="result"></div>
+                </div>
+
+                <div id="keypad-4x5" class="keypad active" style="grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(5, 1fr);">
+                    <button class="calc-btn function">AC</button>
+                    <button class="calc-btn function">⌫</button>
+                    <button class="calc-btn function">±</button>
+                    <button class="calc-btn operator">÷</button>
+                    <button class="calc-btn number main-btn">7</button>
+                    <button class="calc-btn number main-btn">8</button>
+                    <button class="calc-btn number main-btn">9</button>
+                    <button class="calc-btn operator">×</button>
+                    <button class="calc-btn number main-btn">4</button>
+                    <button class="calc-btn number main-btn">5</button>
+                    <button class="calc-btn number main-btn">6</button>
+                    <button class="calc-btn operator">-</button>
+                    <button class="calc-btn number main-btn">1</button>
+                    <button class="calc-btn number main-btn">2</button>
+                    <button class="calc-btn number main-btn">3</button>
+                    <button class="calc-btn operator">+</button>
+                    <button class="calc-btn function">⇱</button>
+                    <button class="calc-btn number main-btn">0</button>
+                    <button class="calc-btn number">.</button>
+                    <button class="calc-btn function">=</button>
+                </div>
+
+                <div id="keypad-5x6" class="keypad " style="grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(6, 1fr);">
+                    <button class="calc-btn operator">^</button>
+                    <button class="calc-btn operator">%</button>
+                    <button class="calc-btn operator">y√</button>
+                    <button class="calc-btn operator">(</button>
+                    <button class="calc-btn operator">)</button>
+                    <button class="calc-btn operator">√</button>
+                    <button class="calc-btn function">AC</button>
+                    <button class="calc-btn function">⌫</button>
+                    <button class="calc-btn function">±</button>
+                    <button class="calc-btn operator">÷</button>
+                    <button class="calc-btn operator">x!</button>
+                    <button class="calc-btn number main-btn">7</button>
+                    <button class="calc-btn number main-btn">8</button>
+                    <button class="calc-btn number main-btn">9</button>
+                    <button class="calc-btn operator">×</button>
+                    <button class="calc-btn operator">mod</button>
+                    <button class="calc-btn number main-btn">4</button>
+                    <button class="calc-btn number main-btn">5</button>
+                    <button class="calc-btn number main-btn">6</button>
+                    <button class="calc-btn operator">-</button>
+                    <button class="calc-btn number">x</button>
+                    <button class="calc-btn number main-btn">1</button>
+                    <button class="calc-btn number main-btn">2</button>
+                    <button class="calc-btn number main-btn">3</button>
+                    <button class="calc-btn operator">+</button>
+                    <button class="calc-btn function">⇱</button>
+                    <button class="calc-btn function">⇲</button>
+                    <button class="calc-btn number main-btn">0</button>
+                    <button class="calc-btn number">.</button>
+                    <button class="calc-btn function">=</button>
+                </div>
+
+                <div id="keypad-6x7" class="keypad " style="grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(7, 1fr);">
+                    <button class="calc-btn operator">sin</button>
+                    <button class="calc-btn operator">cos</button>
+                    <button class="calc-btn operator">tan</button>
+                    <button class="calc-btn operator">ctan</button>
+                    <button class="calc-btn operator">log</button>
+                    <button class="calc-btn operator">exp</button>
+                    <button class="calc-btn operator">sinh</button>
+                    <button class="calc-btn operator">cosh</button>
+                    <button class="calc-btn operator">tanh</button>
+                    <button class="calc-btn operator">ctanh</button>
+                    <button class="calc-btn operator">(</button>
+                    <button class="calc-btn operator">)</button>
+                    <button class="calc-btn operator">√</button>
+                    <button class="calc-btn operator">y√</button>
+                                        <button class="calc-btn function">AC</button>
+                    <button class="calc-btn function">⌫</button>
+                    <button class="calc-btn function">±</button>
+                    <button class="calc-btn operator">÷</button>
+                    <button class="calc-btn operator">x!</button>
+                    <button class="calc-btn operator">%</button>
+                    <button class="calc-btn number main-btn">7</button>
+                    <button class="calc-btn number main-btn">8</button>
+                    <button class="calc-btn number main-btn">9</button>
+                    <button class="calc-btn operator">×</button>
+                    <button class="calc-btn operator">mod</button>
+                    <button class="calc-btn operator">^</button>
+                    <button class="calc-btn number main-btn">4</button>
+                    <button class="calc-btn number main-btn">5</button>
+                    <button class="calc-btn number main-btn">6</button>
+                    <button class="calc-btn operator">-</button>
+                    <button class="calc-btn number">x</button>
+                    <button class="calc-btn number">y</button>
+                    <button class="calc-btn number main-btn">1</button>
+                    <button class="calc-btn number main-btn">2</button>
+                    <button class="calc-btn number main-btn">3</button>
+                    <button class="calc-btn operator">+</button>
+                    <button class="calc-btn function">⇲</button>
+                    <button class="calc-btn number">e</button>
+                    <button class="calc-btn number">π</button>
+                    <button class="calc-btn number main-btn">0</button>
+                    <button class="calc-btn number">.</button>
+                    <button class="calc-btn function">=</button>
+                </div>
+            </div>
+        </div>
+        <div class="page" id="conv">
+            <h1>Converter</h1>
+            <p>Convert between different units.</p>
+        </div>
+        <div class="page" id="sett">
+            <h1>Settings</h1>
+            <p>Change the settings of the website.</p>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+:root {
+    /* Основные цвета */
+    --bg-primary: #121212;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #242424;
+    --bg-hover: #2a2a2a;
+    
+    /* Текст */
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-on-accent: #ffd700;
+    
+    /* Акцентные цвета */
+    --accent-yellow: #ffd700;
+    --accent-blue: #00bfff;
+    --accent-green: #00ff9d;
+    
+    /* Кнопки */
+    --button-bg: #222222;
+    --button-bg-hover: #2a2a2a;
+    --button-bg-light: #333333;
+    --button-text-number: var(--text-primary);
+    --button-text-operator: var(--accent-green);
+    --button-text-function: var(--accent-blue);
+}

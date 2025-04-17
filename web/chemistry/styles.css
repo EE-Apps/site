@@ -1,0 +1,294 @@
+:root {
+    --element-width: 150px;
+    --element-height: 100px;
+    --primary-color: #4a9eff;
+    --background-color: #1a1a1a;
+    --card-background: #2a2a2a;
+    --text-color: #e0e0e0;
+    --border-color: #404040;
+}
+
+body {
+    margin: 0;
+    padding: 10px;
+    /* padding: 20px; */
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.container {
+    max-width: calc(10 * (var(--element-width) + 8px) + 40px);
+    margin: 0 auto;
+    /* padding: 20px; */
+}
+
+.search-section {
+    margin-bottom: 30px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-section input,
+.search-section select {
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--card-background);
+    color: var(--text-color);
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.search-section input:focus,
+.search-section select:focus {
+    border-color: var(--primary-color);
+}
+
+.search-section input {
+    width: 250px;
+}
+
+.search-section select {
+    cursor: pointer;
+    min-width: 120px;
+}
+
+.periodic-table-container {
+    width: 100%;
+    overflow-x: auto;
+    padding: 20px 0;
+}
+
+.periodic-table {
+    display: grid;
+    grid-template-columns: repeat(10, var(--element-width));
+    grid-template-rows: repeat(17, var(--element-height));
+    gap: 8px;
+    justify-content: left;
+    padding: 20px;
+    background-color: var(--card-background);
+    border-radius: 12px;
+    margin: 0 auto;
+    max-width: calc(10 * (var(--element-width) + 8px));
+    margin-bottom: 40px;
+}
+
+.periodic-table::-webkit-scrollbar {
+    height: 8px;
+}
+
+.periodic-table::-webkit-scrollbar-track {
+    background: var(--card-background);
+    border-radius: 4px;
+}
+
+.periodic-table::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 4px;
+    border: 2px solid var(--card-background);
+}
+
+.periodic-table::-webkit-scrollbar-thumb:hover {
+    background-color: #3b82f6;
+}
+
+.element {
+    width: var(--element-width);
+    height: var(--element-height);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 6px 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: rgba(42, 42, 42, 0.9);
+    position: relative;
+    /* display: grid; */
+    display: flex;
+    flex-direction: column;
+    grid-template-areas: 
+        "symbol atomic"
+        "info info"
+        "mass mass";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: min-content 1fr min-content;
+    gap: 3px;
+    box-sizing: border-box;
+    will-change: transform;
+    backface-visibility: hidden;
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 4px;
+}
+
+.element.group-b {
+    grid-template-areas: 
+        "atomic symbol"
+        "info info"
+        "mass mass";
+}
+
+.element:hover {
+    transform: scale(1.05);
+    z-index: 2;
+    box-shadow: 0 0 15px rgba(74, 158, 255, 0.3);
+    border-color: var(--primary-color);
+    background-color: rgba(42, 42, 42, 0.95);
+}
+
+.element:active {
+    transform: scale(0.98);
+    box-shadow: 0 0 15px var(--hover-color);
+}
+
+.element:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.element .symbol {
+    grid-area: symbol;
+    font-size: 22px;
+    font-weight: bold;
+    align-self: start;
+    padding: 2px 0 0 2px;
+}
+
+.element .atomic {
+    grid-area: atomic;
+    font-size: 14px;
+    justify-self: end;
+    align-self: start;
+    padding: 4px 2px 0 0;
+    color: rgba(224, 224, 224, 0.9);
+}
+
+.element.group-b .symbol {
+    justify-self: end;
+}
+
+.element.group-b .atomic {
+    justify-self: start;
+}
+
+.element .info {
+    grid-area: info;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 2px 4px;
+    min-height: 0;
+}
+
+.element .name {
+    font-size: 11px;
+    line-height: 1.2;
+    word-wrap: break-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    color: rgba(224, 224, 224, 0.9);
+    display: flex;
+}
+
+.element .valences {
+    font-size: 10px;
+    color: rgba(224, 224, 224, 0.7);
+    padding-top: 2px;
+    line-height: 1.2;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.element .mass {
+    grid-area: mass;
+    font-size: 11px;
+    justify-self: end;
+    align-self: end;
+    padding: 0 2px 2px 0;
+    color: rgba(224, 224, 224, 0.7);
+}
+
+.element .category-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 8px;
+}
+
+.gr-a .category-indicator {
+    right: 8px;
+}
+
+.gr-b .category-indicator {
+    left: 8px;
+}
+
+.metal-indicator {
+    background-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(74, 158, 255, 0.5);
+}
+
+.nonmetal-indicator {
+    background-color: #ffffff;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.element[style*="row: 16"] {
+    margin-top: 20px;
+}
+
+/* Style for Lanthanides and Actinides */
+.element[data-category="lanthanide"],
+.element[data-category="actinide"] {
+    background-color: rgba(42, 42, 42, 0.85);
+}
+
+.element-details {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background-color: var(--card-background);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.element-details h2 {
+    margin-top: 0;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.element-details p {
+    margin: 8px 0;
+    color: var(--text-color);
+    font-size: 16px;
+}
+
+.lang {
+    background-color: #404040;
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px 0;
+    display: inline-block;
+    color: white;
+}
+
+@media (max-width: 1800px) {
+}
+
+.card-up {
+    display: flex;
+}
+
+.card-up-half {
+    width: 70%;
+}
+
+.card-up-half-2 {
+    display: flex;
+    width: 30%;
+}

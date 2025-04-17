@@ -1,0 +1,178 @@
+.calculator {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg-primary);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.calculator-display {
+    background: var(--bg-secondary);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.expression {
+    font-size: 1.2em;
+    color: var(--text-secondary);
+    min-height: 24px;
+    margin-bottom: 8px;
+    text-align: right;
+    word-wrap: break-word;
+}
+
+.result {
+    font-size: 2em;
+    color: var(--text-primary);
+    text-align: right;
+    word-wrap: break-word;
+    transition: all 0.3s ease;
+}
+
+.result.equals {
+    font-size: 2.5em;
+    color: var(--accent-yellow);
+}
+
+.system-type {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+}
+
+.system-type span {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 6px;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+.system-type span:hover {
+    background: var(--bg-hover);
+}
+
+.system-type span.active {
+    background: var(--accent-color);
+    color: var(--text-on-accent);
+}
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.quick-action {
+    padding: 12px;
+    background: var(--button-bg);
+    border: none;
+    border-radius: 8px;
+    color: var(--button-text-function);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.quick-action:hover {
+    background: var(--button-bg-hover);
+}
+
+.keypad {
+    display: none;
+    gap: 10px;
+    flex: 1;
+}
+
+.keypad.active {
+    display: grid;
+}
+
+#keypad-4x5.active,
+#keypad-5x6.active,
+#keypad-6x7.active {
+    grid-template-columns: repeat(auto-fit, 1fr);
+    grid-auto-rows: 1fr;
+}
+
+.calc-btn {
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--button-bg);
+    color: var(--button-text-number);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px; /* Add minimum height for buttons */
+}
+
+.calc-btn:hover {
+    background: var(--button-bg-hover);
+    transform: translateY(-2px);
+}
+
+.calc-btn:active {
+    transform: translateY(0);
+}
+
+.calc-btn.operator {
+    color: var(--button-text-operator);
+}
+
+.calc-btn.function {
+    color: var(--button-text-function);
+}
+
+@media (max-width: 480px) {
+    #calculator {
+        padding: 10px;
+    }
+
+    .calculator-display {
+        padding: 15px;
+    }
+
+    .quick-actions {
+        gap: 5px;
+    }
+
+    #keypad-4x5 {
+        gap: 5px;
+    }
+
+    .calc-btn {
+        padding: 12px;
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 360px) {
+    .quick-action {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+
+    .calc-btn {
+        padding: 10px;
+        font-size: 1em;
+    }
+}
+
+.main-btn {
+    background: var(--button-bg-light);
+}

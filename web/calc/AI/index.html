@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/calculator.css">
+    <link rel="stylesheet" href="styles/converter.css">
+    <link rel="stylesheet" href="styles/settings.css">
+</head>
+<body>
+    <div class="navigation">
+        <button class="nav-btn active" data-page="calculator">Калькулятор</button>
+        <button class="nav-btn" data-page="converter">Конвертеры</button>
+        <button class="nav-btn" data-page="settings">Настройки</button>
+    </div>
+
+    <div class="pages">
+        <!-- Калькулятор -->
+        <div class="page active" id="calculator">
+            <div class="system-type">
+                <span class="active">DEC</span>
+                <span>HEX</span>
+                <span>OCT</span>
+                <span>BIN</span>
+            </div>
+
+            <div class="calculator-display">
+                <div class="expression">0</div>
+                <div class="result">0</div>
+            </div>
+
+            <div class="quick-actions">
+                <button class="quick-action">MC</button>
+                <button class="quick-action">MR</button>
+                <button class="quick-action">M+</button>
+                <button class="quick-action">M-</button>
+            </div>
+
+            <div id="keypad-4x5">
+                <!-- Кнопки будут добавлены через JavaScript -->
+            </div>
+        </div>
+
+        <!-- Конвертер -->
+        <div class="page" id="converter">
+            <!-- Содержимое будет добавлено через JavaScript -->
+        </div>
+
+        <!-- Настройки -->
+        <div class="page" id="settings">
+            <div class="keypad-size">
+                <h3>Размер клавиатуры:</h3>
+                <select id="keypad-size-select">
+                    <option value="4x5">4x5 (Стандартный)</option>
+                    <option value="5x6">5x6 (Расширенный)</option>
+                    <option value="6x7">6x7 (Максимальный)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/converter.js"></script>
+    <script src="js/settings.js"></script>
+</body>
+</html> 

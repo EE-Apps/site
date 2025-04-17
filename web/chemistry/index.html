@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Periodic Table | Таблица Менделеева</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="search-section">
+            <input type="text" id="searchInput" placeholder="Search elements...">
+            <select class="lang" id="searchLanguage">
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+                <option value="ua">Українська</option>
+            </select>
+        </div>
+        <div class="periodic-table-container">
+            <div id="periodicTable" class="periodic-table">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+        <div id="elementDetails" class="element-details">
+            <!-- Element details will appear here -->
+        </div>
+    </div>
+    <script src="elements.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

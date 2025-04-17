@@ -1,0 +1,140 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    user-select: none;
+}
+
+:root {
+    /* Основные цвета */
+    --bg-primary: #121212;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #242424;
+    --bg-hover: #2a2a2a;
+    
+    /* Текст */
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-on-accent: #000000;
+    
+    /* Акцентные цвета */
+    --accent-yellow: #ffd700;
+    --accent-blue: #00bfff;
+    --accent-green: #00ff9d;
+    
+    /* Кнопки */
+    --button-bg: #222222;
+    --button-bg-hover: #2a2a2a;
+    --button-text-number: var(--text-primary);
+    --button-text-operator: var(--accent-green);
+    --button-text-function: var(--accent-blue);
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.navigation {
+    background-color: var(--bg-secondary);
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nav-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: var(--bg-hover);
+    transform: translateY(-2px);
+}
+
+.nav-btn.active {
+    background: var(--accent-yellow);
+    color: var(--text-on-accent);
+}
+
+.nav-icons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.nav-icon {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.nav-icon.active {
+    color: var(--accent-green);
+}
+
+.system-type {
+    display: flex;
+    gap: 1rem;
+    font-size: 1.2rem;
+}
+
+.system-type span {
+    color: var(--text-secondary);
+}
+
+.system-type span.active {
+    background: var(--accent-yellow);
+    color: var(--text-on-accent);
+}
+
+.pages {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    height: calc(100vh - 50px);
+}
+
+.page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    background-color: var(--bg-primary);
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.page.active {
+    transform: translateX(0);
+}
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 600px) {
+    .navigation {
+        padding: 0.25rem;
+    }
+
+    .system-type {
+        font-size: 1rem;
+    }
+} 

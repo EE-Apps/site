@@ -1,0 +1,139 @@
+.converter-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg-primary);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+#converter-type {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#converter-type:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+.converter-input {
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.converter-input input {
+    flex: 1;
+    min-width: 150px;
+    padding: 10px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.converter-input input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+.converter-input select {
+    width: 150px;
+    padding: 10px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.converter-input select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+#swap-units {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.2rem;
+    background: var(--accent-color);
+    color: var(--text-on-accent);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#swap-units:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+#swap-units:active {
+    transform: translateY(0);
+}
+
+#to-value {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+@media (max-width: 480px) {
+    .converter-container {
+        padding: 15px;
+    }
+
+    .converter-input {
+        padding: 10px;
+    }
+
+    .converter-input input,
+    .converter-input select {
+        font-size: 1rem;
+        padding: 8px;
+    }
+
+    #converter-type {
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    #swap-units {
+        padding: 10px;
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .converter-container {
+        padding: 10px;
+    }
+
+    .converter-input {
+        padding: 8px;
+    }
+
+    #swap-units {
+        padding: 8px;
+        font-size: 1rem;
+    }
+} 
