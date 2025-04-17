@@ -91,7 +91,7 @@ body {
 
 .periodic-table-container {
     width: 100%;
-    overflow-x: auto;
+    /* overflow-x: auto; */
     padding: 20px 0;
     justify-content: start;
     display: flex;
