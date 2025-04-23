@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download RAM - Free Memory Upgrade</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dark">
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <i class="fas fa-memory"></i>
+                    <span data-i18n="brand">DownloadRAM</span>
+                </div>
+                <div class="controls">
+                    <select id="language">
+                        <option value="en">English</option>
+                        <option value="ru">Русский</option>
+                        <option value="ua">Українська</option>
+                    </select>
+                    <button id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="hero">
+            <h1 data-i18n="hero.title">Download More RAM Instantly!</h1>
+            <p data-i18n="hero.subtitle">Upgrade your computer's memory with our revolutionary cloud-based RAM technology</p>
+        </section>
+
+        <section class="ram-configurator">
+            <div class="config-card">
+                <h2 data-i18n="config.title">Configure Your RAM Download</h2>
+                <div class="config-options">
+                    <div class="option">
+                        <label data-i18n="config.type">RAM Type:</label>
+                        <select id="ram-type">
+                            <option value="ddr1">DDR1</option>
+                            <option value="ddr2">DDR2</option>
+                            <option value="ddr3">DDR3</option>
+                            <option value="ddr4">DDR4</option>
+                            <option value="ddr5">DDR5</option>
+                            <option value="ddr5x">DDR5X</option>
+                        </select>
+                    </div>
+                    <div class="option">
+                        <label data-i18n="config.amount">Amount of RAM:</label>
+                        <select id="ram-amount">
+                            <option value="4">4 GB</option>
+                            <option value="8">8 GB</option>
+                            <option value="16">16 GB</option>
+                            <option value="32">32 GB</option>
+                            <option value="64">64 GB</option>
+                        </select>
+                    </div>
+                </div>
+                <button id="download-btn" class="primary-btn" data-i18n="config.download">Download RAM</button>
+            </div>
+        </section>
+
+        <section class="premium">
+            <div class="premium-card">
+                <div class="premium-header">
+                    <i class="fas fa-crown"></i>
+                    <h2 data-i18n="premium.title">Go Premium</h2>
+                </div>
+                <ul class="premium-features">
+                    <li data-i18n="premium.feature1">Unlimited RAM Downloads</li>
+                    <li data-i18n="premium.feature2">Priority Download Speed</li>
+                    <li data-i18n="premium.feature3">Advanced RAM Types</li>
+                    <li data-i18n="premium.feature4">24/7 Support</li>
+                </ul>
+                <button id="premium-btn" class="premium-btn" data-i18n="premium.button">Upgrade to Premium</button>
+            </div>
+        </section>
+    </main>
+
+    <div id="download-modal" class="modal">
+        <div class="modal-content">
+            <div class="loader"></div>
+            <p id="download-status" data-i18n="modal.downloading">Downloading RAM...</p>
+        </div>
+    </div>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
