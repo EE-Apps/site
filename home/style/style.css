@@ -45,8 +45,14 @@ body {
     display: flex; /* Используется flexbox */
     flex-direction: column; /* Расположение элементов в колонку */
     align-items: center; /* Центрирование по горизонтали */
-    padding: 10px 10px 10px 10px;
+    /*padding: 10px 10px 10px 10px;*/
     flex-shrink: 0;
+    
+    padding-top: 10px;
+    padding-right: 10px;
+    /*padding-bottom: 10px;*/
+    padding-left: 10px;
+
 }
 
 .ais {
@@ -58,7 +64,7 @@ body {
     flex-direction: column; /* Расположение элементов в колонку */
     align-items: center; /* Центрирование по горизонтали */
     flex-shrink: 0;
-    margin: 10px;
+    /*margin: 10px;*/
 }
 
 .ais-ai {
@@ -155,7 +161,7 @@ body {
     display: flex;
     align-items: center;
     background: var(--card-bg);
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -168,7 +174,7 @@ body {
     display: flex;
     align-items: center;
     background: var(--card-bg);
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);

@@ -1,5 +1,5 @@
 // alert("1917")
-let thisversion = "1.3.3";
+let thisversion = "1.4.0";
 const searchEngines = {
     google: {
         url: "https://www.google.com/search?q=",
@@ -14,7 +14,7 @@ const searchEngines = {
         assistant: { url: "https://alice.yandex.ru/", icon: "./icons/alice.svg" }
     },
     openai: {
-        url: "https://chatgpt.com/?q=",
+        url: "https://chatgpt.com/?temporary-chat=true&q=",
         assistant: { url: "https://chatgpt.com/", icon: "./icons/chatgpt.svg" }
     },
     wru: {
