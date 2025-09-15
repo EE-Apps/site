@@ -1,4 +1,4 @@
-class main {
+class calculator {
     constructor(parameters) {
         
     }

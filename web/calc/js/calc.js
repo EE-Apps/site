@@ -1,402 +1,402 @@
-class Calculator {
-    constructor() {
-        this.expression = '';
-        this.currentNumber = '0';
-        this.result = '0';
-        this.system = 'DEC';
-        this.isCalculated = false;
-        this.currentExpression = '0';
-        this.currentKeypadSize = '4x5';
-
-        this.displayExpression = document.querySelector('.expression');
-        this.displayResult = document.querySelector('.result');
-        this.customBaseInput = null; // Удаляем ссылку на элемент
-        
-        this.initializeEventListeners();
-
-        this.validDigits = {
-            'DEC': /[0-9]/,
-            'HEX': /[0-9A-Fa-f]/,
-            'OCT': /[0-7]/,
-            'BIN': /[0-1]/
-        };
-
-        // Добавляем математические константы
-        this.constants = {
-            'π': Math.PI,
-            'e': Math.E
-        };
-
-        this.integralSteps = 1000; // Количество шагов для численного интегрирования
+class CalcManager {
+    constructor(parameters) {
+        this.cursor = 1;
+        this.system = 10;
+        this.size = 'min';
     }
 
-    initializeEventListeners() {
-        // Number buttons
-        document.querySelectorAll('.calc-btn.number').forEach(button => {
-            button.addEventListener('click', () => this.handleNumber(button.textContent));
-        });
-
-        // Operator buttons
-        document.querySelectorAll('.calc-btn.operator').forEach(button => {
-            button.addEventListener('click', () => this.handleOperator(button.textContent));
-        });
-
-        // Function buttons
-        document.querySelectorAll('.calc-btn.function').forEach(button => {
-            button.addEventListener('click', () => this.handleFunction(button.textContent));
-        });
-
-        // System type buttons
-        document.querySelectorAll('.system-type span:not(.custom-base)').forEach(button => {
-            button.addEventListener('click', () => this.switchSystem(button.textContent));
-        });
+    init() {
     }
 
-    handleNumber(num) {
-        if (this.isCalculated) {
-            this.currentExpression = '0';
-            this.result = '0';
-            this.isCalculated = false;
-            this.displayResult.classList.remove('equals');
+    interactClin(type, value = '', cursorPos) {
+        if (cursorPos === undefined) {
+            cursorPos = this.cursor;
         }
 
-        // Обработка констант
-        if (this.constants.hasOwnProperty(num)) {
-            if (this.currentExpression === '0') {
-                this.currentExpression = this.constants[num].toString();
-            } else {
-                this.currentExpression += this.constants[num].toString();
-            }
-            this.updateDisplay();
+        // --------------------==========::::::::: система счисления :::::::::==========--------------------
+        const base = this.system || 10; // система счисления
+        const digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.slice(0, base); // допустимые символы
+        const allowedChars = new RegExp(`^[${digits}]+$`, 'i');
+
+        const input = document.getElementById('clin');
+        if (!input) {
+            console.error('Элемент #clin не найден!');
             return;
         }
 
-        // Проверка допустимости цифры для текущей системы
-        if (this.system !== 'CUSTOM') {
-            if (!this.validDigits[this.system].test(num)) {
-                return; // Игнорируем недопустимые цифры
+        let currentValue = input.value;
+        let pos = Math.max(0, cursorPos - 1); // переводим из твоей 1-индексации в JS-овский 0
+
+        switch (type) {
+            case 'add': {
+                input.value = currentValue.slice(0, pos) + value + currentValue.slice(pos);
+                if (cursorPos <= this.cursor) {
+                    this.cursor += value.length;
+                };
+                this.interactClin('result');
+                break;
             }
-        } else {
-            const base = parseInt(this.customBaseInput.value);
-            const maxDigit = base <= 10 ? base - 1 : '9';
-            const validChars = base > 10 
-                ? `[0-9A-${String.fromCharCode(55 + base - 10)}]`
-                : `[0-${maxDigit}]`;
-            if (!new RegExp(validChars, 'i').test(num)) {
-                return;
+            case 'delFront': { // delete
+                let count = Number(value) || 1;
+                input.value = currentValue.slice(pos + count);
+                this.interactClin('result');
+                break;
             }
-        }
-
-        if (this.currentExpression === '0' && num !== '.') {
-            this.currentExpression = num;
-        } else {
-            this.currentExpression += num;
-        }
-        
-        this.updateDisplay();
-    }
-
-    handleOperator(operator) {
-        if (operator === '=') {
-            this.calculate();
-            return;
-        }
-
-        if (operator === 'x!') {
-            this.currentExpression += '!';
-            this.updateDisplay();
-            return;
-        }
-
-        const operatorMap = {
-            '×': '*',
-            '÷': '/',
-            'mod': '%',
-            '^': '**',
-            'sin': 'Math.sin(',
-            'cos': 'Math.cos(',
-            'tan': 'Math.tan(',
-            'ctan': '1/Math.tan(',
-            'log': 'Math.log10(',
-            'ln': 'Math.log(',
-            'exp': 'Math.exp(',
-            'sinh': 'Math.sinh(',
-            'cosh': 'Math.cosh(',
-            'tanh': 'Math.tanh(',
-            'ctanh': '1/Math.tanh(',
-            '√': 'Math.sqrt(',
-            'y√': '**0.5',
-            'x!': '!'
-        };
-
-        let opToAdd = operatorMap[operator] || operator;
-        
-        if (this.currentExpression !== '0') {
-            // Убираем особую обработку функций, теперь все операторы добавляются как есть
-            this.currentExpression += opToAdd;
-            this.updateDisplay();
-        } else {
-            // Если выражение пустое, и это функция - добавляем её
-            if (['Math.sin(', 'Math.cos(', 'Math.tan(', '1/Math.tan(', 'Math.log10(',
-                'Math.log(', 'Math.exp(', 'Math.sinh(', 'Math.cosh(', 'Math.tanh(',
-                '1/Math.tanh(', 'Math.sqrt('].includes(opToAdd)) {
-                this.currentExpression = opToAdd;
-                this.updateDisplay();
-            }
-        }
-    }
-
-    handleFunction(func) {
-        switch (func) {
-            case 'AC':
-                this.clear();
-                break;
-            case '⌫':
-                this.backspace();
-                break;
-            case '±':
-                this.toggleSign();
-                break;
-            case '=':
-                this.calculate();
-                break;
-            case '⇱':
-                this.switchKeypad('up');
-                break;
-            case '⇲':
-                this.switchKeypad('down');
-                break;
-        }
-    }
-
-    switchSystem(newSystem) {
-        if (newSystem === this.system) return;
-
-        // Сохраняем текущее выражение и результат в десятичной системе
-        let decimalExpression = '';
-        if (this.currentExpression !== '0') {
-            decimalExpression = this.currentExpression.split(' ').map(part => {
-                if (this.isNumber(part)) {
-                    return this.toDecimal(part, this.system);
+            case 'delBack': { // backspace удалить
+                let count = Number(value) || 1;
+                let start = Math.max(0, pos - count);
+                input.value = currentValue.slice(0, start) + currentValue.slice(pos);
+                if (this.cursor > 0) {
+                    this.cursor = this.cursor - 1;
+                } else {
+                    this.cursor = 1;
                 }
-                return part;
-            }).join(' ');
-        }
+                this.interactClin('result');
+                break;
+            }
+            case 'clear': {
+                input.value = '';
+                this.cursor = 1
+                document.getElementById('result').textContent = ''
+                break;
+            }
+            case 'replace': {
+                input.value = value;
+                document.getElementById('result').textContent = ''
+                this.interactClin('result');
+                break;
+            }
+            case 'result': {
+                if (document.getElementById('clin').value.includes('x') && value === 'click') {
+                    this.interactClin('add', '=')
+                }
+                let resultSpan = document.getElementById('result');
+                let currentValue = document.getElementById('clin').value.trim();
 
-        // Обновляем UI
-        document.querySelectorAll('.system-type span').forEach(span => {
-            span.classList.remove('active');
+                try {
+                    // Преобразуем числа в десятичную перед вычислением
+                    let convertedExpr = currentValue.replace(
+                        new RegExp(`[${digits}]+`, 'gi'),
+                        match => parseInt(match, base).toString(10)
+                    );
+
+                    if (convertedExpr.includes('=')) {
+                        // Разделяем на строки/уравнения, если есть переносы или ;
+                        let lines = convertedExpr.split(/[\n;]/).map(l => l.trim()).filter(l => l);
+
+                        // Проверяем, система или одно уравнение
+                        if (lines.length > 1) {
+                            // Система уравнений
+                            const variableMap = {};
+
+                            /*// Получаем все переменные из уравнений
+                            lines.forEach(eq => {
+                                const varMatch = eq.match(/[a-zA-Z]+/);
+                                if (varMatch) {
+                                    const v = varMatch[0];
+                                    if (!variableMap[v]) variableMap[v] = [];
+                                    // Получаем решения для каждого уравнения по переменной
+                                    const sols = nerdamer(eq).solveFor(v).map(s => s.text());
+                                    variableMap[v].push(...sols);
+                                }
+                            });
+
+                            // Декартово произведение всех решений
+                            const cartesianProduct = (arrays) =>
+                                arrays.reduce((acc, curr) => {
+                                    const res = [];
+                                    acc.forEach(a => curr.forEach(b => res.push(a.concat([b]))));
+                                    return res;
+                                }, [[]]);
+
+                            const allSolutions = cartesianProduct(Object.values(variableMap));
+
+                            // Выводим все комбинации
+                            let output = allSolutions
+                                .map(sol => Object.keys(variableMap)
+                                    .map((v, i) => `${v} = ${sol[i]}`)
+                                    .join('\n')
+                                )
+                                .join('\n\n'); // между разными решениями пустая строка*/
+
+                            // Решаем систему через solveEquations
+                            let solutions = nerdamer.solveEquations(lines);
+
+                            // Преобразуем в массив, если это не массив
+                            if (!Array.isArray(solutions)) solutions = [solutions];
+
+                            let output = solutions
+                                .map(sol => {
+                                    // sol — это массив вида ['x', '23']
+                                    let variable = sol[0];
+                                    let value = sol[1];
+                                    return `${variable} = ${nerdamer(value).evaluate().text()}`;
+                                })
+                                .join('\n');
+
+                            // Переводим результат обратно в нужную систему
+                            output = output.replace(/-?\d+(\.\d+)?/g, num =>
+                                (isFinite(num) ? parseFloat(num).toString(base).toUpperCase() : num)
+                            );
+
+                            resultSpan.textContent = output;
+                        } else {
+                            // Одно уравнение
+                            let solutions = nerdamer.solve(lines[0], 'x');
+                            if (!Array.isArray(solutions)) solutions = [solutions];
+
+                            let output;
+                            if (solutions.length === 1) {
+                                output = solutions[0];
+                            } else {
+                                output = solutions.map(s => `x = ${nerdamer(s).evaluate().text()}`).join('\n');
+
+                                // Переводим результат обратно в нужную систему
+                                output = output.replace(/-?\d+(\.\d+)?/g, num =>
+                                    (isFinite(num) ? parseFloat(num).toString(base).toUpperCase() : num)
+                                );
+                            }
+                            
+                            resultSpan.textContent = output;
+                        }
+                    } else {
+                        // обычный калькулятор
+                        let output = nerdamer(convertedExpr).evaluate().text(); // получаем результат в виде строки
+
+                        // Переводим результат обратно в нужную систему
+                        output = output.replace(/-?\d+(\.\d+)?/g, num =>
+                            (isFinite(num) ? parseFloat(num).toString(base).toUpperCase() : num)
+                        );
+
+                        resultSpan.textContent = output;
+                    }
+
+                    // Сохраняем в local storage
+                    //alert(`${resultSpan.textContent} enot`);
+                    localStorage.setItem('calcenter', document.getElementById('clin').value.trim());
+                    localStorage.setItem('calccursor', window.CalcManager.cursor)
+                } catch (e) {
+                    //resultSpan.textContent = 'Ошибка: ' + e.message;
+                }
+                break;
+            }
+
+            default:
+                console.error('Неизвестный тип взаимодействия:', type);
+        }
+    }
+
+    sheetSet(system, size) {
+        if (size === undefined) {
+            size = this.size;
+        }
+        if (system === undefined) {
+            system = this.system
+        }
+        let grid;
+        this.size = size;
+
+        localStorage.setItem('calcsize', size);
+        localStorage.setItem('calcsystem', system);
+
+        grid = document.getElementById('buttonsplace');
+        grid.classList.remove('min');
+        grid.classList.remove('mid');
+        grid.classList.remove('max');
+        grid.classList.add(size);
+
+        grid.classList.remove(`bin`);
+        grid.classList.remove(`oct`);
+        grid.classList.remove(`dec`);
+        grid.classList.remove(`hex`);
+
+        if (system == 10) {
+            grid.classList.add('dec');
+            if (size == 'min') {
+                grid.innerHTML = `
+                    <button class="btn bcalc func" data-val="clear" onclick="window.CalcManager.interactClin('clear', '')">AC</button>
+                    <button class="btn bcalc func" data-val="backsp" onclick="window.CalcManager.interactClin('delBack', 1)">←</button>
+                    <button class="btn bcalc oper" data-val="+or-" onclick="window.CalcManager.interactClin('add', '-')">+/-</button>
+                    <button class="btn bcalc oper" data-val="/" onclick="window.CalcManager.interactClin('add', '/')">/</button>
+                    <button class="btn bcalc numb" data-val="7" onclick="window.CalcManager.interactClin('add', '7')">7</button>
+                    <button class="btn bcalc numb" data-val="8" onclick="window.CalcManager.interactClin('add', '8')">8</button>
+                    <button class="btn bcalc numb" data-val="9" onclick="window.CalcManager.interactClin('add', '9')">9</button>
+                    <button class="btn bcalc oper" data-val="*" onclick="window.CalcManager.interactClin('add', '*')">*</button>
+                    <button class="btn bcalc numb" data-val="4" onclick="window.CalcManager.interactClin('add', '4')">4</button>
+                    <button class="btn bcalc numb" data-val="5" onclick="window.CalcManager.interactClin('add', '5')">5</button>
+                    <button class="btn bcalc numb" data-val="6" onclick="window.CalcManager.interactClin('add', '6')">6</button>
+                    <button class="btn bcalc oper" data-val="-" onclick="window.CalcManager.interactClin('add', '-')">-</button>
+                    <button class="btn bcalc numb" data-val="1" onclick="window.CalcManager.interactClin('add', '1')">1</button>
+                    <button class="btn bcalc numb" data-val="2" onclick="window.CalcManager.interactClin('add', '2')">2</button>
+                    <button class="btn bcalc numb" data-val="3" onclick="window.CalcManager.interactClin('add', '3')">3</button>
+                    <button class="btn bcalc oper" data-val="+" onclick="window.CalcManager.interactClin('add', '+')">+</button>
+                    <button class="btn bcalc gray" data-val="more" onclick="window.CalcManager.sheetSet(undefined, 'mid')">«</button>
+                    <button class="btn bcalc numb" data-val="0" onclick="window.CalcManager.interactClin('add', '0')">0</button>
+                    <button class="btn bcalc numb" data-val="." onclick="window.CalcManager.interactClin('add', '.')">.</button>
+                    <button class="btn bcalc func" data-val="result" onclick="window.CalcManager.interactClin('result', 'click')">=</button>`
+            } else if (size == 'mid') {
+                grid.innerHTML = `
+                    <button class="btn bcalc oper" data-val="^" onclick="window.CalcManager.interactClin('add', '^')">^</button>
+                    <button class="btn bcalc oper" data-val="%" onclick="window.CalcManager.interactClin('add', '%')">%</button>
+                    <button class="btn bcalc opeb" data-val="xqrt" onclick="window.CalcManager.interactClin('add', 'xqrt(')">x√</button>
+                    <button class="btn bcalc oper" data-val="(" onclick="window.CalcManager.interactClin('add', '(')">(</button>
+                    <button class="btn bcalc oper" data-val=")" onclick="window.CalcManager.interactClin('add', ')')">)</button>
+                    <button class="btn bcalc oper" data-val="sqrt" onclick="window.CalcManager.interactClin('add', 'sqrt(')">√</button>
+                    <button class="btn bcalc func" data-val="clear" onclick="window.CalcManager.interactClin('clear', '')">AC</button>
+                    <button class="btn bcalc func" data-val="backsp" onclick="window.CalcManager.interactClin('delBack', 1)">←</button>
+                    <button class="btn bcalc oper" data-val="+or-" onclick="window.CalcManager.interactClin('add', '-')">+/-</button>
+                    <button class="btn bcalc oper" data-val="/" onclick="window.CalcManager.interactClin('add', '/')">/</button>
+                    <button class="btn bcalc oper" data-val="!" onclick="window.CalcManager.interactClin('add', '!')">x!</button>
+                    <button class="btn bcalc numb" data-val="7" onclick="window.CalcManager.interactClin('add', '7')">7</button>
+                    <button class="btn bcalc numb" data-val="8" onclick="window.CalcManager.interactClin('add', '8')">8</button>
+                    <button class="btn bcalc numb" data-val="9" onclick="window.CalcManager.interactClin('add', '9')">9</button>
+                    <button class="btn bcalc oper" data-val="*" onclick="window.CalcManager.interactClin('add', '*')">*</button>
+                    <button class="btn bcalc opeb" data-val="mod" onclick="window.CalcManager.interactClin('add', 'mod')">mod</button>
+                    <button class="btn bcalc numb" data-val="4" onclick="window.CalcManager.interactClin('add', '4')">4</button>
+                    <button class="btn bcalc numb" data-val="5" onclick="window.CalcManager.interactClin('add', '5')">5</button>
+                    <button class="btn bcalc numb" data-val="6" onclick="window.CalcManager.interactClin('add', '6')">6</button>
+                    <button class="btn bcalc oper" data-val="-" onclick="window.CalcManager.interactClin('add', '-')">-</button>
+                    <button class="btn bcalc oper" data-val="x" onclick="window.CalcManager.interactClin('add', 'x')">x</button>
+                    <button class="btn bcalc numb" data-val="1" onclick="window.CalcManager.interactClin('add', '1')">1</button>
+                    <button class="btn bcalc numb" data-val="2" onclick="window.CalcManager.interactClin('add', '2')">2</button>
+                    <button class="btn bcalc numb" data-val="3" onclick="window.CalcManager.interactClin('add', '3')">3</button>
+                    <button class="btn bcalc oper" data-val="+" onclick="window.CalcManager.interactClin('add', '+')">+</button>
+                    <button class="btn bcalc gray" data-val="more" onclick="window.CalcManager.sheetSet(undefined, 'max')">«</button>
+                    <button class="btn bcalc gray" data-val="less" onclick="window.CalcManager.sheetSet(undefined, 'min')">»</button>
+                    <button class="btn bcalc numb" data-val="0" onclick="window.CalcManager.interactClin('add', '0')">0</button>
+                    <button class="btn bcalc numb" data-val="." onclick="window.CalcManager.interactClin('add', '.')">.</button>
+                    <button class="btn bcalc func" data-val="result" onclick="window.CalcManager.interactClin('result', 'click')">=</button>`
+            } else if (size == 'max') {
+                grid.innerHTML = `
+                    <button class="btn bcalc opeb" data-val="sin" onclick="window.CalcManager.interactClin('add', 'sin(')">sin</button>
+                    <button class="btn bcalc opeb" data-val="cos" onclick="window.CalcManager.interactClin('add', 'cos(')">cos</button>
+                    <button class="btn bcalc opeb" data-val="tan" onclick="window.CalcManager.interactClin('add', 'tan(')">tan</button>
+                    <button class="btn bcalc opeb" data-val="ctan" onclick="window.CalcManager.interactClin('add', 'ctan(')">ctan</button>
+                    <button class="btn bcalc opeb" data-val="log" onclick="window.CalcManager.interactClin('add', 'log(')">log</button>
+                    <button class="btn bcalc opeb" data-val="exp" onclick="window.CalcManager.interactClin('add', 'exp(')">exp</button>
+                    <button class="btn bcalc opeb" data-val="sinh" onclick="window.CalcManager.interactClin('add', 'sinh(')">sinh</button>
+                    <button class="btn bcalc opeb" data-val="cosh" onclick="window.CalcManager.interactClin('add', 'cosh(')">cosh</button>
+                    <button class="btn bcalc opeb" data-val="tanh" onclick="window.CalcManager.interactClin('add', 'tanh(')">tanh</button>
+                    <button class="btn bcalc opeb" data-val="ctanh" onclick="window.CalcManager.interactClin('add', 'ctanh(')">ctanh</button>
+                    <button class="btn bcalc oper" data-val="(" onclick="window.CalcManager.interactClin('add', '(')">(</button>
+                    <button class="btn bcalc oper" data-val=")" onclick="window.CalcManager.interactClin('add', ')')">)</button>
+                    <button class="btn bcalc oper" data-val="sqrt" onclick="window.CalcManager.interactClin('add', 'sqrt(')">√</button>
+                    <button class="btn bcalc oper" data-val="xqrt" onclick="window.CalcManager.interactClin('add', 'xqrt(')">x√</button>
+                    <button class="btn bcalc func" data-val="clear" onclick="window.CalcManager.interactClin('clear', '')">AC</button>
+                    <button class="btn bcalc func" data-val="backsp" onclick="window.CalcManager.interactClin('delBack', 1)">←</button>
+                    <button class="btn bcalc oper" data-val="+or-" onclick="window.CalcManager.interactClin('add', '-')">+/-</button>
+                    <button class="btn bcalc oper" data-val="/" onclick="window.CalcManager.interactClin('add', '/')">/</button>
+                    <button class="btn bcalc oper" data-val="!" onclick="window.CalcManager.interactClin('add', '!')">x!</button>
+                    <button class="btn bcalc oper" data-val="%" onclick="window.CalcManager.interactClin('add', '%')">%</button>
+                    <button class="btn bcalc numb" data-val="7" onclick="window.CalcManager.interactClin('add', '7')">7</button>
+                    <button class="btn bcalc numb" data-val="8" onclick="window.CalcManager.interactClin('add', '8')">8</button>
+                    <button class="btn bcalc numb" data-val="9" onclick="window.CalcManager.interactClin('add', '9')">9</button>
+                    <button class="btn bcalc oper" data-val="*" onclick="window.CalcManager.interactClin('add', '*')">*</button>
+                    <button class="btn bcalc opeb" data-val="mod" onclick="window.CalcManager.interactClin('add', 'mod')">mod</button>
+                    <button class="btn bcalc oper" data-val="^" onclick="window.CalcManager.interactClin('add', '^')">^</button>
+                    <button class="btn bcalc numb" data-val="4" onclick="window.CalcManager.interactClin('add', '4')">4</button>
+                    <button class="btn bcalc numb" data-val="5" onclick="window.CalcManager.interactClin('add', '5')">5</button>
+                    <button class="btn bcalc numb" data-val="6" onclick="window.CalcManager.interactClin('add', '6')">6</button>
+                    <button class="btn bcalc oper" data-val="-" onclick="window.CalcManager.interactClin('add', '-')">-</button>
+                    <button class="btn bcalc oper" data-val="x" onclick="window.CalcManager.interactClin('add', 'x')">x</button>
+                    <button class="btn bcalc oper" data-val="y" onclick="window.CalcManager.interactClin('add', 'y')">y</button>
+                    <button class="btn bcalc numb" data-val="1" onclick="window.CalcManager.interactClin('add', '1')">1</button>
+                    <button class="btn bcalc numb" data-val="2" onclick="window.CalcManager.interactClin('add', '2')">2</button>
+                    <button class="btn bcalc numb" data-val="3" onclick="window.CalcManager.interactClin('add', '3')">3</button>
+                    <button class="btn bcalc oper" data-val="+" onclick="window.CalcManager.interactClin('add', '+')">+</button>
+                    <button class="btn bcalc gray" data-val="less" onclick="window.CalcManager.sheetSet(undefined, 'mid')">»</button>
+                    <button class="btn bcalc oper" data-val="e" onclick="window.CalcManager.interactClin('add', 'e')">e</button>
+                    <button class="btn bcalc oper" data-val="π" onclick="window.CalcManager.interactClin('add', 'π')">π</button>
+                    <button class="btn bcalc numb" data-val="0" onclick="window.CalcManager.interactClin('add', '0')">0</button>
+                    <button class="btn bcalc numb" data-val="." onclick="window.CalcManager.interactClin('add', '.')">.</button>
+                    <button class="btn bcalc func" data-val="result" onclick="window.CalcManager.interactClin('result', 'click')">=</button>`
+            }
+        } else if (system == 16) {
+            grid.classList.add('hex');
+            if (size == 'min') {
+                grid.innerHTML = `
+                    <button class="btn bcalc numb" data-val="E" onclick="window.CalcManager.interactClin('add', 'E')">E</button>
+                    <button class="btn bcalc numb" data-val="F" onclick="window.CalcManager.interactClin('add', 'F')">F</button>
+                    <button class="btn bcalc oper" data-val="^" onclick="window.CalcManager.interactClin('add', '^')">^</button>
+                    <button class="btn bcalc oper" data-val="(" onclick="window.CalcManager.interactClin('add', '(')">(</button>
+                    <button class="btn bcalc oper" data-val=")" onclick="window.CalcManager.interactClin('add', ')')">)</button>
+                    <button class="btn bcalc numb" data-val="D" onclick="window.CalcManager.interactClin('add', 'D')">D</button>
+                    <button class="btn bcalc func" data-val="clear" onclick="window.CalcManager.interactClin('clear', '')">AC</button>
+                    <button class="btn bcalc func" data-val="backsp" onclick="window.CalcManager.interactClin('delBack', 1)">←</button>
+                    <button class="btn bcalc oper" data-val="+or-" onclick="window.CalcManager.interactClin('add', '-')">+/-</button>
+                    <button class="btn bcalc oper" data-val="/" onclick="window.CalcManager.interactClin('add', '/')">/</button>
+                    <button class="btn bcalc numb" data-val="C" onclick="window.CalcManager.interactClin('add', 'C')">C</button>
+                    <button class="btn bcalc numb" data-val="7" onclick="window.CalcManager.interactClin('add', '7')">7</button>
+                    <button class="btn bcalc numb" data-val="8" onclick="window.CalcManager.interactClin('add', '8')">8</button>
+                    <button class="btn bcalc numb" data-val="9" onclick="window.CalcManager.interactClin('add', '9')">9</button>
+                    <button class="btn bcalc oper" data-val="*" onclick="window.CalcManager.interactClin('add', '*')">*</button>
+                    <button class="btn bcalc numb" data-val="B" onclick="window.CalcManager.interactClin('add', 'B')">B</button>
+                    <button class="btn bcalc numb" data-val="4" onclick="window.CalcManager.interactClin('add', '4')">4</button>
+                    <button class="btn bcalc numb" data-val="5" onclick="window.CalcManager.interactClin('add', '5')">5</button>
+                    <button class="btn bcalc numb" data-val="6" onclick="window.CalcManager.interactClin('add', '6')">6</button>
+                    <button class="btn bcalc oper" data-val="-" onclick="window.CalcManager.interactClin('add', '-')">-</button>
+                    <button class="btn bcalc numb" data-val="A" onclick="window.CalcManager.interactClin('add', 'A')">A</button>
+                    <button class="btn bcalc numb" data-val="1" onclick="window.CalcManager.interactClin('add', '1')">1</button>
+                    <button class="btn bcalc numb" data-val="2" onclick="window.CalcManager.interactClin('add', '2')">2</button>
+                    <button class="btn bcalc numb" data-val="3" onclick="window.CalcManager.interactClin('add', '3')">3</button>
+                    <button class="btn bcalc oper" data-val="+" onclick="window.CalcManager.interactClin('add', '+')">+</button>
+                    <button class="btn bcalc gray" data-val="more" onclick="window.CalcManager.sheetSet(undefined, 'mid')">«</button>
+                    <button class="btn bcalc numb" data-val="∞" onclick="window.CalcManager.interactClin('add', '∞')">∞</button>
+                    <button class="btn bcalc numb" data-val="0" onclick="window.CalcManager.interactClin('add', '0')">0</button>
+                    <button class="btn bcalc numb" data-val="." onclick="window.CalcManager.interactClin('add', '.')">.</button>
+                    <button class="btn bcalc func" data-val="result" onclick="window.CalcManager.interactClin('result', 'click')">=</button>`
+            }
+        }
+    }
+
+    sysSwitch(sysId) {
+        let btId = 'sys';
+        btId += sysId;
+        document.querySelectorAll('.bsys').forEach(btn => {
+            btn.classList.remove('active');
         });
-        if (newSystem === 'CUSTOM') {
-            document.querySelector('.system-type .custom-base').classList.add('active');
+        if ([2, 8, 10, 16].includes(sysId)) {
+            document.getElementById(btId)?.classList.add('active');
         } else {
-            document.querySelectorAll('.system-type span:not(.custom-base)').forEach(span => {
-                if (span.textContent === newSystem) {
-                    span.classList.add('active');
-                }
-            });
+            document.getElementById('sysCUSTOM')?.classList.add('active');
         }
-
-        // Меняем систему и конвертируем выражение
-        this.system = newSystem;
-        if (decimalExpression) {
-            this.currentExpression = decimalExpression.split(' ').map(part => {
-                const num = parseFloat(part);
-                return isNaN(num) ? part : this.fromDecimal(num, newSystem);
-            }).join(' ');
-        }
-
-        // Конвертируем результат если есть
-        if (this.isCalculated && this.result !== '0' && this.result !== 'Error') {
-            const decimalResult = parseFloat(this.result);
-            this.result = this.fromDecimal(decimalResult, newSystem);
-        }
-
-        this.updateDisplay();
-    }
-
-    switchKeypad(direction) {
-        const sizes = ['4x5', '5x6', '6x7'];
-        const currentIndex = sizes.indexOf(this.currentKeypadSize);
-        
-        if (direction === 'up' && currentIndex < sizes.length - 1) {
-            this.activateKeypad(sizes[currentIndex + 1]);
-        } else if (direction === 'down' && currentIndex > 0) {
-            this.activateKeypad(sizes[currentIndex - 1]);
-        }
-    }
-
-    activateKeypad(size) {
-        document.querySelector(`#keypad-${this.currentKeypadSize}`).classList.remove('active');
-        document.querySelector(`#keypad-${size}`).classList.add('active');
-        this.currentKeypadSize = size;
-    }
-
-    parseNumber(num, system) {
-        switch (system) {
-            case 'HEX': return parseInt(num, 16);
-            case 'OCT': return parseInt(num, 8);
-            case 'BIN': return parseInt(num, 2);
-            default: return parseFloat(num);
-        }
-    }
-
-    formatNumber(num, system) {
-        switch (system) {
-            case 'HEX': return Math.floor(num).toString(16).toUpperCase();
-            case 'OCT': return Math.floor(num).toString(8);
-            case 'BIN': return Math.floor(num).toString(2);
-            default: return num.toString();
-        }
-    }
-
-    isNumber(str) {
-        if (str === undefined || str === null) return false;
-        // Расширенная проверка для разных систем счисления
-        const hexRegex = /^-?[0-9A-Fa-f]+$/;
-        const octRegex = /^-?[0-7]+$/;
-        const binRegex = /^-?[01]+$/;
-        const decRegex = /^-?\d+(\.\d+)?$/;
-
-        switch (this.system) {
-            case 'HEX': return hexRegex.test(str);
-            case 'OCT': return octRegex.test(str);
-            case 'BIN': return binRegex.test(str);
-            default: return decRegex.test(str);
-        }
-    }
-
-    toDecimal(num, fromSystem) {
-        if (!num || typeof num !== 'string') return 0;
-        const isNegative = num.startsWith('-');
-        const absNum = isNegative ? num.slice(1) : num;
-
-        let decimal;
-        switch (fromSystem) {
-            case 'HEX': decimal = parseInt(absNum, 16); break;
-            case 'OCT': decimal = parseInt(absNum, 8); break;
-            case 'BIN': decimal = parseInt(absNum, 2); break;
-            default: decimal = parseFloat(absNum);
-        }
-
-        return isNegative ? -decimal : decimal;
-    }
-
-    fromDecimal(decimal, toSystem) {
-        if (isNaN(decimal)) return '0';
-        const isNegative = decimal < 0;
-        const absNum = Math.abs(decimal);
-        
-        let result;
-        switch (toSystem) {
-            case 'HEX': result = Math.floor(absNum).toString(16).toUpperCase(); break;
-            case 'OCT': result = Math.floor(absNum).toString(8); break;
-            case 'BIN': result = Math.floor(absNum).toString(2); break;
-            default: result = absNum.toString();
-        }
-
-        return isNegative ? '-' + result : result;
-    }
-
-    calculate() {
-        try {
-            let decimalExpression = this.currentExpression;
-
-            // Добавляем закрывающие скобки для незакрытых функций
-            const openBrackets = (decimalExpression.match(/\(/g) || []).length;
-            const closeBrackets = (decimalExpression.match(/\)/g) || []).length;
-            if (openBrackets > closeBrackets) {
-                decimalExpression += ')'.repeat(openBrackets - closeBrackets);
-            }
-
-            // Остальная обработка остаётся той же
-            decimalExpression = decimalExpression.replace(/(-?\d+)!/g, (match, num) => {
-                return this.factorial(parseInt(num));
-            });
-
-            // Преобразуем в десятичную систему
-            decimalExpression = decimalExpression.split(' ').map(part => {
-                if (this.isNumber(part)) {
-                    return this.toDecimal(part, this.system);
-                }
-                return part;
-            }).join(' ');
-
-            const result = eval(decimalExpression);
-            this.result = this.fromDecimal(result, this.system);
-            this.isCalculated = true;
-            this.displayResult.classList.add('equals');
-        } catch (error) {
-            console.error('Calculation error:', error);
-            this.result = 'Error';
-        }
-        this.updateDisplay();
-    }
-
-    evaluateExpression(expr) {
-        try {
-            return eval(expr);
-        } catch {
-            return 0;
-        }
-    }
-
-    factorial(n) {
-        if (isNaN(n) || n < 0) return NaN;
-        if (n === 0) return 1;
-        let result = 1;
-        for (let i = 2; i <= n; i++) {
-            result *= i;
-        }
-        return result;
-    }
-
-    clear() {
-        this.currentExpression = '0';
-        this.result = '0';
-        this.isCalculated = false;
-        this.displayResult.classList.remove('equals');
-        this.updateDisplay();
-    }
-
-    backspace() {
-        if (this.currentExpression.length > 1) {
-            this.currentExpression = this.currentExpression.slice(0, -1);
-        } else {
-            this.currentExpression = '0';
-        }
-        this.updateDisplay();
-    }
-
-    toggleSign() {
-        if (this.currentExpression === '0') return;
-
-        // Разбиваем выражение на части, сохраняя разделители
-        const parts = this.currentExpression.split(/([+\-*/()^])/);
-        
-        // Находим последнее число
-        let lastNumberIndex = parts.length - 1;
-        while (lastNumberIndex >= 0 && !this.isNumber(parts[lastNumberIndex].trim())) {
-            lastNumberIndex--;
-        }
-
-        if (lastNumberIndex >= 0) {
-            const num = parts[lastNumberIndex].trim();
-            // Переключаем знак числа
-            parts[lastNumberIndex] = num.startsWith('-') ? num.slice(1) : '-' + num;
-            // Собираем выражение обратно
-            this.currentExpression = parts.join('');
-            this.updateDisplay();
-        }
-    }
-
-    updateDisplay() {
-        this.displayExpression.textContent = this.currentExpression;
-        this.displayResult.textContent = this.isCalculated ? this.result : '';
+        this.system = sysId;
+        this.interactClin('result');
+        this.sheetSet(sysId)
     }
 }
 
-// Initialize calculator when page loads
+// Создаем глобальный экземпляр менеджера после загрузки DOM
 document.addEventListener('DOMContentLoaded', () => {
-    window.calculator = new Calculator();
+    console.log('Инициализация CalcManager...');
+    window.CalcManager = new CalcManager();
+
+    document.getElementById('clin').addEventListener(
+        'change',
+        window.CalcManager.interactClin.bind(window.CalcManager, 'result')
+    );
+
+    console.log('CalcManager инициализирован:', window.CalcManager);
+
+    // Получаем textarea
+    const textarea = document.getElementById('clin');
+
+    if (textarea) {
+        textarea.addEventListener('click', updateCursor);
+        textarea.addEventListener('keyup', updateCursor);
+        textarea.addEventListener('select', updateCursor); // на случай выделения
+
+        function updateCursor() {
+            // Позиция курсора
+            window.CalcManager.cursor = textarea.selectionStart + 1;
+            // Для проверки
+            // console.log('Cursor at:', window.CalcManager.cursor);
+        }
+    }
+
+    window.CalcManager.sheetSet(localStorage.getItem('calcsystem'), localStorage.getItem('calcsize'));
+    window.CalcManager.system = localStorage.getItem('calcsystem');
+    window.CalcManager.size = localStorage.getItem('calcsize');
+    window.CalcManager.cursor = Number(localStorage.getItem('calccursor'));
+    document.getElementById('clin').value = localStorage.getItem('calcenter');
 });
