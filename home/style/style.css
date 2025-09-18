@@ -8,6 +8,11 @@ body {
     transition: background 0.3s ease, color 0.3s ease;
 }
 
+body {
+    background: linear-gradient(135deg, #21211A, #1C2125, #1F2120);
+    color: white;
+}
+
 /* Dark theme toggle button */
 .theme-toggle {
     top: 10px;
