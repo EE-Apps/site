@@ -1,0 +1,88 @@
+<html>
+<head>
+    <title>Battlebashns</title>
+
+    <link rel="stylesheet" href="css/!.css">
+    <link rel="stylesheet" href="css/place.css">
+    <link rel="stylesheet" href="css/ai.css">
+    <link rel="stylesheet" href="css/interface.css">
+</head>
+<body>
+    <div id="connectPage" class="active">
+        <!-- SimplePeer: поля для обмена сигналами -->
+        <div id="webrtcControls" style="margin:12px 0; padding:8px; border:1px dashed #888;">
+        <label><input type="checkbox" id="isInitiator"> Я инициатор (создать offer)</label>
+        <div style="margin-top:6px;">
+            <button id="btnCreateSignal">Create / Update local signal</button>
+            <button id="btnAcceptRemote">Accept remote signal</button>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:6px;">
+            <div style="flex:1;">
+            <div>Local signal (скопируй и отправь другому):</div>
+            <textarea id="localSignal" rows="6" style="width:100%"></textarea>
+            </div>
+            <div style="flex:1;">
+            <div>Remote signal (вставь сюда и нажми Accept):</div>
+            <textarea id="remoteSignal" rows="6" style="width:100%"></textarea>
+            </div>
+        </div>
+
+        <div style="margin-top:6px;">
+            <span id="connStatus">Status: not connected</span>
+        </div>
+        </div>
+    </div>
+    <div id="gamePage">
+        <div class="gameHead">
+            <!-- Кнопка конца хода -->
+            <div style="margin:8px 0;">
+                <button id="nextTurn">NEXT</button>
+            </div>
+            <div class="gameHeadOptions">
+                <div class="settingrow"><input id="use" type="checkbox"><img src="img/fortress.png"></div>
+                <div class="settingrow"><b>Score:</b><p id="scoreCount">4</p></div>
+            </div>
+        </div>
+        <div class="gameHeadBottom">
+            <div class="gameHeadBottomLeft">
+                <span id="turnInfo" style="margin-left:10px">Turn of</span>
+                <span style="margin-left:10px">Turns: <span id="turnCountEl">0</span></span>
+            </div>
+        </div>
+        <div id="gamecontent">
+            <table id="gametable"></table>
+        </div>
+    </div>
+
+    <!-- модальное окно (скрыто по умолчанию) -->
+    <div id="cellModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span id="modalClose" class="modal-close">&times;</span>
+        <h3>Настройки клетки</h3>
+
+        <div>
+        <label>Token:</label><br>
+        <label><input type="radio" name="token" value="" checked> none</label>
+        <label><input type="radio" name="token" value="one"> one</label>
+        <label><input type="radio" name="token" value="two"> two</label>
+        </div>
+
+        <div style="margin-top:8px;">
+        <label><input type="checkbox" id="chkCastle"> castle</label>
+        <label style="margin-left:10px;"><input type="checkbox" id="chkFortress"> fortress</label>
+        </div>
+
+        <div style="margin-top:12px;">
+        <button id="saveCell">Сохранить</button>
+        <button id="cancelCell">Отмена</button>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"></script>
+    <script src="js/peer.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/bot.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+.settingrow {
+    display: inline-flex;
+    flex-direction: row;
+    margin: 1dvh;
+}
+.settingrow p {
+    margin: 0;
+}
+.settingrow img {
+    width: 22px;
+}
+
+#gamepage {
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+#gamePage.active {
+    display: inline-flex;
+}
+
+#connectPage {
+    display: none;
+}
+#connectPage.active {
+    display: block;
+}
+
+.gameHead {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 1rem;
+}
+
+.gameHeadOptions {
+    display: inline-flex;
+    flex-direction: row;
+}

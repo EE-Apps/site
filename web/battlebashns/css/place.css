@@ -1,0 +1,71 @@
+#gametable {
+    background-color: var(--background-secondary-great);
+    border-radius: var(--br);
+    padding: 1rem;
+}
+
+#gamecontent {
+    justify-items: center;
+    align-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    min-height: calc(100% - 16px);
+}
+
+#gametable td {
+    width: 25px;
+    height: 27px;
+    background-color: var(--background-primary);
+    text-align: center;
+}
+#gametable td.castle {
+    background-color: #000000;
+}
+#gametable td.one {
+    background-color: #9c4444;
+}
+#gametable td.fortressRadiusOne.one {
+    background-color: #990000;
+    outline: none;
+}
+#gametable td.fortress.one {
+    background-color: #5b0000;
+}
+
+#gametable td.two {
+    background-color: #435792;
+}
+#gametable td.fortressRadiusTwo.two {
+    background-color: #002699;
+    outline: none;
+}
+#gametable td.fortress.two {
+    background-color: #001450;
+}
+
+#gametable td.fortressRadiusOne {
+    outline: 1px solid #990000;
+}
+#gametable td.fortressRadiusTwo {
+    outline: 1px solid #002699;
+}
+
+#gametable td.castle.one {
+    background-color: #290000;
+}
+#gametable td.castle.two {
+    background-color: #000b2b;
+}
+
+#nextTurn {
+    background-color: var(--accent-background);
+}
+#nextTurn:hover {
+    background-color: var(--accent-background-hover);
+    color: white;
+}
