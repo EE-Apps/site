@@ -38,3 +38,14 @@
     display: inline-flex;
     flex-direction: row;
 }
+
+.gameHeadBottom {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.gameHeadBottomLeft, .gameHeadBottomRight {
+    display: inline-flex;
+    flex-direction: column;
+}

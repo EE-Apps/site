@@ -56,22 +56,26 @@ let lastBonusAppliedFor = { turn: null, turnCount: null };
 
 // Инициализация (попробуйте вызвать initPlayersFromUrl до этого)
 function initPeerControls() {
-  const isInitiatorCheckbox = document.getElementById('isInitiator');
-  const btnCreateSignal = document.getElementById('btnCreateSignal');
-  const btnAcceptRemote = document.getElementById('btnAcceptRemote');
-  const localSignalEl = document.getElementById('localSignal');
-  const remoteSignalEl = document.getElementById('remoteSignal');
-  const connStatus = document.getElementById('connStatus');
-  const nextTurnBtn = document.getElementById('nextTurn');
-  const turnInfo = document.getElementById('turnInfo');
-  const turnCountEl = document.getElementById('turnCountEl');
+    const isInitiatorCheckbox = document.getElementById('isInitiator');
+    const btnCreateSignal = document.getElementById('btnCreateSignal');
+    const btnAcceptRemote = document.getElementById('btnAcceptRemote');
+    const localSignalEl = document.getElementById('localSignal');
+    const remoteSignalEl = document.getElementById('remoteSignal');
+    const connStatus = document.getElementById('connStatus');
+    const nextTurnBtn = document.getElementById('nextTurn');
+    const turnInfo = document.getElementById('turnInfo');
+    const turnCountEl = document.getElementById('turnCountEl');
+    const redCountEl = document.getElementById('redCountEl');
+    const blueCountEl = document.getElementById('blueCountEl');
 
-  function updateStatus(txt) { connStatus.textContent = 'Status: ' + txt; }
+    function updateStatus(txt) { connStatus.textContent = 'Status: ' + txt; }
 function updateTurnUI() {
-  turnInfo.textContent = `Turn: ${turn} (${turn === player ? '✅ YOUR turn' : '⌛ OPPONENT'})`;
-  turnCountEl.textContent = String(turnCount);
-  // отображаем локальный счёт игрока
-  document.getElementById('scoreCount').textContent = String(scores[player] ?? 0);
+    turnInfo.textContent = `Turn: ${turn} (${turn === player ? '✅ YOUR turn' : '⌛ OPPONENT'})`;
+    turnCountEl.textContent = String(turnCount);
+    redCountEl.textContent = countCellsOf('one');
+    blueCountEl.textContent = countCellsOf('two');
+    // отображаем локальный счёт игрока
+    document.getElementById('scoreCount').textContent = String(scores[player] ?? 0);
 }
 
 
