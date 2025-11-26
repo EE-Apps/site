@@ -2,13 +2,45 @@
 <head>
     <title>Battlebashns</title>
 
-    <link rel="stylesheet" href="css/!.css">
+    <link rel="stylesheet" href="eelibs/import.css">
     <link rel="stylesheet" href="css/place.css">
     <link rel="stylesheet" href="css/ai.css">
     <link rel="stylesheet" href="css/interface.css">
+    <link rel="stylesheet" href="css/home.css">
 </head>
 <body>
-    <div id="connectPage" class="active">
+    <div id="homePage" class="page active">
+        <h1>Battlebashns</h1>
+        <div class="homeBtns">
+            <button id="btnSinglePlayer">Single Player (vs Bot)</button>
+            <button id="btnMultiplayer">Multiplayer (vs Human)</button>
+        </div>
+        <!--div>
+            <label><input type="checkbox" id="chkUseAI"> Use AI for suggestions</label>
+        </div-->
+    </div>
+    <div id="lobbyPage" class="page">
+        <h2>Lobby</h2>
+        <div id="roomsList" style="margin-top:12px; border:1px solid #888; padding:8px; max-height:300px; overflow-y:auto;">
+            <!-- Сюда будут добавляться комнаты -->
+        </div>
+        <div style="margin-top:12px;">
+            <button id="btnCreateRoom">Create New Room</button>
+            <button id="btnRefreshRooms" onclick="renderRooms(window.cloud)">Refresh Rooms</button>
+        </div>
+    </div>
+    <div id="chatPage" class="page">
+        <h2>P2P Chat - <span id="chatStatus" style="color:#f00;">Waiting for peer...</span></h2>
+        <div id="chatMessages" style="border:1px solid #888; padding:8px; height:300px; overflow-y:auto; background:#f9f9f9; margin-bottom:8px; font-family:monospace; font-size:12px;">
+            <!-- Сюда будут добавляться сообщения -->
+        </div>
+        <div style="display:flex; gap:8px;">
+            <input type="text" id="chatInput" placeholder="Type a message..." style="flex:1; padding:6px;" />
+            <button id="btnSendMessage" onclick="sendChatMessage()" disabled>Send</button>
+            <button id="btnBack" onclick="backToLobby()">Back to Lobby</button>
+        </div>
+    </div>
+    <div id="connectPage" class="page">
         <!-- SimplePeer: поля для обмена сигналами -->
         <div id="webrtcControls" style="margin:12px 0; padding:8px; border:1px dashed #888;">
         <label><input type="checkbox" id="isInitiator"> Я инициатор (создать offer)</label>
@@ -33,7 +65,7 @@
         </div>
         </div>
     </div>
-    <div id="gamePage">
+    <div id="gamePage" class="page">
         <div class="gameHead">
             <!-- Кнопка конца хода -->
             <div style="margin:8px 0;">
@@ -83,10 +115,12 @@
         </div>
     </div>
     </div>
-
+</body>
+    <script src="eelibs/import.js" type="module"></script>
     <script src="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"></script>
-    <script src="js/peer.js"></script>
+    <script src="js/lobby.js"></script>
+    <script src="js/home.js" type="module"></script>
+    <!--script src="js/peer.js"></script-->
     <script src="js/game.js"></script>
     <script src="js/bot.js"></script>
-</body>
 </html>

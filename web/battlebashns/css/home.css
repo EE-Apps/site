@@ -1,0 +1,34 @@
+#homePage {
+    height: 100%;
+    width: 100%;
+}
+
+#homePage h1 {
+    font-size: 2.5em;
+    color: #aaaaaa;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.homeBtns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    height: calc(100% - 54px);
+    width: 100%;
+    justify-content: center;
+}
+
+.homeBtns button {
+    max-width: 300px;
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #444444;
+    color: #ffffff;
+    transition: background-color 0.3s;
+}
