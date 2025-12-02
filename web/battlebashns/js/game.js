@@ -154,7 +154,7 @@ function onCellClick(e) {
             drawPlace();
             
             // Отправляем ход сопернику через P2P
-            //sendMove(row, col, cells[row][col]);
+            sendMove(row, col, cells[row][col]);
         }
     };
 }
@@ -266,7 +266,7 @@ function setupNextTurnButton() {
         }
         
         // Проверка: соединение установлено?
-        if (!isConnected) {
+        /*if (!isConnected) {
             console.warn('[Game] Cannot end turn: not connected (isConnected=false)');
             return;
         }
@@ -274,7 +274,7 @@ function setupNextTurnButton() {
         if (!peerConnection) {
             console.warn('[Game] Cannot end turn: no peer connection');
             return;
-        }
+        }*/
         
         try {
             // Отправляем состояние игры и завершаем ход
@@ -297,6 +297,7 @@ function setupNextTurnButton() {
             
             // Отправляем бонусы сопернику при его ходе
             applyTurnBonuses();
+            updateGameUI(); // Обновляем UI при смене хода
         } catch (e) {
             console.error('[Game] Error ending turn:', e);
         }
@@ -477,14 +478,6 @@ function setupPeerConnectionListener() {
             console.log('[Game] Setup complete. isConnected:', isConnected, 'peerConnection:', !!peerConnection);
         }
     }, 100);
-    
-    // Таймаут на случай, если соединение не установится
-    setTimeout(() => {
-        clearInterval(checkPeer);
-        if (!isConnected) {
-            console.warn('[Game] Peer connection not established after 10 seconds');
-        }
-    }, 10000);
 }
 
 /**

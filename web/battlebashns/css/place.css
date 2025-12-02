@@ -62,6 +62,11 @@ body {
     background-color: #000b2b;
 }
 
+#gameTable td.fortressRadiusOne.fortressRadiusTwo:not(.one):not(.two):not(.castle) {
+    background-color: #909090;
+}
+
+
 #nextTurn {
     background-color: var(--accent-background);
 }

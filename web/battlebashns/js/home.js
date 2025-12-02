@@ -3,7 +3,7 @@ import TurboCloudClient from "../eelibs/js/websocket.js";
 
 document.getElementById('btnSinglePlayer').onclick = () => {
     gameType = 'singleplayer';
-    window.pages.switch('gameSett');
+    window.pages.switch('connectPage');
 };
 
 document.getElementById('btnMultiplayer').onclick = () => {
