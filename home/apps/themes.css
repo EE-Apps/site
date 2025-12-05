@@ -30,7 +30,7 @@ body.moziladark {
 }
 
 body.dark .app-item {
-    background-color: var(--card-bg);
+    background-color: var(--background-secondary);
     color: var(--text-color);
 }
 

@@ -1,11 +1,11 @@
-/* Основной стиль для контейнера, в котором находится виджет */
+/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ */
 .weather-widget-container {
     position: relative;
     width: 100%;
     height: 100%;
 }
 
-/* Основной стиль для блока погоды */
+/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ */
 .weather-widget {
 	text-decoration: none;
     position: absolute;
@@ -14,8 +14,8 @@
     width: 300px;
     height: 150px;
     padding: 8px;
-    background-color: var(--card-bg);
-    border-radius: 10px;
+    background-color: var(--background-secondary);
+    border-radius: var(--br);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
     color: var(--text-color);
@@ -25,7 +25,7 @@
     margin: 10px;
 }
 
-/* Стили для тёмной темы */
+/* пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ */
 body.dark-theme .weather-widget {
     background-color: var(--dark-bg);
     color: var(--light-text-color);
@@ -45,7 +45,7 @@ body.dark-theme .weather-widget {
             background-color: var(--dark-btn-hover-bg);
         }
 
-/* Общие стили для погоды */
+/* пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ */
 .weather-widget .current-weather {
     display: flex;
     align-items: center;
@@ -77,7 +77,7 @@ body.dark-theme .weather-widget {
         margin: 3px 0;
     }
 
-/* Стили для блока с данными о ветре и влажности */
+/* пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 .weather-widget .weather-details {
     display: flex;
     flex-direction: column;
@@ -97,7 +97,7 @@ body.dark-theme .weather-widget {
     font-size: 12px;
 }
 
-/* Стили для блока выбора города */
+/* пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ */
 .weather-widget .city-select {
     margin-top: 5px;
     text-align: left;
@@ -120,7 +120,7 @@ body.dark-theme .weather-widget {
         background-color: var(--primary-btn-bg);
         color: var(--primary-btn-text-color);
         border: none;
-        border-radius: 5px;
+        border-radius: var(--br);
         margin-left: 5px;
     }
 

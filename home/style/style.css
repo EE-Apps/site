@@ -17,7 +17,7 @@ body {
 .theme-toggle {
     top: 10px;
     right: 10px;
-    background: var(--card-bg);
+    background: var(--background-secondary);
     color: var(--text-color);
     border: none;
     border-radius: 50%;
@@ -37,10 +37,10 @@ body {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: var(--card-bg);
+    background: var(--background-secondary);
     color: var(--text-color);
     border: none;
-    border-radius: 8px;
+    border-radius: var(--br);
     font-size: 1.5rem;
     cursor: pointer;
     width: 40px;
@@ -87,7 +87,7 @@ body {
 /* Sidebar styles */
 .sidebar {
     width: 40px;
-    background: var(--card-bg);
+    background: var(--background-secondary);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
@@ -165,9 +165,9 @@ body {
 .search-bar-wrapper {
     display: flex;
     align-items: center;
-    background: var(--card-bg);
+    background: var(--background-secondary);
     /*border: 1px solid #ccc;*/
-    border-radius: 8px;
+    border-radius: var(--br);
     overflow: hidden;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 	margin: 10px 0;
@@ -178,9 +178,9 @@ body {
 .search-main {
     display: flex;
     align-items: center;
-    background: var(--card-bg);
+    background: var(--background-secondary);
     /*border: 1px solid #ccc;*/
-    border-radius: 8px;
+    border-radius: var(--br);
     overflow: hidden;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 	width: 100%;
@@ -190,7 +190,7 @@ body {
     padding: 8px;
     font-size: 1rem;
     border: none;
-    border-right: 1px solid #ccc;
+    /*border-right: 1px solid #ccc;*/
     background: var(--search-engine-bg);
     cursor: pointer;
     appearance: none;
@@ -236,9 +236,9 @@ body {
     position: absolute;
     top: 50px;
     left: 100px;
-    background: var(--card-bg);
+    background: var(--background-secondary);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    border-radius: var(--br);
     padding: 20px;
     width: 2000px; /* Increased width */
     display: flex;
@@ -268,9 +268,9 @@ body {
     align-items: center;
     justify-content: center;
     padding: 10px;
-    border-radius: 8px;
+    border-radius: var(--br);
     transition: transform 0.2s;
-    background: var(--card-bg);
+    background: var(--background-secondary);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border: 1px solid #ccc;
 }
@@ -298,10 +298,10 @@ body {
     position: absolute;
     top: 10px;  /* Adjust as needed */
     left: 10px;  /* Adjust to be right of sidebar */
-    background: var(--card-bg);
+    background: var(--background-secondary);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border: none;
-    border-radius: 8px;
+    border-radius: var(--br);
     z-index: 9999;  /* Make sure this is the highest z-index on the page */
     width: 100%;
     height: 90%;
