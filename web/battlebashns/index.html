@@ -7,19 +7,23 @@
     <link rel="stylesheet" href="css/ai.css">
     <link rel="stylesheet" href="css/interface.css">
     <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/lobby.css">
 </head>
 <body>
     <div id="homePage" class="page active">
         <h1>Battlebashns</h1>
         <div class="homeBtns">
-            <button id="btnSinglePlayer">Single Player (vs Bot)</button>
-            <button id="btnMultiplayer">Multiplayer (vs Human)</button>
+            <!--button id="btnSinglePlayer">Single Player (vs Bot)</button-->
+            <div><button id="btnConnectPeer">Connect (vs Human)</button></div>
+            <div><button id="btnMultiplayer">Lobby (vs Human)</button></div>
+            <div><a href="https://discord.com/invite/BA6ebD2en9">Discord</a></div>
         </div>
         <!--div>
             <label><input type="checkbox" id="chkUseAI"> Use AI for suggestions</label>
         </div-->
     </div>
     <div id="lobbyPage" class="page">
+        <button class="btnBackHome"><img src="../../res/img/ui/back.svg"></button>
         <h2>Lobby</h2>
         <div id="roomsList" style="margin-top:12px; border:1px solid #888; padding:8px; max-height:300px; overflow-y:auto;">
             <!-- Сюда будут добавляться комнаты -->
@@ -30,17 +34,53 @@
         </div>
     </div>
     <div id="chatPage" class="page">
-        <h2>P2P Chat - <span id="chatStatus" style="color:#f00;">Waiting for peer...</span></h2>
-        <div id="chatMessages" style="border:1px solid #888; padding:8px; height:300px; overflow-y:auto; background:#f9f9f9; margin-bottom:8px; font-family:monospace; font-size:12px;">
-            <!-- Сюда будут добавляться сообщения -->
-        </div>
-        <div style="display:flex; gap:8px;">
-            <input type="text" id="chatInput" placeholder="Type a message..." style="flex:1; padding:6px;" />
-            <button id="btnSendMessage" onclick="sendChatMessage()" disabled>Send</button>
-            <button id="btnBack" onclick="backToLobby()">Back to Lobby</button>
+        <button class="btnBackHome"><img src="../../res/img/ui/back.svg"></button>
+        <h2><span id="chatStatus" style="color:#f00;">Waiting for peer...</span></h2>
+        <div id=roomContent>
+            <div id="chatInRoom">
+                <div id="chatMessages" style="border:1px solid #888; padding:8px; height:300px; overflow-y:auto; background:#f9f9f9; margin-bottom:8px; font-family:monospace; font-size:12px;">
+                    <!-- Сюда будут добавляться сообщения -->
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <input type="text" id="chatInput" placeholder="Type a message..." style="flex:1; padding:6px;" />
+                    <button id="btnSendMessage" onclick="sendChatMessage()" disabled>Send</button>
+                    <button id="btnBack" onclick="backToLobby()">Back to Lobby</button>
+                </div>
+            </div>
+            <div id="roomSettings">
+                <div class="roomSett">
+                    <label>Room Name:</label>
+                    <input type="text" id="roomNameInput" class="roomSettingInpt" />
+                </div>
+                <div class="roomSett">
+                    <label>Field size:</label>
+                    <input type="number" id="roomFiledSizeInput" class="roomSettingInpt" value="11" />
+                </div>
+                <div class="roomSett">
+                    <label>Resource points:</label>
+                    <input type="number" id="roomResourcePointsInput" class="roomSettingInpt" value="3" readonly disabled/>
+                </div>
+                <div class="roomSett">
+                    <label>Resources per turn:</label>
+                    <input type="number" id="roomResourcesPerTurnInput" class="roomSettingInpt" value="4" />
+                </div>
+                <div class="roomSett">
+                    <label>Resources per point:</label>
+                    <input type="number" id="roomResourcesPerPointInput" class="roomSettingInpt" value="4" />
+                </div>
+                <div class="roomSett">
+                    <label>Game mode:</label>
+                    <select id="roomGameModeInput" value="classic" disabled>
+                        <option value="classic">Classic</option>
+                        <option value="community">Community</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
     <div id="connectPage" class="page">
+        <button class="btnBackHome"><img src="../../res/img/ui/back.svg"></button>
         <!-- SimplePeer: поля для обмена сигналами -->
         <div id="webrtcControls" style="margin:12px 0; padding:8px; border:1px dashed #888;">
         <label><input type="checkbox" id="isInitiator"> Я инициатор (создать offer)</label>
@@ -123,4 +163,5 @@
     <!--script src="js/peer.js"></script-->
     <script src="js/game.js"></script>
     <script src="js/bot.js"></script>
+    <script src="js/test.js"></script>
 </html>

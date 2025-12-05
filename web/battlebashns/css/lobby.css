@@ -1,0 +1,33 @@
+#roomContent {
+    width: calc(100% - 2rem);
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+#chatMessages {
+    border: 1px solid #888;
+    padding: 8px;
+    height: 300px;
+    overflow-y: auto;
+    background: #f9f9f9;
+    margin-bottom: 8px;
+    font-family: monospace;
+    font-size: 12px;
+    border-radius: var(--br) var(--br) 0 0;
+}
+
+.roomSett {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+#roomSettings {
+    width: 100%;
+    padding-left: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    align-content: start;
+}

@@ -29,6 +29,9 @@ export default class CloudWebSocket {
         this.project_id = opts.project_id || opts.projectId || '1234567';
         this.user = opts.user || opts.username || 'ExampleUsername';
         this.logEnabled = opts.log !== undefined ? !!opts.log : true;
+        this.helloRecive;
+        this.helloRecived = false;
+        this.initialMessages = []; // Массив для хранения всех начальных сообщений
 
         /** @type {WebSocket|null} */
         this.ws = null;
@@ -77,6 +80,84 @@ export default class CloudWebSocket {
     }
 
     /**
+     * Распарсить несколько JSON объектов в одной строке
+     * Например: {"a":1}{"b":2} → [{a:1}, {b:2}]
+     * @param {string} text
+     * @returns {Array} массив распарсенных объектов
+     */
+    _parseMultipleJSON(text) {
+        const results = [];
+        let current = '';
+        let depth = 0;
+        let inString = false;
+        let escapeNext = false;
+        
+        const str = typeof text === 'string' ? text : String(text);
+        
+        for (let i = 0; i < str.length; i++) {
+            const char = str[i];
+            
+            // Обработка экранирования
+            if (escapeNext) {
+                current += char;
+                escapeNext = false;
+                continue;
+            }
+            
+            if (char === '\\' && inString) {
+                escapeNext = true;
+                current += char;
+                continue;
+            }
+            
+            // Обработка строк
+            if (char === '"') {
+                inString = !inString;
+                current += char;
+                continue;
+            }
+            
+            if (inString) {
+                current += char;
+                continue;
+            }
+            
+            // Обработка скобок вне строк
+            if (char === '{' || char === '[') {
+                depth++;
+            } else if (char === '}' || char === ']') {
+                depth--;
+            }
+            
+            current += char;
+            
+            // Если закончился объект/массив, пытаемся распарсить
+            if (depth === 0 && current.trim()) {
+                try {
+                    const parsed = JSON.parse(current);
+                    results.push(parsed);
+                    current = '';
+                } catch (e) {
+                    // Может быть разделитель или незавершённый объект
+                    // Пропускаем и продолжаем
+                }
+            }
+        }
+        
+        // Попытка распарсить остаток
+        if (current.trim()) {
+            try {
+                const parsed = JSON.parse(current);
+                results.push(parsed);
+            } catch (e) {
+                this._log('Could not parse remaining text:', current);
+            }
+        }
+        
+        return results;
+    }
+
+    /**
      * Подключиться. После открытия автоматически отправит handshake
      * в формате с отступами (2 пробела), как ты просил.
      * @param {object} [opts]
@@ -117,12 +198,48 @@ export default class CloudWebSocket {
                     ws.send(handshakeText);
 
                     this._emit('open');
+                    
+                    // После отправки handshake, в скором времени придут начальные сообщения
+                    // Даём серверу время отправить все начальные сообщения (roomsList, signals и т.д.)
+                    const handleInitialMessages = () => {
+                        // Обрабатываем все собранные начальные сообщения
+                        if (this.initialMessages.length > 0) {
+                            this._log('Processing', this.initialMessages.length, 'initial messages');
+                            
+                            for (const msgData of this.initialMessages) {
+                                try {
+                                    const parsed = JSON.parse(typeof msgData === 'string' ? msgData : String(msgData));
+                                    
+                                    if (parsed && parsed.method === 'set') {
+                                        this._log('Processing initial set message:', parsed.name);
+                                        this._emit('set', parsed);
+                                        
+                                        // Также диспатчим CustomEvent
+                                        try {
+                                            if (typeof window !== 'undefined' && typeof CustomEvent !== 'undefined') {
+                                                const ev = new CustomEvent('clouddata:set', { detail: parsed });
+                                                window.dispatchEvent(ev);
+                                            }
+                                        } catch (e) {
+                                            // ignore
+                                        }
+                                    }
+                                } catch (e) {
+                                    this._log('Could not parse initial message');
+                                }
+                            }
+                        }
+                    };
+                    
+                    // Даём серверу время отправить все hello сообщения (roomsList, signals и т.д.)
+                    setTimeout(handleInitialMessages, 200);
+                    
                     resolve();
                 };
 
                 ws.onmessage = async (evt) => {
                     let data = evt.data;
-
+                    
                     // если пришёл Blob → конвертируем в data:URI (для совместимости)
                     if (typeof Blob !== 'undefined' && data instanceof Blob) {
                         data = await this._blobToDataURL(data);
@@ -131,34 +248,38 @@ export default class CloudWebSocket {
                     // логируем
                     this._log('recv raw:', data);
 
-                    // пытаемся распарсить JSON
-                    let parsed = null;
-                    try {
-                        parsed = JSON.parse(typeof data === 'string' ? data : String(data));
-                    } catch (e) {
-                        // не JSON — просто генерим событие message
-                        this._emit('message', data);
-                        return;
-                    }
+                    // Обработка: может быть несколько JSON объектов в одной строке
+                    // Нужно их разбить и обработать каждый
+                    const messages = this._parseMultipleJSON(data);
+                    
+                    for (const parsed of messages) {
+                        if (!parsed) continue;
+                        
+                        // Если это первое сообщение, сохраняем в initialMessages
+                        if (this.helloRecived != true) {
+                            this.initialMessages.push(JSON.stringify(parsed));
+                        }
+                        this.helloRecived = true;
+                        
+                        // ставим общий 'message'
+                        this._emit('message', parsed);
 
-                    // ставим общий 'message'
-                    this._emit('message', parsed);
+                        // если метод == 'set' — логируем и уведомляем другие скрипты
+                        if (parsed && parsed.method === 'set') {
+                            this._log('recv set:', parsed);
 
-                    // если метод == 'set' — логируем и уведомляем другие скрипты
-                    if (parsed && parsed.method === 'set') {
-                        this._log('recv set:', parsed);
+                            // Встроенный callback
+                            this._emit('set', parsed);
 
-                        // Встроенный callback
-                        this._emit('set', parsed);
-
-                        // Также диспатчим CustomEvent в window с именем 'clouddata:set'
-                        try {
-                            if (typeof window !== 'undefined' && typeof CustomEvent !== 'undefined') {
-                                const ev = new CustomEvent('clouddata:set', { detail: parsed });
-                                window.dispatchEvent(ev);
+                            // Также диспатчим CustomEvent в window с именем 'clouddata:set'
+                            try {
+                                if (typeof window !== 'undefined' && typeof CustomEvent !== 'undefined') {
+                                    const ev = new CustomEvent('clouddata:set', { detail: parsed });
+                                    window.dispatchEvent(ev);
+                                }
+                            } catch (e) {
+                                // ignore
                             }
-                        } catch (e) {
-                            // ignore
                         }
                     }
                 };

@@ -10,6 +10,7 @@ let peer = null;
 let connected = false;
 let signalListeners = [];
 let messageQueue = []; // Буфер сообщений до подключения
+let pendingSignal = null; // Буфер сигнала, если хост ждёт второго игрока
 
 /**
  * Отправить информацию о новой комнате в облако
@@ -23,11 +24,19 @@ function createRoom(cloud, roomName, author) {
         name: roomName,
         author: author,
         createdAt: new Date().toISOString(),
-        players: 1
+        players: 1,
+        settings: {
+            filedSize: 11,
+            resourcePoints: 4,
+            resourcesPerTurn: 4,
+            resourcesPerPoint: 4,
+            gameMode: 'classic'
+        }
     };
 
     // Добавляем в локальный кеш
     roomsCache.push(roomInfo);
+    let roomNumber = roomsCache.length - 1;
     console.log('[Lobby] Room created locally:', roomInfo);
     
     // Отправляем весь список комнат в облако
@@ -39,6 +48,21 @@ function createRoom(cloud, roomName, author) {
     } catch (e) {
         console.error('[Lobby] Error sending rooms list:', e);
     }
+
+    document.querySelectorAll('.roomSettingInpt').forEach(element => {
+    // Назначаем обработчик клика каждому элементу
+    element.onclick = (e) => {
+        console.log(roomsCache);
+        roomsCache[roomNumber].name = document.getElementById('roomNameInput').value;
+        roomsCache[roomNumber].settings.filedSize = parseInt(document.getElementById('roomFiledSizeInput').value) || 11;
+        roomsCache[roomNumber].settings.resourcesPerTurn = parseInt(document.getElementById('roomResourcesPerTurnInput').value) || 4;
+        roomsCache[roomNumber].settings.resourcesPerPoint = parseInt(document.getElementById('roomResourcesPerPointInput').value) || 4;
+        const roomsListData = JSON.stringify(roomsCache);
+        cloud.sendSet(CLOUD_ROOMS_LIST_VAR, roomsListData, { encode: true });
+        console.log('[Lobby] Rooms list updated to cloud:', roomsCache.length, 'rooms');
+    }});
+
+    joinRoom(roomInfo.id);
 }
 
 /**
@@ -97,14 +121,32 @@ function renderRooms(cloud) {
                         roomsCache = roomData;
                         console.log('[Lobby] Updated rooms list from cloud:', roomsCache.length, 'rooms');
                     } else if (roomData.id) {
-                        // Это одна комната, добавляем её
+                        // Это одна комната, добавляем или обновляем её
                         const existingIndex = roomsCache.findIndex(r => r.id === roomData.id);
+                        const oldPlayersCount = existingIndex >= 0 ? roomsCache[existingIndex].players : 0;
+                        
                         if (existingIndex >= 0) {
                             roomsCache[existingIndex] = roomData;
                         } else {
                             roomsCache.push(roomData);
                         }
-                        console.log('[Lobby] Added room:', roomData.name);
+                        console.log('[Lobby] Added/Updated room:', roomData.name, 'players:', roomData.players);
+                        
+                        // Если это текущая комната и число игроков увеличилось
+                        if (currentRoom && currentRoom.id === roomData.id) {
+                            console.log('[Lobby] Current room updated. Old players:', oldPlayersCount, 'New players:', roomData.players);
+                            
+                            // Обновляем информацию о текущей комнате
+                            const oldPlayerCount = currentRoom.players;
+                            currentRoom = roomData;
+                            
+                            // Если второй игрок только что присоединился и у нас есть буферизованный сигнал
+                            if (oldPlayerCount < 2 && roomData.players >= 2 && pendingSignal && peer) {
+                                console.log('[Lobby] Second player joined! Sending buffered offer signal');
+                                sendPeerSignal(cloud, pendingSignal);
+                                pendingSignal = null;
+                            }
+                        }
                     }
                     
                     updateRoomsList(cloud);
@@ -121,8 +163,69 @@ function renderRooms(cloud) {
         });
     }
 
-    // Первоначальное обновление списка
-    updateRoomsList(cloud);
+    // Если уже есть начальные сообщения от сервера, обработаем их
+    if (cloud.initialMessages && cloud.initialMessages.length > 0) {
+        console.log('[Lobby] Processing', cloud.initialMessages.length, 'initial messages');
+        
+        for (const msgData of cloud.initialMessages) {
+            try {
+                const parsed = JSON.parse(typeof msgData === 'string' ? msgData : String(msgData));
+                
+                if (parsed && parsed.method === 'set' && parsed.name === `☁ ${CLOUD_ROOMS_LIST_VAR}`) {
+                    console.log('[Lobby] Initial roomsList found in messages');
+                    const decodedText = cloud.decodeText(parsed.value);
+                    console.log('[Lobby] Decoded initial roomsList:', decodedText);
+                    
+                    try {
+                        const roomData = JSON.parse(decodedText);
+                        if (Array.isArray(roomData)) {
+                            roomsCache = roomData;
+                            console.log('[Lobby] Loaded initial rooms from hello:', roomsCache.length, 'rooms');
+                            updateRoomsList(cloud);
+                        }
+                    } catch (e) {
+                        console.error('[Lobby] Error parsing initial roomsList:', e);
+                    }
+                    break; // Выходим после первого найденного roomsList
+                }
+            } catch (e) {
+                console.log('[Lobby] Could not parse initial message');
+            }
+        }
+    }
+
+    // Если уже есть начальное сообщение от сервера (hello), обработаем его
+    if (cloud.helloRecive) {
+        console.log('[Lobby] Processing initial server message from hello');
+        try {
+            const parsed = JSON.parse(typeof cloud.helloRecive === 'string' ? cloud.helloRecive : String(cloud.helloRecive));
+            
+            // Если это сообщение содержит данные о комнатах, загружаем их
+            if (parsed && parsed.method === 'set' && parsed.name === `☁ ${CLOUD_ROOMS_LIST_VAR}`) {
+                console.log('[Lobby] Initial roomsList found in hello message');
+                const decodedText = cloud.decodeText(parsed.value);
+                console.log('[Lobby] Decoded initial roomsList:', decodedText);
+                
+                try {
+                    const roomData = JSON.parse(decodedText);
+                    if (Array.isArray(roomData)) {
+                        roomsCache = roomData;
+                        console.log('[Lobby] Loaded initial rooms from hello:', roomsCache.length, 'rooms');
+                        updateRoomsList(cloud);
+                    }
+                } catch (e) {
+                    console.error('[Lobby] Error parsing initial roomsList:', e);
+                }
+            }
+        } catch (e) {
+            console.log('[Lobby] Could not parse initial hello message');
+        }
+    }
+
+    // Первоначальное обновление списка (если нет данных в hello)
+    if (roomsCache.length === 0) {
+        updateRoomsList(cloud);
+    }
 }
 
 /**
@@ -197,6 +300,21 @@ function joinRoom(roomId) {
         // Экспортируем currentRoom в глобальный контекст
         window.currentRoom = currentRoom;
         
+        // Если это не моя комната (не я автор), увеличиваем количество игроков
+        if (currentRoom.author !== window.cloud.user) {
+            currentRoom.players = (currentRoom.players || 1) + 1;
+            console.log('[Lobby] Joined as guest, updated players count to:', currentRoom.players);
+            
+            // Обновляем информацию о комнате в облаке
+            try {
+                const updatedRoom = JSON.stringify(currentRoom);
+                window.cloud.sendSet(CLOUD_ROOMS_VAR, updatedRoom, { encode: true });
+                console.log('[Lobby] Updated room info in cloud with players:', currentRoom.players);
+            } catch (e) {
+                console.error('[Lobby] Error updating room in cloud:', e);
+            }
+        }
+        
         // Переходим на страницу чата
         switchPage('chatPage');
         clearChatMessages();
@@ -205,6 +323,43 @@ function joinRoom(roomId) {
         // Инициируем peer подключение
         initiatePeerConnection(window.cloud);
         addChatMessage('[System]', 'P2P initiated: ' + (currentRoom.author === window.cloud.user ? 'initiator' : 'non-initiator'), 'system');
+    }
+}
+
+/**
+ * Отправить P2P сигнал в облако
+ * @param {CloudWebSocket} cloud
+ * @param {Object} data - сигнал от SimplePeer
+ */
+function sendPeerSignal(cloud, data) {
+    // Проверяем состояние облака перед отправкой
+    if (!cloud.ws) {
+        console.error('[Lobby] Cloud WebSocket is null!');
+        return;
+    }
+    
+    if (cloud.ws.readyState !== 1) {
+        console.error('[Lobby] Cloud WebSocket is not open! State:', cloud.ws.readyState);
+        return;
+    }
+    
+    // Отправляем сигнал в облако
+    const signal = {
+        roomId: currentRoom.id,
+        from: cloud.user,
+        to: currentRoom.author === cloud.user ? 'guest' : currentRoom.author,
+        timestamp: Date.now(),
+        signal: data,
+        type: data.type // 'offer' или 'answer'
+    };
+    
+    console.log('[Lobby] Sending peer signal from', cloud.user, 'type:', data.type, 'in room', currentRoom.id);
+    
+    try {
+        cloud.sendSet(CLOUD_SIGNALS_VAR, JSON.stringify(signal), { encode: true });
+        console.log('[Lobby] Signal sent successfully');
+    } catch (e) {
+        console.error('[Lobby] Error sending signal:', e);
     }
 }
 
@@ -226,6 +381,14 @@ function initiatePeerConnection(cloud) {
     console.log('[Lobby] Is initiator:', isInitiator);
     console.log('[Lobby] Current user:', cloud.user);
     console.log('[Lobby] Room author:', currentRoom.author);
+
+    // Заполняем данные комнаты
+    document.getElementById('roomNameInput').value = currentRoom.name;
+    document.getElementById('roomFiledSizeInput').value = currentRoom.settings?.filedSize || 11;
+    document.getElementById('roomResourcesPerTurnInput').value = currentRoom.settings?.resourcesPerTurn || 11;
+    document.getElementById('roomResourcesPerPointInput').value = currentRoom.settings?.resourcesPerPoint || 11;
+
+    // Работа с SimplePeer
     
     peer = new SimplePeer({ 
         initiator: isInitiator, 
@@ -241,35 +404,21 @@ function initiatePeerConnection(cloud) {
     peer.on('signal', (data) => {
         console.log('[Lobby] SIGNAL EVENT TRIGGERED, type:', data.type);
         
-        // Проверяем состояние облака перед отправкой
-        if (!cloud.ws) {
-            console.error('[Lobby] Cloud WebSocket is null!');
-            return;
+        // Если я инициатор (хост), проверяем, присоединился ли второй игрок
+        const isInitiator = currentRoom.author === cloud.user;
+        if (isInitiator && data.type === 'offer') {
+            // Хост может отправить offer только если второй игрок уже в комнате
+            // Проверяем количество игроков в комнате
+            if (currentRoom.players < 2) {
+                console.log('[Lobby] Waiting for second player before sending offer. Current players:', currentRoom.players);
+                // Буферируем сигнал, отправим позже
+                pendingSignal = data;
+                return;
+            }
         }
         
-        if (cloud.ws.readyState !== 1) {
-            console.error('[Lobby] Cloud WebSocket is not open! State:', cloud.ws.readyState);
-            return;
-        }
-        
-        // Отправляем сигнал в облако
-        const signal = {
-            roomId: currentRoom.id,
-            from: cloud.user,
-            to: currentRoom.author === cloud.user ? 'guest' : currentRoom.author,
-            timestamp: Date.now(),
-            signal: data,
-            type: data.type // 'offer' или 'answer'
-        };
-        
-        console.log('[Lobby] Sending peer signal from', cloud.user, 'type:', data.type, 'in room', currentRoom.id);
-        
-        try {
-            cloud.sendSet(CLOUD_SIGNALS_VAR, JSON.stringify(signal), { encode: true });
-            console.log('[Lobby] Signal sent successfully');
-        } catch (e) {
-            console.error('[Lobby] Error sending signal:', e);
-        }
+        // Отправляем сигнал
+        sendPeerSignal(cloud, data);
     });
     
     peer.on('connect', () => {

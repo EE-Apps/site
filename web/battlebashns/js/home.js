@@ -1,8 +1,14 @@
 let gameType = 'singleplayer';
 import TurboCloudClient from "../eelibs/js/websocket.js";
 
-document.getElementById('btnSinglePlayer').onclick = () => {
+try { document.getElementById('btnSinglePlayer').onclick = () => {
     gameType = 'singleplayer';
+    window.pages.switch('singleplayerPage');
+};
+} catch(e) { /* игнорируем, если кнопки нет на странице */ }
+
+document.getElementById('btnConnectPeer').onclick = () => {
+    gameType = 'multiplayer';
     window.pages.switch('connectPage');
 };
 
@@ -14,10 +20,19 @@ document.getElementById('btnMultiplayer').onclick = () => {
         username: `guest${Math.floor(Math.random() * 100)}`,
     });
 
-    cloud.connect();
-    window.cloud = cloud;
-
-    renderRooms(cloud);
+    cloud.connect().then(() => {
+        console.log('[Home] Cloud connected, now rendering rooms');
+        window.cloud = cloud;
+        renderRooms(cloud);
+    }).catch(err => {
+        console.error('[Home] Failed to connect to cloud:', err);
+    });
 
     window.pages.switch('lobbyPage');
 }
+
+document.querySelectorAll('.btnBackHome').forEach(btn => {
+    btn.onclick = () => {
+        window.pages.switch('homePage');
+    };
+});

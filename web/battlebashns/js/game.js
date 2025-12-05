@@ -149,6 +149,7 @@ function onCellClick(e) {
                 setFortressRadius(row + 1, col - 1);
                 setFortressRadius(row, col - 1);
                 setFortressRadius(row - 1, col - 1);
+                document.getElementById('use').checked = false;
             }
 
             drawPlace();
