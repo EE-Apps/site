@@ -1,0 +1,1 @@
+switchPage('chatPage')

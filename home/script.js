@@ -1,5 +1,5 @@
 // alert("1917")
-let thisversion = "1.4.0";
+let thisversion = "1.5.0";
 const searchEngines = {
     google: {
         url: "https://www.google.com/search?q=",
@@ -89,6 +89,7 @@ function getAssistantUrl() {
 document.querySelectorAll(".app-btn").forEach(button => {
     button.addEventListener("click", (event) => {
         const company = event.target.closest(".app-btn").dataset.company;
+        if (company == 'deepwiki') return;
         loadIframe(company);
     });
 });
@@ -129,12 +130,14 @@ function toggleTheme() {
 
     if (navigator.userAgent.indexOf('Firefox') !== -1) {
         document.body.classList.toggle("moziladark"); // Браузер - Firefox
+        document.body.classList.toggle("light");
         newTheme = localStorage.getItem("theme") == "moziladark" ? "light" : "moziladark";
         if (document.body.classList.contains("dark")) {
             document.body.classList.toggle("dark");
         }
     } else {
         document.body.classList.toggle("dark"); // Другой браузер
+        document.body.classList.toggle("light");
         newTheme = localStorage.getItem("theme") == "dark" ? "light" : "dark";
         if (document.body.classList.contains("moziladark")) {
             document.body.classList.toggle("moziladark");

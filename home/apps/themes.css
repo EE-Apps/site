@@ -1,39 +1,77 @@
-/* Theme variables */
-:root {
-    --bg-color: #f9f9f9;
-    --text-color: #333;
-    --card-bg: #ffffff10;
-    --search-bar-bg: #ffffff10;
-    --search-engine-bg: #ffffff10;
-}
-
 body {
     font-family: 'Roboto', sans-serif;
     background: var(--bg-color);
     color: var(--text-color);
 }
 
-body.dark {
+body.light {
+    /* OLD THEME COLORS*/
     --bg-color: #1a1a1a;
     --text-color: #f1f1f1;
     --card-bg: #242424;
     --search-bar-bg: #242424;
     --search-engine-bg: #242424;
+
+    /* NEW THEME COLORS */
+    --background-primary: #ffffffb0;
+    --background-secondary: #f5f5f5b0;
+    --background-secondary-hover: #cacacab0;
+    --background-secondary-great: #f5f5f5;
+    --background-secondary-great-hover: #dadada;
+    --background-hover: #c9c9c9b0;
+    --border-color: #1f1f1f;
+    --text-primary: #000000;
+    --text-secondary: #787777;
+    background: linear-gradient(135deg, #c4c49d, #98b3c9, #bac6c0);
 }
 
+/*body.dark {
+    /* OLD THEME COLORS /
+    --bg-color: #1a1a1a;
+    --text-color: #f1f1f1;
+    --card-bg: #242424;
+    --search-bar-bg: #242424;
+    --search-engine-bg: #242424;
+
+    /* NEW THEME COLORS /
+}*/
+
 body.moziladark {
+    /* OLD THEME COLORS*/
     --bg-color: #1f1e25;
     --text-color: #f1f1f1;
     --card-bg: #2b2a33;
     --search-bar-bg: #2b2a33;
     --search-engine-bg: #2b2a33;
+
+    /* NEW THEME COLORS */
+    --background-primary: #1f1e25;
+    --background-secondary: #2b2a33;
+    --background-secondary-hover: #cacacab0;
+    --background-secondary-great: #f5f5f5;
+    --background-secondary-great-hover: #dadada;
+    --background-hover: #c9c9c9b0;
+    --border-color: #1f1f1f;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    background: linear-gradient(135deg, #2b2a33, #1f1e25, #2b2a33);
 }
 
 body.dark .app-item {
     background-color: var(--background-secondary);
-    color: var(--text-color);
+    color: var(--text-primary);
 }
 
 body.dark .app-item p {
-    color: var(--text-color);
+    color: var(--text-primary);
+}
+
+body.light #search-bar {
+    background-color: var(--background-primary) !important;
+    color: var(--text-secondary);
+}
+
+body.moziladark #search-bar {
+    background-color: var(--background-primary) !important;
+    color: var(--text-secondary);
 }

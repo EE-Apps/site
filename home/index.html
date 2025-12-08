@@ -32,6 +32,9 @@
         <button class="app-btn" data-company="desmos">
             <img src="./icons/desmos.png" alt="VContacte">
         </button>
+        <a class="app-btn" href="https://deepwiki.com/" target="_blank" rel="noopener" data-company="deepwiki">
+            <img src="./icons/deepwiki.png" alt="DeepWiki">
+        </a>
     </aside>
 
     <!-- Main content -->
@@ -39,7 +42,7 @@
 
         <div class="qbar" id="qbar">
             <!-- Button for Dark Theme Toggle -->
-            <button id="theme-toggle" class="theme-toggle">🌙</button>
+            <button id="theme-toggle" class="theme-toggle"><img src="imgcopy/sun.svg"></button>
             <div class="ais" id="ais">
                 <a class="ais-ai" href="https://chatgpt.com">
                     <img src="./icons/chatgpt.svg" alt="ChatGPT">
@@ -59,11 +62,14 @@
                 <a class="ais-ai" href="https://alice.yandex.ru">
                     <img src="./icons/alice.svg" alt="Yandex Alice">
                 </a>
+                <a class="ais-ai" href="https://grok.com/">
+                    <img src="./icons/grok.svg" alt="Grok">
+                </a>
             </div>
         </div>
 
         <!-- ПОГОДА -->
-        <a class="weather-widget" href="https://ee-apps.netlify.app/web/weather/">
+        <div class="weather-widget" href="https://ee-apps.netlify.app/web/weather/">
             <div class="current-weather">
                 <div class="weather-icon" id="weather-icon"></div>
                 <div class="weather-info">
@@ -95,9 +101,9 @@
                     <option value="Bobruisk" data-lat="53.1500" data-lon="29.2333">[Бел] Бобруйск</option>
                     <option value="Gomel" data-lat="52.4443" data-lon="30.9754">[Бел] Гомель</option>
                 </select>
-                <button id="update-weather">Обновить</button>
+                <button id="update-weather"><img src="imgcopy/reload.svg"></button>
             </div>
-        </a>
+        </div>
 
         <!-- New container for iframe -->
         <div class="iframe-wrapper" id="iframe-wrapper" style="display: none;">
@@ -118,7 +124,7 @@
                     </select>
 
                     <!-- Search input -->
-                    <input type="text" id="search-bar" placeholder="Поиск" autocomplete="off">
+                    <input type="text" id="search-bar" placeholder="      Search" autocomplete="off">
 
                     <!-- AI Assistant Button -->
                     <button id="assistant-btn">
