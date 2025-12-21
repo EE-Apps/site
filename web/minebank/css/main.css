@@ -1,0 +1,140 @@
+:root {
+    --background-primary: #323232b0;
+    --background-secondary: #171717;
+    --background-secondary-hover: #444445;
+    --background-secondary-great: #242424;
+    --background-secondary-great-hover: #2a2a2a;
+    --background-thirdary: #252525;
+    --background-thirdary-hover: #303030;
+    --background-hover: #2a2a2ab0;
+    --border-color: #1f1f1f;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --br: 1.2rem;
+    --brs: 0.4rem;
+    --bc: #404040;
+    --accent-color: #3498db;
+    --accent-hover: #6bacd8;
+    --accent-background: #3498dbb0;
+    --accent-background-hover: #6bacd8b0;
+
+    --height: 16px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+    overflow: auto;
+    max-height: none;
+    padding-bottom: 1rem;
+}
+
+body {
+    display: inline-flex;
+    flex-direction: row !important;
+
+    width: 100%;
+    height: max-content;
+
+    background: linear-gradient(135deg, #12120f, #0a0c0d, #010102);
+}
+
+#content {
+    display: inline-flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+#navright {
+    display: inline-flex;
+    flex-direction: column;
+
+    margin: 1rem;
+        margin-left: 0;
+        margin-top: 2rem;
+        margin-bottom: 0;
+    padding: 1rem;
+    /*gap: 1rem;*/
+
+    background-color: var(--background-secondary);
+    border-radius: 0 var(--br) var(--br) 0;
+}
+
+#navright img {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+#navright a {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    padding: 0.5rem 0;
+    margin: 0.25rem 0;
+}
+
+#navright a.active {
+    background-color: var(--background-secondary-hover);
+    border-radius: var(--brs);
+}
+
+#navright a img {
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+}
+
+#navright a p {
+    padding: 0;
+    margin: 0;
+}
+
+#navtop {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    margin: 1rem;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+#navtop img {
+    width: 1.5rem;
+}
+
+@media (orientation: landscape) {
+    #navright {
+        width: 38%;
+    }
+}
+
+button {
+    border-radius: var(--brs);
+}
+
+.separator {
+    width: 100%;
+    border-style: dotted;
+    border-left: none;
+    border-bottom: none;
+    border-right: none;
+    border-color: var(--text-secondary);
+    border-width: 4px;
+    margin: 1rem 0;
+}
+
+#pages {
+    margin-right: 1rem;
+}
+
+#userbtn {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}

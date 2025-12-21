@@ -1,0 +1,50 @@
+@media (orientation: portrait) {
+    
+    #content {
+        flex-direction: column-reverse;
+        margin-top: 1rem;
+    }
+
+    #navright {
+        min-width: 0;
+        width: 0;
+        overflow: hidden;
+        background: none;
+        font-size: 3rem;
+    }
+    #navright.active {
+        width: calc(100dvw - 2rem);
+        height: 100%;
+        position: absolute;
+        margin: 0;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        padding: 2rem;
+        background-color: var(--background-secondary);
+    }
+    #navright img {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+
+    #openmenu {
+        position: absolute;
+        top: 1rem;
+        left: 2rem;
+        z-index: 1100;
+        background: none;
+        border: none;
+        padding: 1rem;
+        border-radius: var(--br);
+    }
+
+    #navright.active #openmenu {
+        position: unset;
+        margin-bottom: 20rem;
+    }
+
+    .randomOnHome {
+        grid-template-columns: 1fr;
+    }
+}

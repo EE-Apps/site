@@ -1,0 +1,117 @@
+<html>
+<head>
+    <title>RAIB</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="eelibs/import.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/page/home.css">
+    <link rel="stylesheet" href="css/page/history.css">
+    <link rel="stylesheet" href="css/page/login.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <script src="eelibs/import.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+</head>
+<body>
+    <nav id="navright">
+        <button id="openmenu" onclick="document.getElementById('navright').classList.toggle('active')"><img src="img/ui/lines.svg"></button>
+        <a href="#home" onclick="pages.switch('phome')" class="active navbtn" id="phome-btn"><img src="img/ui/home.svg"><p>Home</p></a>
+        <a href="#budget" onclick="pages.switch('pbudget')" class="navbtn" id="pbudget-btn"><img src="img/ui/text_big.svg"><p>Budget</p></a>
+        <a href="#history" onclick="pages.switch('phistory')" class="navbtn" id="phistory-btn"><img src="img/ui/list/list.svg"><p>History</p></a>
+        <div class="separator"></div>
+        <!--a href="#about"><img src="img/ui/exchange.svg"><p>Shares</p></a>
+        <a href="#about"><img src="img/ui/exchange.svg"><p>Trades</p></a>
+        <div class="separator"></div-->
+        <a href="#transfer" onclick="pages.switch('ptransfer')" class="navbtn" id="ptransfer-btn"><img src="img/ui/exchange.svg"><p>Transfer</p></a>
+        <a href="#settings" onclick="pages.switch('psettings')" class="navbtn" id="psettings-btn"><img src="img/ui/settings.svg"><p>Settings</p></a>
+    </nav>
+    <div id="content">
+        <nav id="navtop">
+            <button id="userbtn" onclick="pages.switch('plogin')"><b id="username">Guest</b><img src="img/ui/user.svg"></button>
+            <!--button><img src="img/ui/more.svg"></button-->
+        </nav>
+        <div id="pages">
+            <div id="phome" class="page active">
+                <div class="slider-container">
+                    <div class="slider-track">
+                        <img src="img/adds/1.png" alt="Image 1">
+                        <!--img src="img/adds/2.png" alt="Image 2"-->
+                        <img src="img/adds/3.png" alt="Image 3">
+                    </div>
+                </div>
+                <div class="randomOnHome">
+                    <div class="randomEl">
+                        <h2>Transfer money</h2>
+                        <div class="randomContent">
+                            <p>Send money to other user</p>
+                            <div class="randomPlace">
+                                <p>Amount:</p>
+                                <input id="homeTransAmount" type="number" placeholder="0.00 IRR">
+                            </div>
+                            <div class="randomPlace">
+                                <p>Password:</p>
+                                <input id="homeTransPassword" type="password" placeholder="Your password">
+                            </div>
+                            <div class="randomPlace">
+                                <p>Reciver:</p>
+                                <input id="homeTransReciver" type="text" placeholder="Reciver ID">
+                            </div>
+                        </div>
+                        <div class='btns'>
+                            <button id="homeTransSend"><img src="img/ui/arrow/right.svg"></button>
+                            <button onclick="pages.switch('ptransfer')"><img src="img/ui/file/open.svg"></button>
+                        </div>
+                    </div>
+                    <div class="randomEl">
+                        <h2>Help</h2>
+                        <p>How it works?</p>
+                        <div class='btns'><button><img src="img/ui/file/open.svg"></button></div>
+                    </div>
+                    <!--div class="randomEl">
+                        <h2>Change reciver of transfer-code</h2>
+                        <div class="randomContent">
+                            <div class="randomPlace">
+                                <p>Password:</p>
+                                <input type="password" placeholder="Your password">
+                            </div>
+                            <div class="randomPlace">
+                                <p>Reciver:</p>
+                                <input type="password" placeholder="Reciver ID">
+                            </div>
+                        </div>
+                        <div class='btns'><button><img src="img/ui/file/open.svg"></button></div>
+                    </div>
+                    <div class="randomEl">
+                        <h2>Welcome to RAIB</h2>
+                        <p>Your personal finance management app.</p>
+                        <div class='btns'><button><img src="img/ui/file/open.svg"></button></div>
+                    </div>
+                    <div class="randomEl">
+                        <h2>Welcome to RAIB</h2>
+                        <p>Your personal finance management app.</p>
+                        <div class='btns'><button><img src="img/ui/file/open.svg"></button></div>
+                    </div-->
+                </div>
+                <ul id="users" style="display: none;"></ul>
+            </div>
+            <div id="phistory" class="page">
+                <div id="historys" class="history-list"></div>
+            </div>
+            <div id="pbudget" class="page">
+                <div id="budget-data">
+                    <p>Currently in your account: <b id="homeBalanceValue"></b> IRR</p>
+                </div>
+            </div>
+            <div id="plogin" class="page">
+                <div id="login-content">
+                    <input id="login-username" type="text" placeholder="Username">
+                    <input id="login-password" type="password" placeholder="Password">
+                </div>
+                <button id="login-btn">Login</button>
+            </div>
+        </div>
+    </div>
+</body>
+    <script src="js/page/home.js" type="module"></script>
+    <script src="js/sbase.js" type="module"></script>
+</html>
