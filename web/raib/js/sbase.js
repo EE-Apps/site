@@ -198,13 +198,20 @@ function getUserIdByNameCI(name) {
     if (!window.usersList || !name) return null;
     const searchName = name.toLowerCase();
 
-    const user = window.usersList.find(u => u.name?.toLowerCase() === searchName);
-
-    return user?.id || null;
+    for (const [id, user] of Object.entries(window.usersList)) {
+        if (user.name?.toLowerCase() === searchName) {
+            return Number(id);
+        }
+    }
+    return null;
 }
 window.getUserIdByNameCI = getUserIdByNameCI;
 
 document.getElementById('login-btn').addEventListener('click', async (e) => {
+    window.login();
+});
+
+window.login = async function() {
     const name = document.getElementById('login-username').value;
     const pw = document.getElementById('login-password').value;
     if (!name) {
@@ -244,4 +251,4 @@ document.getElementById('login-btn').addEventListener('click', async (e) => {
     window.userid = id
     localStorage.setItem('raib-user', Number(id));
     location.reload();
-});
+}
