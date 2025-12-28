@@ -3,153 +3,154 @@
 <head>
 <title>Write Messages</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #333;
-        color: white;
-    }
-    .form-group {
-        margin-bottom: 15px;
-    }
-    label {
-        display: block;
-        margin-bottom: 5px;
-    }
-    input[type="text"], textarea {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 10px;
-        border: 1px solid #555;
-        border-radius: 4px;
-        background-color: #222;
-        color: white;
-    }
-    .button-group {
-        display: flex;
-        gap: 10px;
-    }
-    button {
-        padding: 8px 15px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        color: white;
-    }
-    button[type="submit"] {
-        background-color: #4CAF50;
-    }
-    button[type="button"] {
-        background-color: #f44336;
-    }
+body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+}
+.form-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; }
+input, textarea, select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    background: #222;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 4px;
+}
+button {
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    border-radius: 4px;
+    background-color: #4CAF50;
+}
+button:hover {
+    background-color: #45a049;
+}
 </style>
-
 <script>
-/*
-  СЛОВАРЬ ВЕБХУКОВ
-  ключ   → ссылка вебхука
-  значение → имя, под которым он пишет
-*/
-const WEBHOOK_NAMES = {
-    "https://discord.com/api/webhooks/1454957080695017730/JPjMrDwJ92aNQtqWulQXkl39NVQiZ0fNVwlZnpmljzmL0IDbyExYOmt3KSDiG264b7DI": "Red",
-    "https://discord.com/api/webhooks/1454957113175441647/UYSy4pbW-NTQAnAE4C3y3FnOBkf_TzWBsFK0tdfDYkeQr3a6GPo_WUzOpd3kv5KkRNtB": "Hawk",
-    "https://discord.com/api/webhooks/1454957117122547877/q_nzPpPUvK2cmPikzh1AWGwbdXsX27Z2-kMUgU3ljU0_lYTCPFOeTiPrnfxp00pEL0P3": "Forest",
-    "https://discord.com/api/webhooks/1454957125838049320/F-Q0whVCGdjXFn-jrdZ9PJK3AMnQCsMkBnubw8V4i1oqUo9RJ-DznEsKnyTJP-rAnxNJ": "Minister",
-    "https://discord.com/api/webhooks/1454956867020259329/HwNufkolBEWcxkKF0zu98AfKG3GF94vi3Y_F5K2xe28TyLgof12AG97UkI4vq1ers_vO": "Ministry of Economic Development",
-};
-const WEBHOOK_AVAS = {
-    "https://discord.com/api/webhooks/111/AAA": "Great Comrade",
-    "https://discord.com/api/webhooks/222/BBB": "SFN Command",
-    "https://discord.com/api/webhooks/333/CCC": "Central Committee"
-};
-
-const DEFAULT_NAME = "Unknown User";
-const DEFAULT_AVA = "https://discord.fandom.com/wiki/File:Wumpus2024homepage.webp";
+/* ================= WEBHOOK ================= */
+const WEBHOOK_NAMES = {};
+const DEFAULT_NAME = "System";
 const STORAGE_KEY = "discord_webhook_url";
 
-// загрузка сохранённого вебхука
+/* ================= PROFILES ================= */
+const ANON_PROFILES = {
+    soft:   { max: 18, dropPunct: 0.4, removePronouns: false, scramble: 0.05 },
+    medium: { max: 12, dropPunct: 0.7, removePronouns: true, scramble: 0.12 },
+    hard:   { max: 8,  dropPunct: 0.95, removePronouns: true, scramble: 0.25 }
+};
+let CURRENT_PROFILE = "medium";
+
+/* ================= REGEX ================= */
+const ARTICLES = /\b(a|an|the)\b/gi;
+const PRONOUNS = /\b(i|we|you|he|she|they|me|us|him|her|them|my|our|your|his|its|their|myself|yourself|himself|herself|themselves)\b/gi;
+const NUMBERS = /\b\d+(\.\d+)?%?\b/g;
+const MENTIONS = /@[\w\s-]+/g;
+const EMOTIONS = /[!?…]{2,}/g;
+const ROLES = '';
+const LOCATIONS = '';
+const ORGS = '';
+
+/* ================= INIT ================= */
 window.onload = () => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-        document.getElementById('webhook').value = saved;
-        updateName();
-    }
+    if (saved) document.getElementById("webhook").value = saved;
 };
 
-function updateName() {
-    const webhook = document.getElementById('webhook').value.trim();
-    const name = WEBHOOK_NAMES[webhook] || DEFAULT_NAME;
-    const ava = WEBHOOK_AVAS[webhook] || DEFAULT_AVA;
-    document.getElementById('currentName').textContent = name;
-}
-
-function saveWebhook() {
-    const webhook = document.getElementById('webhook').value.trim();
-    if (!webhook) {
-        alert("Webhook URL is required");
-        return;
+/* ================= ANON ================= */
+function anonymizeText(text) {
+    const cfg = ANON_PROFILES[CURRENT_PROFILE];
+    let t = text.toLowerCase()
+        .replace(/\r?\n+/g, ' ')
+        .replace(/[,;:"'()[\]]/g, '')
+        .replace(MENTIONS, 'entity')
+        .replace(LOCATIONS, 'location')
+        .replace(ORGS, 'organization')
+        .replace(ROLES, 'office')
+        .replace(NUMBERS, 'value')
+        .replace(EMOTIONS, '')
+        .replace(ARTICLES, '')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+    
+    if (cfg.removePronouns) {
+        t = t.replace(PRONOUNS, '');
     }
-    localStorage.setItem(STORAGE_KEY, webhook);
-    updateName();
+    
+    let words = t.split(/\s+/).filter(w => w.length > 0);
+    
+    // Word scrambling for higher anonymization
+    if (cfg.scramble > 0) {
+        for (let i = words.length - 1; i > 0; i--) {
+            if (Math.random() < cfg.scramble) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [words[i], words[j]] = [words[j], words[i]];
+            }
+        }
+    }
+    
+    let out = [];
+    while (words.length) {
+        let chunk = words.splice(0, cfg.max).join(' ');
+        if (chunk.trim()) out.push(chunk.trim());
+    }
+    
+    return out.map(s => {
+        if (Math.random() >= cfg.dropPunct) return s + '.';
+        return s;
+    }).join(' ').replace(/\s{2,}/g, ' ').trim();
 }
 
-function writeMessageInDiscord() {
-    const webhook = document.getElementById('webhook').value.trim();
-    const message = document.getElementById('message').value.trim();
-
-    if (!webhook || !message) {
+/* ================= SEND ================= */
+function send() {
+    const webhook = document.getElementById("webhook").value.trim();
+    const raw = document.getElementById("message").value;
+    if (!webhook || !raw.trim()) {
         alert("Webhook and message are required");
         return;
     }
-
-    const name = WEBHOOK_NAMES[webhook] || DEFAULT_NAME;
-    const ava = WEBHOOK_AVAS[webhook] || DEFAULT_AVA;
-
+    const msg = anonymizeText(raw);
     fetch(webhook, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            content: message,
-            username: name,
-            avatar_url: ava
+            content: msg,
+            username: DEFAULT_NAME
         })
     })
     .then(res => {
-        console.log('Готово! Статус:', res.status);
-        document.getElementById('message').value = '';
+        console.log("Sent:", res.status);
+        document.getElementById("message").value = "";
     })
     .catch(console.error);
 }
 </script>
 </head>
-
 <body>
-<h1>Write Messages</h1>
-
+<h2>Write Messages</h2>
 <div class="form-group">
-    <label for="webhook">Discord Webhook URL:</label>
-    <input type="text" id="webhook" placeholder="https://discord.com/api/webhooks/..." oninput="updateName()">
-    <button type="button" onclick="saveWebhook()">Save Webhook</button>
+    <label>Webhook URL</label>
+    <input id="webhook" type="text" placeholder="https://discord.com/api/webhooks/..." oninput="localStorage.setItem('discord_webhook_url', this.value)">
 </div>
-
 <div class="form-group">
-    <label>Webhook name:</label>
-    <div><strong id="currentName">Unknown User</strong></div>
+    <label>Anonymization Profile</label>
+    <select onchange="CURRENT_PROFILE=this.value">
+        <option value="soft">Soft</option>
+        <option value="medium" selected>Medium</option>
+        <option value="hard">Hard</option>
+    </select>
 </div>
-
 <div class="form-group">
-    <label for="message">Message:</label>
-    <textarea id="message" rows="4" placeholder="Enter your message"></textarea>
+    <label>Message</label>
+    <textarea id="message" rows="6" placeholder="Enter your message here..."></textarea>
 </div>
-
-<div class="button-group">
-    <button type="submit" onclick="writeMessageInDiscord()">Send Message</button>
-    <button type="button" onclick="document.getElementById('message').value = ''">Clear Message</button>
-</div>
-
+<button onclick="send()">Send Message</button>
 </body>
 </html>
