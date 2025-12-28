@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Write Messages</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #333;
+        color: white;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    input[type="text"], textarea {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #555;
+        border-radius: 4px;
+        background-color: #222;
+        color: white;
+    }
+    .button-group {
+        display: flex;
+        gap: 10px;
+    }
+    button {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        color: white;
+    }
+    button[type="submit"] {
+        background-color: #4CAF50;
+    }
+    button[type="button"] {
+        background-color: #f44336;
+    }
+</style>
+
+<script>
+/*
+  СЛОВАРЬ ВЕБХУКОВ
+  ключ   → ссылка вебхука
+  значение → имя, под которым он пишет
+*/
+const WEBHOOK_NAMES = {
+    "https://discord.com/api/webhooks/1454957080695017730/JPjMrDwJ92aNQtqWulQXkl39NVQiZ0fNVwlZnpmljzmL0IDbyExYOmt3KSDiG264b7DI": "Red",
+    "https://discord.com/api/webhooks/1454957113175441647/UYSy4pbW-NTQAnAE4C3y3FnOBkf_TzWBsFK0tdfDYkeQr3a6GPo_WUzOpd3kv5KkRNtB": "Hawk",
+    "https://discord.com/api/webhooks/1454957117122547877/q_nzPpPUvK2cmPikzh1AWGwbdXsX27Z2-kMUgU3ljU0_lYTCPFOeTiPrnfxp00pEL0P3": "Forest",
+    "https://discord.com/api/webhooks/1454957125838049320/F-Q0whVCGdjXFn-jrdZ9PJK3AMnQCsMkBnubw8V4i1oqUo9RJ-DznEsKnyTJP-rAnxNJ": "Minister",
+    "https://discord.com/api/webhooks/1454956867020259329/HwNufkolBEWcxkKF0zu98AfKG3GF94vi3Y_F5K2xe28TyLgof12AG97UkI4vq1ers_vO": "Minister",
+};
+const WEBHOOK_AVAS = {
+    "https://discord.com/api/webhooks/111/AAA": "Great Comrade",
+    "https://discord.com/api/webhooks/222/BBB": "SFN Command",
+    "https://discord.com/api/webhooks/333/CCC": "Central Committee"
+};
+
+const DEFAULT_NAME = "Unknown User";
+const DEFAULT_AVA = "https://discord.fandom.com/wiki/File:Wumpus2024homepage.webp";
+const STORAGE_KEY = "discord_webhook_url";
+
+// загрузка сохранённого вебхука
+window.onload = () => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        document.getElementById('webhook').value = saved;
+        updateName();
+    }
+};
+
+function updateName() {
+    const webhook = document.getElementById('webhook').value.trim();
+    const name = WEBHOOK_NAMES[webhook] || DEFAULT_NAME;
+    const ava = WEBHOOK_AVAS[webhook] || DEFAULT_AVA;
+    document.getElementById('currentName').textContent = name;
+}
+
+function saveWebhook() {
+    const webhook = document.getElementById('webhook').value.trim();
+    if (!webhook) {
+        alert("Webhook URL is required");
+        return;
+    }
+    localStorage.setItem(STORAGE_KEY, webhook);
+    updateName();
+}
+
+function writeMessageInDiscord() {
+    const webhook = document.getElementById('webhook').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (!webhook || !message) {
+        alert("Webhook and message are required");
+        return;
+    }
+
+    const name = WEBHOOK_NAMES[webhook] || DEFAULT_NAME;
+    const ava = WEBHOOK_AVAS[webhook] || DEFAULT_AVA;
+
+    fetch(webhook, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            content: message,
+            username: name,
+            avatar_url: ava
+        })
+    })
+    .then(res => {
+        console.log('Готово! Статус:', res.status);
+        document.getElementById('message').value = '';
+    })
+    .catch(console.error);
+}
+</script>
+</head>
+
+<body>
+<h1>Write Messages</h1>
+
+<div class="form-group">
+    <label for="webhook">Discord Webhook URL:</label>
+    <input type="text" id="webhook" placeholder="https://discord.com/api/webhooks/..." oninput="updateName()">
+    <button type="button" onclick="saveWebhook()">Save Webhook</button>
+</div>
+
+<div class="form-group">
+    <label>Webhook name:</label>
+    <div><strong id="currentName">Unknown User</strong></div>
+</div>
+
+<div class="form-group">
+    <label for="message">Message:</label>
+    <textarea id="message" rows="4" placeholder="Enter your message"></textarea>
+</div>
+
+<div class="button-group">
+    <button type="submit" onclick="writeMessageInDiscord()">Send Message</button>
+    <button type="button" onclick="document.getElementById('message').value = ''">Clear Message</button>
+</div>
+
+</body>
+</html>
