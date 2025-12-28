@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     let urlparams = new URLSearchParams(window.location.search);
-    if (urlparams.get('saferules') === '1') {
-        pages.switch('psafe');
+    if (urlparams.get('page')) {
+        pages.switch(urlparams.get('page'));
     }
 });
