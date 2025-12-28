@@ -59,4 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
         passwordInput.value = '';
         receiverInput.value = '';
     });
+
+    let urlparams = new URLSearchParams(window.location.search);
+    if (urlparams.get('saferules') === '1') {
+        pages.switch('psafe');
+    }
 });
