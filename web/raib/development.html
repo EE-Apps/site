@@ -29,24 +29,40 @@ button {
     color: white;
     border-radius: 4px;
     background-color: #4CAF50;
+    margin-right: 10px;
 }
 button:hover {
     background-color: #45a049;
 }
+.clear-btn {
+    background-color: #f44336;
+}
+.clear-btn:hover {
+    background-color: #da190b;
+}
 </style>
 <script>
 /* ================= WEBHOOK ================= */
-const WEBHOOK_NAMES = {};
-const DEFAULT_NAME = "System";
+const WEBHOOK_NAMES = {
+    "https://discord.com/api/webhooks/1454957080695017730/JPjMrDwJ92aNQtqWulQXkl39NVQiZ0fNVwlZnpmljzmL0IDbyExYOmt3KSDiG264b7DI": "Red",
+    "https://discord.com/api/webhooks/1454957113175441647/UYSy4pbW-NTQAnAE4C3y3FnOBkf_TzWBsFK0tdfDYkeQr3a6GPo_WUzOpd3kv5KkRNtB": "Hawk",
+    "https://discord.com/api/webhooks/1454957117122547877/q_nzPpPUvK2cmPikzh1AWGwbdXsX27Z2-kMUgU3ljU0_lYTCPFOeTiPrnfxp00pEL0P3": "Forest",
+    "https://discord.com/api/webhooks/1454957125838049320/F-Q0whVCGdjXFn-jrdZ9PJK3AMnQCsMkBnubw8V4i1oqUo9RJ-DznEsKnyTJP-rAnxNJ": "Minister"
+};
+const WEBHOOK_AVAS = {};
+const DEFAULT_NAME = "Unknown User";
+const DEFAULT_AVA = "https://discord.fandom.com/wiki/File:Wumpus2024homepage.webp";
 const STORAGE_KEY = "discord_webhook_url";
 
 /* ================= PROFILES ================= */
 const ANON_PROFILES = {
-    soft:   { max: 18, dropPunct: 0.4, removePronouns: false, scramble: 0.05 },
-    medium: { max: 12, dropPunct: 0.7, removePronouns: true, scramble: 0.12 },
-    hard:   { max: 8,  dropPunct: 0.95, removePronouns: true, scramble: 0.25 }
+    none:   { max: 999, dropPunct: 0, removePronouns: false, scramble: 0 },
+    soft:   { max: 20, dropPunct: 0.3, removePronouns: false, scramble: 0 },
+    medium: { max: 15, dropPunct: 0.5, removePronouns: false, scramble: 0 },
+    hard:   { max: 12, dropPunct: 0.7, removePronouns: true, scramble: 0.1 }
 };
 let CURRENT_PROFILE = "medium";
+let ANON_ENABLED = true;
 
 /* ================= REGEX ================= */
 const ARTICLES = /\b(a|an|the)\b/gi;
@@ -54,18 +70,42 @@ const PRONOUNS = /\b(i|we|you|he|she|they|me|us|him|her|them|my|our|your|his|its
 const NUMBERS = /\b\d+(\.\d+)?%?\b/g;
 const MENTIONS = /@[\w\s-]+/g;
 const EMOTIONS = /[!?…]{2,}/g;
-const ROLES = '';
-const LOCATIONS = '';
-const ORGS = '';
+const ROLES = 'adfghdfghgadydfhtys';
+const LOCATIONS = 'adfghdfghgadydfhtys';
+const ORGS = 'adfghdfghgadydfhtys';
 
 /* ================= INIT ================= */
 window.onload = () => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) document.getElementById("webhook").value = saved;
+    if (saved) {
+        document.getElementById("webhook").value = saved;
+    }
+    updateName();
 };
+
+/* ================= HELPERS ================= */
+function updateName() {
+    const webhook = document.getElementById('webhook').value.trim();
+    const nameElement = document.getElementById('currentName');
+    if (nameElement) {
+        nameElement.textContent = WEBHOOK_NAMES[webhook] || DEFAULT_NAME;
+    }
+}
+
+function saveWebhook() {
+    const webhook = document.getElementById('webhook').value.trim();
+    if (!webhook) {
+        alert("Webhook URL is required");
+        return;
+    }
+    localStorage.setItem(STORAGE_KEY, webhook);
+    updateName();
+}
 
 /* ================= ANON ================= */
 function anonymizeText(text) {
+    if (!ANON_ENABLED) return text;
+    
     const cfg = ANON_PROFILES[CURRENT_PROFILE];
     let t = text.toLowerCase()
         .replace(/\r?\n+/g, ' ')
@@ -117,12 +157,16 @@ function send() {
         return;
     }
     const msg = anonymizeText(raw);
+    const name = WEBHOOK_NAMES[webhook] || DEFAULT_NAME;
+    const ava = WEBHOOK_AVAS[webhook] || DEFAULT_AVA;
+    
     fetch(webhook, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             content: msg,
-            username: DEFAULT_NAME
+            username: name,
+            avatar_url: ava
         })
     })
     .then(res => {
@@ -136,21 +180,34 @@ function send() {
 <body>
 <h2>Write Messages</h2>
 <div class="form-group">
-    <label>Webhook URL</label>
-    <input id="webhook" type="text" placeholder="https://discord.com/api/webhooks/..." oninput="localStorage.setItem('discord_webhook_url', this.value)">
+    <label>Discord Webhook URL</label>
+    <input id="webhook" type="text" placeholder="https://discord.com/api/webhooks/..." oninput="updateName()">
+    <button onclick="saveWebhook()">Save Webhook</button>
+</div>
+<div class="form-group">
+    <label>Webhook Name</label>
+    <strong id="currentName">Unknown User</strong>
 </div>
 <div class="form-group">
     <label>Anonymization Profile</label>
     <select onchange="CURRENT_PROFILE=this.value">
+        <option value="none">None (No changes)</option>
         <option value="soft">Soft</option>
         <option value="medium" selected>Medium</option>
         <option value="hard">Hard</option>
     </select>
 </div>
 <div class="form-group">
+    <label>
+        <input type="checkbox" checked onchange="ANON_ENABLED=this.checked" style="width: auto; margin-right: 5px;">
+        Enable Anonymization
+    </label>
+</div>
+<div class="form-group">
     <label>Message</label>
     <textarea id="message" rows="6" placeholder="Enter your message here..."></textarea>
 </div>
 <button onclick="send()">Send Message</button>
+<button class="clear-btn" onclick="document.getElementById('message').value = ''">Clear</button>
 </body>
 </html>
