@@ -138,3 +138,29 @@ button {
     align-items: center;
     gap: 0.5rem;
 }
+
+.homeBalanceValueDiv {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 36px;
+    background-color: var(--background-secondary);
+    border: 1px solid var(--bc);
+    border-radius: var(--brs);
+    color: var(--text-primary);
+    padding: 5px;
+    min-width: 100px;
+}
+
+.homeBalanceValueDiv b, .homeBalanceValueDiv p {
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--text-secondary) var(--background-secondary);
+}

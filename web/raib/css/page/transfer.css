@@ -1,0 +1,111 @@
+.transfer-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.transfer-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+.transfer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+#transfer-receiver-dropdown {
+    width: 100%;
+}
+
+.transfer-btn {
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.transfer-btn:hover {
+    background-color: #45a049;
+}
+
+.transfer-btn:active {
+    transform: scale(0.98);
+}
+
+.transfer-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .transfer-container {
+        padding: 15px;
+        margin: 10px auto;
+    }
+
+    .transfer-container h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .transfer-form {
+        gap: 15px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .transfer-btn {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+}
+
+.custom-dd__menu {
+    top: -25;
+    bottom: unset;
+}

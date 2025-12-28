@@ -7,9 +7,12 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/page/home.css">
     <link rel="stylesheet" href="css/page/history.css">
+    <link rel="stylesheet" href="css/page/registration.css">
     <link rel="stylesheet" href="css/page/login.css">
+    <link rel="stylesheet" href="css/page/transfer.css">
     <link rel="stylesheet" href="css/mobile.css">
     <script src="eelibs/import.js" type="module"></script>
+    <script src="eelibs/js/dropdown.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
 </head>
 <body>
@@ -27,6 +30,7 @@
     </nav>
     <div id="content">
         <nav id="navtop">
+            <button onclick="pages.switch('pbudget')" class="homeBalanceValueDiv"><b id="homeBalanceValueHome"></b><p>IRR</p></button>
             <button id="userbtn" onclick="pages.switch('plogin')"><b id="username">Guest</b><img src="img/ui/user.svg"></button>
             <!--button><img src="img/ui/more.svg"></button-->
         </nav>
@@ -102,16 +106,62 @@
                     <p>Currently in your account: <b id="homeBalanceValue"></b> IRR</p>
                 </div>
             </div>
+            <div id="ptransfer" class="page">
+                <div class="transfer-container">
+                    <h2>Transfer Money</h2>
+                    <div class="transfer-form">
+                        <div class="form-group">
+                            <label>Receiver:</label>
+                            <div id="transfer-receiver-dropdown"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Amount:</label>
+                            <input id="transfer-amount" type="number" placeholder="0.00 IRR" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Type (optional):</label>
+                            <input id="transfer-type" type="text" placeholder="Transfer type">
+                        </div>
+                        <div class="form-group">
+                            <label>Comment (optional):</label>
+                            <textarea id="transfer-comment" placeholder="Add a comment..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Password:</label>
+                            <input id="transfer-password" type="password" placeholder="Your password">
+                        </div>
+                        <button id="transfer-submit" class="transfer-btn">Send Transfer</button>
+                    </div>
+                </div>
+            </div>
             <div id="plogin" class="page">
                 <div id="login-content">
                     <input id="login-username" type="text" placeholder="Username">
                     <input id="login-password" type="password" placeholder="Password">
                 </div>
                 <button id="login-btn">Login</button>
+                <p class="register-link">
+                    Don't have an account? <a href="#" onclick="pages.switch('pregister')">Register here</a>
+                </p>
+            </div>
+            <div id="pregister" class="page">
+                <div id="register-content">
+                    <input id="register-username" type="text" placeholder="Username">
+                    <input id="register-discord" type="text" placeholder="Discord ID (optional)">
+                    <input id="register-state" type="text" placeholder="State (optional)">
+                    <input id="register-password" type="password" placeholder="Password">
+                    <input id="register-password-confirm" type="password" placeholder="Confirm Password">
+                </div>
+                <button id="register-btn">Create Account</button>
+                <p class="login-link">
+                    Already have an account? <a href="#" onclick="pages.switch('plogin')">Login here</a>
+                </p>
             </div>
         </div>
     </div>
 </body>
-    <script src="js/page/home.js" type="module"></script>
     <script src="js/sbase.js" type="module"></script>
+    <script src="js/page/home.js" type="module"></script>
+    <script src="js/page/transfer.js" type="module"></script>
+    <script src="js/page/registration.js" type="module"></script>
 </html>

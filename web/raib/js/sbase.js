@@ -35,7 +35,10 @@ async function loadUsers() {
         return
     }
 
-    window.usersList = data;
+    window.usersList = {};
+    data.forEach(user => {
+        window.usersList[user.id] = user;
+    });
 
     const ul = document.getElementById('users')
     ul.innerHTML = ''
@@ -52,8 +55,12 @@ async function loadUsers() {
             document.getElementById('username').textContent = currentUser.name
             const balanceElem = document.getElementById('homeBalanceValue')
             balanceElem.textContent = currentUser.balance
+            const balanceElemH = document.getElementById('homeBalanceValueHome')
+            balanceElemH.textContent = currentUser.balance
         }
     }
+
+    window.initTransferPage();
 }
 
 async function loadHistory() {
@@ -104,11 +111,11 @@ async function loadHistory() {
             <div class="history-row">
                 <div class="history-col">
                     <span class="label">From</span>
-                    <span class="value">${t.from_account}</span>
+                    <span class="value">${usersList[t.from_account].name}</span>
                 </div>
                 <div class="history-col">
                     <span class="label">To</span>
-                    <span class="value">${t.to_account}</span>
+                    <span class="value">${usersList[t.to_account].name}</span>
                 </div>
             </div>
 
