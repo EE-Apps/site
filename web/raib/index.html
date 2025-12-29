@@ -120,7 +120,16 @@
                         </div>
                         <div class="form-group">
                             <label>Type (optional):</label>
-                            <input id="transfer-type" type="text" placeholder="Transfer type">
+                            <!--input id="transfer-type" type="text" placeholder="Transfer type"-->
+                            <select id="transfer-type">
+                                <option value="payment">Payment</option>
+                                <option value="gift">Gift</option>
+                                <option value="donation">Donation</option>
+                                <option value="investment">Investment</option>
+                                <option value="loan">Loan (give)</option>
+                                <option value="pay-loan">Loan (close)</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label>Comment (optional):</label>
