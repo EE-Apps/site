@@ -158,6 +158,14 @@ async function sendTransfer(fromId, toId, amount, comment, password, type) {
             return;
         }
 
+        if (comment == undefined || comment === null) {
+            comment = '';
+        }
+
+        if (type == undefined || type === null) {
+            type = '';
+        }
+
         // 3. Отправляем перевод
         const { error } = await window.supabase.rpc(
             'make_transfer_with_password',
