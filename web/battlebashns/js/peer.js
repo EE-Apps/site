@@ -100,6 +100,13 @@ function updateTurnUI() {
       connected = true;
       updateStatus('connected');
       console.log('peer connected');
+      
+      // Удаляем комнату из списка, если она существует (игра начинается)
+      if (typeof deleteRoom === 'function' && window.currentRoom && window.cloud) {
+        deleteRoom(window.currentRoom.id, window.cloud);
+        console.log('[Peer] Room deleted from list - game started');
+      }
+      
       // сразу отправляем initial sync so both sides share same state
       document.getElementById('connectPage').classList.remove('active');
       document.getElementById('gamePage').classList.add('active');

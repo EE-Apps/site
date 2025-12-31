@@ -258,20 +258,12 @@ function updateRoomsList(cloud) {
  */
 function createRoomElement(room) {
     const div = document.createElement('div');
-    div.style.cssText = `
-        padding: 10px;
-        margin: 5px 0;
-        background: #f0f0f0;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background 0.2s;
-    `;
+    div.className = 'room';
 
     const createdDate = new Date(room.createdAt).toLocaleTimeString('ru-RU');
 
     div.innerHTML = `
-        <div style="font-weight: bold; color: #333;">${room.name}</div>
+        <div style="font-weight: bold">${room.name}</div>
         <div style="font-size: 12px; color: #666;">
             Автор: <strong>${room.author}</strong> | 
             Игроков: <strong>${room.players}</strong> | 
@@ -279,8 +271,6 @@ function createRoomElement(room) {
         </div>
     `;
 
-    div.onmouseover = () => div.style.background = '#e8e8e8';
-    div.onmouseout = () => div.style.background = '#f0f0f0';
     div.onclick = () => joinRoom(room.id);
 
     return div;
@@ -446,6 +436,12 @@ function initiatePeerConnection(cloud) {
         // Экспортируем peer в глобальный контекст для игры
         window.peer = peer;
         
+        // Удаляем комнату из списка (игра начинается)
+        if (currentRoom && window.cloud) {
+            deleteRoom(currentRoom.id, window.cloud);
+            console.log('[Lobby] Room deleted from list - game started');
+        }
+        
         // Переходим в игру
         if (typeof window.startMultiplayerGame === 'function') {
             window.startMultiplayerGame(peer, currentRoom);
@@ -542,6 +538,31 @@ function handleCloudSignal(cloud, encodedSignal) {
         console.error('[Lobby] Error handling cloud signal:', e);
         console.error('[Lobby] Signal data was:', encodedSignal);
     }
+}
+
+/**
+ * Удалить комнату из списка комнат (локально и на сервере)
+ * @param {string} roomId - ID комнаты для удаления
+ * @param {CloudWebSocket} cloud - облако для синхронизации
+ */
+function deleteRoom(roomId, cloud) {
+    console.log('[Lobby] Deleting room:', roomId);
+    
+    // Удаляем из локального кеша
+    roomsCache = roomsCache.filter(room => room.id !== roomId);
+    console.log('[Lobby] Room removed from cache. Remaining rooms:', roomsCache.length);
+    
+    // Обновляем список на сервере
+    try {
+        const roomsListData = JSON.stringify(roomsCache);
+        cloud.sendSet(CLOUD_ROOMS_LIST_VAR, roomsListData, { encode: true });
+        console.log('[Lobby] Updated rooms list on server');
+    } catch (e) {
+        console.error('[Lobby] Error updating rooms list on server:', e);
+    }
+    
+    // Обновляем список в UI для других игроков (если они еще смотрят список)
+    updateRoomsList(cloud);
 }
 
 /**
@@ -686,5 +707,6 @@ function handlePeerMessage(msg) {
 window.handlePeerMessage = handlePeerMessage;
 window.sendChatMessage = sendChatMessage;
 window.backToLobby = backToLobby;
+window.deleteRoom = deleteRoom;
 window.currentRoom = currentRoom;
 window.cloud = cloud;

@@ -34,6 +34,10 @@ let peerConnection = null;
 let isConnected = false;
 let gameStarted = false;
 
+// Переменные для отслеживания готовности к новой игре
+let isPlayerReady = false;
+let isOpponentReady = false;
+
 let cells = []; // будет массив объектов { token: "", castle: bool, fortress: bool }
 const place = document.getElementById('gametable');
 function use() {
@@ -188,8 +192,272 @@ function checklength(row, col, mode) {
     return false;
 }
 
+/**
+ * Проверить, может ли игрок делать ходы
+ * @param {string} playerToken - 'one' или 'two'
+ * @returns {boolean} true если есть хотя бы один возможный ход
+ */
+function canPlayerMove(playerToken) {
+    // Проходим по всем ячейкам и проверяем возможность захвата
+    for (let r = 1; r < cells.length - 1; r++) {
+        for (let c = 1; c < cells[r].length - 1; c++) {
+            const currentCell = cells[r][c];
+            
+            // Ячейка должна быть пуста и не быть замком/крепостью
+            if (currentCell.token || currentCell.castle || currentCell.fortress) continue;
+            
+            // Проверяем радиус крепости
+            if (playerToken === 'one' && currentCell.fortressRadiusOne) continue;
+            if (playerToken === 'two' && currentCell.fortressRadiusTwo) continue;
+            
+            // Проверяем количество очков и возможность захвата
+            const currentScore = scores[playerToken] || 0;
+            const use_mode = document.getElementById('use') ? (document.getElementById('use').checked ? 'fortress' : 'own') : 'own';
+            
+            // Проверяем условия захвата
+            if (currentScore >= 1 
+                && !(currentScore < 4 && use_mode === 'fortress' && currentCell.token !== playerToken)
+                && !(currentScore < 3 && use_mode === 'fortress' && currentCell.token === playerToken)
+                && checklengthForPlayer(r, c, playerToken)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/**
+ * Проверить соседство для конкретного игрока
+ * @param {number} row
+ * @param {number} col
+ * @param {string} playerToken - 'one' или 'two'
+ * @returns {boolean}
+ */
+function checklengthForPlayer(row, col, playerToken) {
+    const deltas = [
+        [-1, 0],
+        [0, -1], [0, 1],
+        [1, 0]
+    ];
+
+    for (let [dr, dc] of deltas) {
+        const nr = row + dr;
+        const nc = col + dc;
+        if (!cells[nr] || !cells[nr][nc]) continue;
+        if (cells[nr][nc].token === playerToken) return true;
+    }
+
+    return false;
+}
+
 function showModal() { modal.style.display = 'flex'; }
 function hideModal() { modal.style.display = 'none'; activeCell = null; }
+
+/**
+ * Завершить игру и показать результаты
+ * @param {string} winner - 'one', 'two' или 'draw'
+ */
+function endGame(winner) {
+    console.log('[Game] Game ended! Winner:', winner, 'Scores:', scores);
+    
+    // Определяем текст уведомления
+    let message = '';
+    if (winner === 'draw') {
+        message = 'Игра завершена! Ничья.';
+    } else if (winner === player) {
+        message = `Игра завершена! Вы выиграли! (${countCellsOf(player)} очков)`;
+    } else {
+        message = `Игра завершена! Вы проиграли! (${countCellsOf(player)} против ${countCellsOf(winner)})`;
+    }
+    
+    // Отправляем сообщение сопернику о конце игры
+    if (peerConnection && isConnected) {
+        startNewGame();
+        scores.one = 0;
+
+        try {
+            const gameState = {
+                type: 'endTurn',
+                data: {
+                    cells: cells,
+                    scores: scores,
+                    currentPlayer: player,
+                    timestamp: Date.now()
+                }
+            };
+            peerConnection.send(JSON.stringify(gameState));
+            console.log('[Game] Game state sent to opponent');
+        } catch (e) {
+            console.error('[Game] Error syncing game state:', e);
+        }
+    }
+    
+    // Показываем уведомление
+    showGameEndNotification(message);
+}
+
+/**
+ * Показать уведомление о конце игры и вернуть в лобби
+ * @param {string} message - текст уведомления
+ */
+function showGameEndNotification(message) {
+    alert(message);
+    
+    // Переходим в лобби (на страницу с настройками комнаты)
+    //switchPage('chatPage');
+    //switchPage('lobbyPage');
+    document.getElementById('gamePage').classList.add('nextgame');
+
+    scores = { one: 4, two: 0 };
+    turn = 'one';
+    turnCount = 0;
+    lastBonusAppliedFor = { turn: null, turnCount: null };
+    
+    // Инициализируем кнопку "готов"
+    //setupReadyButton();
+}
+
+/**
+ * Настроить кнопку "готов" для новой игры
+ */
+function setupReadyButton() {
+    // Проверяем, есть ли уже кнопка, иначе создаем
+    let readyBtn = document.getElementById('readyButton');
+    
+    if (!readyBtn) {
+        // Создаём кнопку "готов"
+        readyBtn = document.createElement('button');
+        readyBtn.id = 'readyButton';
+        readyBtn.textContent = 'Готов к новой игре';
+        readyBtn.style.cssText = `
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        `;
+        
+        // Вставляем кнопку на страницу chatPage
+        const chatPage = document.getElementById('chatPage');
+        if (chatPage) {
+            const container = chatPage.querySelector('.room-settings') || chatPage;
+            container.appendChild(readyBtn);
+        }
+    }
+    
+    // Сбрасываем состояние готовности
+    isPlayerReady = false;
+    isOpponentReady = false;
+    readyBtn.disabled = false;
+    readyBtn.style.backgroundColor = '#4CAF50';
+    
+    // Добавляем обработчик клика
+    readyBtn.onclick = () => {
+        isPlayerReady = true;
+        readyBtn.disabled = true;
+        readyBtn.style.backgroundColor = '#888';
+        readyBtn.textContent = 'Ожидание соперника...';
+        
+        // Отправляем сообщение сопернику о готовности
+        if (peerConnection && isConnected) {
+            try {
+                const readyMsg = {
+                    type: 'playerReady',
+                    timestamp: Date.now()
+                };
+                peerConnection.send(JSON.stringify(readyMsg));
+                console.log('[Game] Ready message sent to opponent');
+            } catch (e) {
+                console.error('[Game] Error sending ready message:', e);
+            }
+        }
+        
+        // Проверяем, готов ли противник
+        checkBothReady();
+    };
+}
+
+/**
+ * Проверить, готовы ли оба игрока
+ */
+function checkBothReady() {
+    if (isPlayerReady && isOpponentReady) {
+        console.log('[Game] Both players are ready - starting new game');
+        startNewGame();
+    }
+}
+
+/**
+ * Запустить новую игру
+ */
+function startNewGame() {
+    console.log('[Game] Starting new game...');
+    
+    // Сбрасываем состояние игры
+    isPlayerReady = false;
+    isOpponentReady = false;
+    scores = { one: 4, two: 0 };
+    turn = 'one';
+    turnCount = 0;
+    lastBonusAppliedFor = { turn: null, turnCount: null };
+    
+    // Удаляем кнопку "готов"
+    const readyBtn = document.getElementById('readyButton');
+    if (readyBtn) {
+        readyBtn.remove();
+    }
+    
+    // Инициализируем игру
+    gameStart();
+    drawPlace();
+    updateGameUI();
+    
+    // Переходим на страницу игры
+    switchPage('gamePage');
+    document.getElementById('gamePage').classList.remove('nextgame');
+    
+    // Отправляем сопернику сообщение о начале новой игры
+    if (peerConnection && isConnected) {
+        try {
+            const gameStartMsg = {
+                type: 'newGameStart',
+                cells: cells,
+                scores: scores,
+                turn: turn,
+                timestamp: Date.now()
+            };
+            peerConnection.send(JSON.stringify(gameStartMsg));
+            console.log('[Game] New game start message sent to opponent');
+        } catch (e) {
+            console.error('[Game] Error sending new game start message:', e);
+        }
+    }
+}
+
+/**
+ * Обработать конец игры для текущего игрока
+ * @param {string} currentPlayerToken - 'one' или 'two'
+ */
+function checkForGameEnd(currentPlayerToken) {
+    const hasMove = canPlayerMove(currentPlayerToken);
+    const hasScore = (scores[currentPlayerToken] || 0) > 0;
+    
+    if (!hasMove && hasScore) {
+        console.log('[Game] Player', currentPlayerToken, 'cannot move but has score');
+        return 'cannotMove';
+    }
+    
+    if (!hasMove && !hasScore) {
+        console.log('[Game] Player', currentPlayerToken, 'lost completely');
+        return 'lost';
+    }
+    
+    return null;
+}
 
 modalClose.addEventListener('click', hideModal);
 cancelBtn.addEventListener('click', hideModal);
@@ -278,7 +546,53 @@ function setupNextTurnButton() {
         }*/
         
         try {
-            // Отправляем состояние игры и завершаем ход
+            // Проверяем условия завершения игры ДО передачи хода
+            const currentPlayerGameEndStatus = checkForGameEnd(player);
+            const opponentGameEndStatus = checkForGameEnd(secondPlayer);
+            
+            console.log('[Game] Current player end status:', currentPlayerGameEndStatus);
+            console.log('[Game] Opponent end status:', opponentGameEndStatus);
+            
+            // Если текущий игрок (first player - 'one') не может ходить, но у него есть очки
+            if (player === 'one' && currentPlayerGameEndStatus === 'cannotMove') {
+                console.log('[Game] First player cannot move but has score - giving turn to second player');
+                
+                // Отправляем состояние и даем ход второму игроку
+                const endTurnMsg = {
+                    type: 'endTurn',
+                    cells: cells,
+                    turn: secondPlayer,
+                    turnCount: turnCount + 1,
+                    scores: scores,
+                    playerCannotMove: 'one',
+                    timestamp: Date.now()
+                };
+                
+                peerConnection.send(JSON.stringify(endTurnMsg));
+                console.log('[Game] Turn given to second player (first player cannot move)');
+                
+                turn = secondPlayer;
+                waitingForOpponent = true;
+                applyTurnBonuses();
+                updateGameUI();
+                return;
+            }
+            
+            // Если второй игрок не может ходить, но у него есть очки
+            if (player === 'two' && currentPlayerGameEndStatus === 'cannotMove') {
+                console.log('[Game] Second player cannot move - game ends after this turn');
+                
+                // Определяем победителя
+                let winner = 'draw';
+                if (countCellsOf('one') > countCellsOf('two')) winner = 'one';
+                else if (countCellsOf('two') > countCellsOf('one')) winner = 'two';
+                
+                // Завершаем игру
+                endGame(winner);
+                return;
+            }
+            
+            // Обычный конец хода
             const endTurnMsg = {
                 type: 'endTurn',
                 cells: cells,
@@ -534,6 +848,33 @@ function setupPeerDataListener() {
                 if (msg.scores) scores = JSON.parse(JSON.stringify(msg.scores));
                 if (typeof msg.turnCount === 'number') turnCount = msg.turnCount;
                 
+                // Проверяем, сообщил ли противник о том, что он не может ходить
+                if (msg.playerCannotMove === 'one') {
+                    console.log('[Game] First player cannot move - checking for game end');
+                    
+                    // Второй игрок (мы) может ходить
+                    const opponentCanMove = canPlayerMove(secondPlayer);
+                    if (!opponentCanMove) {
+                        // Второй игрок также не может ходить - игра заканчивается
+                        let winner = 'draw';
+                        if (scores['one'] > scores['two']) winner = 'one';
+                        else if (scores['two'] > scores['one']) winner = 'two';
+                        
+                        console.log('[Game] Both players cannot move - game ends');
+                        endGame(winner);
+                        return;
+                    } else {
+                        // Второй игрок может ходить
+                        turn = player;
+                        waitingForOpponent = false;
+                        applyTurnBonuses();
+                        console.log('[Game] Turn switched to:', turn, 'Second player can move');
+                        drawPlace();
+                        updateGameUI();
+                        return;
+                    }
+                }
+                
                 // Теперь наш ход
                 turn = player;
                 waitingForOpponent = false;
@@ -544,6 +885,51 @@ function setupPeerDataListener() {
                 console.log('[Game] Turn switched to:', turn, 'New scores:', scores);
                 drawPlace();
                 updateGameUI(); // Обновляем UI при смене хода
+            } else if (msg.type === 'gameEnd') {
+                console.log('[Game] Received gameEnd from opponent. Winner:', msg.winner);
+                
+                // Определяем текст уведомления
+                let message = '';
+                if (msg.winner === 'draw') {
+                    message = 'Игра завершена! Ничья.';
+                } else if (msg.winner === player) {
+                    message = `Игра завершена! Вы выиграли! (${countCellsOf(player)} очков)`;
+                } else {
+                    message = `Игра завершена! Вы проиграли! (${countCellsOf(player)} против ${countCellsOf(msg.winner)})`;
+                }
+                
+                showGameEndNotification(message);
+            } else if (msg.type === 'playerReady') {
+                console.log('[Game] Opponent is ready for new game');
+                isOpponentReady = true;
+                
+                // Проверяем, готовы ли оба игрока
+                checkBothReady();
+            } else if (msg.type === 'newGameStart') {
+                console.log('[Game] Starting new game from opponent signal');
+                
+                // Сбрасываем состояние игры
+                isPlayerReady = false;
+                isOpponentReady = false;
+                if (msg.cells) cells = JSON.parse(JSON.stringify(msg.cells));
+                if (msg.scores) scores = JSON.parse(JSON.stringify(msg.scores));
+                if (msg.turn) turn = msg.turn;
+                turnCount = 0;
+                lastBonusAppliedFor = { turn: null, turnCount: null };
+                
+                // Удаляем кнопку "готов"
+                const readyBtn = document.getElementById('readyButton');
+                if (readyBtn) {
+                    readyBtn.remove();
+                }
+                
+                // Инициализируем игру
+                drawPlace();
+                updateGameUI();
+                
+                // Переходим на страницу игры
+                switchPage('gamePage');
+                document.getElementById('gamePage').classList.remove('nextgame');
             }
         } catch (e) {
             console.error('[Game] Error processing peer data:', e, 'raw:', raw.toString());

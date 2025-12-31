@@ -1,1 +1,1 @@
-switchPage('chatPage')
+// switchPage('chatPage')
