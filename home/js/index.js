@@ -659,3 +659,43 @@ function loadApps(company) {
     document.querySelectorAll('.main-content').forEach(mc => mc.classList.remove('active'));
     document.getElementById(`${company}-apps`).classList.add('active');
 }
+
+// Event listeners for page navigation (replaces inline onclick handlers)
+document.addEventListener('DOMContentLoaded', () => {
+    // Settings button handler
+    const settingsBtn = document.getElementById('settingsBtn');
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', () => {
+            document.querySelectorAll('.main-content').forEach(mc => mc.classList.remove('active'));
+            document.getElementById('settings').classList.add('active');
+        });
+    }
+    
+    // Back button from settings
+    const backBtnSettings = document.getElementById('backBtn-settings');
+    if (backBtnSettings) {
+        backBtnSettings.addEventListener('click', () => {
+            document.querySelectorAll('.main-content').forEach(mc => mc.classList.remove('active'));
+            document.getElementById('main').classList.add('active');
+        });
+    }
+    
+    // Back button from apps
+    const backBtnApps = document.getElementById('backBtn-apps');
+    if (backBtnApps) {
+        backBtnApps.addEventListener('click', () => {
+            spage('main');
+        });
+    }
+    
+    // iframe onload handler
+    const iframe = document.getElementById('iframe-display');
+    if (iframe) {
+        iframe.onload = () => {
+            // Определение высоты содержимого iframe
+            const contentDocument = iframe.contentDocument;
+            const contentBody = contentDocument.body;
+            iframe.style.height = contentBody.scrollHeight + 'px';
+        };
+    }
+});
