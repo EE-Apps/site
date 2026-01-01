@@ -1,5 +1,5 @@
 // alert("1917")
-let thisversion = "1.5.0";
+let thisversion = "1.6.0";
 const searchEngines = {
     google: {
         url: "https://www.google.com/search?q=",
@@ -33,7 +33,7 @@ const searchEngines = {
 
 const searchEngineSelect = document.getElementById("search-engine-select");
 const searchBar = document.getElementById("search-bar");
-const assistantBtn = document.getElementById("assistant-btn");
+const assistantBtn = document.getElementById("assistant");
 const assistantIcon = document.getElementById("assistant-icon");
 const themeToggle = document.getElementById("theme-toggle");
 const iframeWrapper = document.getElementById("iframe-wrapper");
@@ -61,10 +61,35 @@ themeToggle.addEventListener("click", toggleTheme);
 searchBar.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
         const query = searchBar.value.trim();
+
         if (query) {
+            // 1. Проверка на внутреннюю команду app:
+            if (query.startsWith("app:")) {
+                const appName = query.slice(4).toLowerCase();
+                loadIframe(appName);
+                return;
+            }
+
+            // 2. Регулярное выражение для проверки, является ли запрос URL-адресом
+            // Проверяет наличие точки (напр. google.com) и отсутствие пробелов
+            const urlPattern = /^(https?:\/\/)?([\w\-]+\.)+[\w\-]{2,}(\/.*)?$/i;
+
+            if (urlPattern.test(query)) {
+                let url = query;
+                
+                // Если адрес не начинается с протокола, добавляем https://
+                if (!/^https?:\/\//i.test(query)) {
+                    url = "https://" + query;
+                }
+                
+                window.location.href = url;
+                return;
+            }
+
+            // 3. Если это не команда и не ссылка — выполняем поиск
             const engine = searchEngineSelect.value;
             const searchUrl = searchEngines[engine].url + encodeURIComponent(query);
-            window.open(searchUrl, "_blank"); // Открыть результаты поиска в новой вкладке
+            window.location.href = searchUrl;
         }
     }
 });
@@ -90,7 +115,8 @@ document.querySelectorAll(".app-btn").forEach(button => {
     button.addEventListener("click", (event) => {
         const company = event.target.closest(".app-btn").dataset.company;
         if (company == 'deepwiki') return;
-        loadIframe(company);
+        spage(`${company}-apps`);
+        //loadIframe(company);
     });
 });
 

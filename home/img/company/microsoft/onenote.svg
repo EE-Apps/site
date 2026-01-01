@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" width="486" height="500" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 486 500">
+  <defs>
+    <style>
+      .h {
+        fill: #fff;
+      }
+
+      .i {
+        fill: url(#g);
+        fill-opacity: .8;
+      }
+
+      .j {
+        fill: url(#c);
+      }
+
+      .k {
+        fill: url(#d);
+      }
+
+      .l {
+        fill: url(#e);
+      }
+
+      .m {
+        fill: url(#f);
+      }
+
+      .n {
+        fill: url(#b);
+      }
+    </style>
+    <radialGradient id="b" data-name="Безымянный градиент" cx="-689.34" cy="753.74" fx="-689.34" fy="753.74" r="13.89" gradientTransform="translate(33259.89 15611.06) scale(47.56 -20.05)" gradientUnits="userSpaceOnUse">
+      <stop offset=".16" stop-color="#a931d8"/>
+      <stop offset=".57" stop-color="#6e1996"/>
+    </radialGradient>
+    <linearGradient id="c" data-name="Безымянный градиент 2" x1="539.94" y1="203.38" x2="300.09" y2="324.61" gradientTransform="translate(0 502) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset=".22" stop-color="#ca59f7"/>
+      <stop offset=".89" stop-color="#691a90"/>
+    </linearGradient>
+    <linearGradient id="d" data-name="Безымянный градиент 3" x1="504.42" y1="293.66" x2="69.52" y2="293.66" gradientTransform="translate(0 502) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset=".81" stop-color="#de66ff"/>
+      <stop offset="1" stop-color="#fcb1ff"/>
+    </linearGradient>
+    <radialGradient id="e" data-name="Безымянный градиент 4" cx="-727.32" cy="813.63" fx="-727.32" fy="813.63" r="13.89" gradientTransform="translate(-45672.39 -3689.4) rotate(121.48) scale(28.87 -50.77) skewX(.02)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffc7a3"/>
+      <stop offset=".83" stop-color="#de67fd" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="f" data-name="Безымянный градиент 5" cx="-675.64" cy="797.48" fx="-675.64" fy="797.48" r="13.89" gradientTransform="translate(-1948.96 23805.99) rotate(45.01) scale(22.62 -22.62) skewX(-.01)" gradientUnits="userSpaceOnUse">
+      <stop offset=".07" stop-color="#ac13eb"/>
+      <stop offset=".88" stop-color="#580087"/>
+    </radialGradient>
+    <radialGradient id="g" data-name="Безымянный градиент 6" cx="-657.62" cy="853.99" fx="-657.62" fy="853.99" r="13.89" gradientTransform="translate(-10902.61 7734.8) rotate(90) scale(11.2 -12.9)" gradientUnits="userSpaceOnUse">
+      <stop offset=".58" stop-color="#841fb0" stop-opacity="0"/>
+      <stop offset=".97" stop-color="#d373fc"/>
+    </radialGradient>
+  </defs>
+  <path class="n" d="M69.43,382.58c0-50.21,40.69-90.91,90.89-90.91h325.68v162.87c0,25.11-20.35,45.46-45.45,45.46l-285.93-.07c-47.05-.01-85.19-38.17-85.19-85.23v-32.12Z"/>
+  <path class="j" d="M291.59,118.06l194.4-6.94v176.77c0,25.1-20.35,45.46-45.45,45.46h-148.95V118.06Z"/>
+  <path class="k" d="M69.5,83.32c0-46.02,37.31-83.32,83.31-83.32h284.59c26.84,0,48.6,21.76,48.6,48.61v69.45c0,26.85-21.76,48.61-48.6,48.61h-41.66c-26.84,0-48.6,21.76-48.6,48.61v69.45c0,26.85-21.76,48.61-48.6,48.61h-145.8c-46.01,0-83.31,37.31-83.31,83.34l.07-333.36Z"/>
+  <path class="l" d="M69.5,83.32c0-46.02,37.31-83.32,83.31-83.32h284.59c26.84,0,48.6,21.76,48.6,48.61v69.45c0,26.85-21.76,48.61-48.6,48.61h-41.66c-26.84,0-48.6,21.76-48.6,48.61v69.45c0,26.85-21.76,48.61-48.6,48.61h-145.8c-46.01,0-83.31,37.31-83.31,83.34l.07-333.36Z"/>
+  <rect class="m" y="236.12" width="222.17" height="222.23" rx="45.13" ry="45.13"/>
+  <rect class="i" y="236.12" width="222.17" height="222.23" rx="45.13" ry="45.13"/>
+  <path class="h" d="M168.16,410.72h-28.85l-52.3-78.37c-1.47-2.36-2.71-4.4-3.72-6.11-1-1.77-1.77-3.25-2.3-4.43h-.35c.12,2.24.21,5.08.27,8.5.06,3.43.09,7.44.09,12.04v68.36h-26.99v-126.99h30.79l50.35,75.89c1.06,1.71,2.09,3.45,3.1,5.23,1.06,1.71,2.04,3.42,2.92,5.14h.35c-.12-1.48-.21-3.66-.27-6.55-.06-2.95-.09-6.58-.09-10.89v-68.81h26.99v126.99Z"/>
+</svg>

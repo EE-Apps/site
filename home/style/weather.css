@@ -128,3 +128,20 @@ body.dark-theme .theme-toggle {
     background: var(--dark-btn-bg);
     color: var(--light-text-primary);
 }
+
+#town-select {
+    width: 167px;
+    height: 27px;
+}
+#town-select .custom-dd {
+    height: 100%;
+}
+#town-select .custom-dd .custom-dd__control {
+    height: 100%;
+    padding: 0;
+}
+#town-select .custom-dd__menu {
+    bottom: unset;
+    top: 0;
+    width: 150%;
+}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="682.5px" height="581.3px" viewBox="0 0 682.5 581.3" style="enable-background:new 0 0 682.5 581.3;" xml:space="preserve"
+	>
+<style type="text/css">
+	.st0{fill:url(#Google_Red_1_);}
+	.st1{fill:#FDBD00;}
+	.st2{fill:#2DA94F;}
+	.st3{fill:url(#Google_Blue_1_);}
+</style>
+<g id="Product_icon">
+	<g>
+		<g id="art_layer">
+			
+				<linearGradient id="Google_Red_1_" gradientUnits="userSpaceOnUse" x1="401.7677" y1="150.1614" x2="652.4301" y2="241.3951" gradientTransform="matrix(1 0 0 1 0 82.238)">
+				<stop  offset="0.2" style="stop-color:#D93025"/>
+				<stop  offset="0.6" style="stop-color:#EA4335"/>
+			</linearGradient>
+			<path id="Google_Red" class="st0" d="M359.5,350.9L528.4,58.4l92,53.1c59.4,34.3,79.7,110.2,45.5,169.6l-95.1,164.7
+				c-21.4,37.1-68.9,49.8-106,28.4l-85.3-49.3C353.5,409.9,344.6,376.8,359.5,350.9z"/>
+			<path id="Google_Yellow" class="st1" d="M341.6,147.8l-210,363.8l91.9,53.1c59.4,34.3,135.3,13.9,169.6-45.5l136.2-236
+				c21.4-37.1,8.7-84.6-28.4-106L415.6,128C389.7,113,356.5,121.9,341.6,147.8z"/>
+			<path id="Google_Green" class="st2" d="M528.4,58.4l-65.1-37.6C389.1-22,294.2,3.4,251.3,77.6L130.6,286.7
+				c-21.4,37.1-8.7,84.6,28.4,106l65.1,37.6c37.1,21.4,84.6,8.7,106-28.4l144.1-249.6l0,0c29.9-51.9,96.2-69.6,148.1-39.7"/>
+			
+				<linearGradient id="Google_Blue_1_" gradientUnits="userSpaceOnUse" x1="21.349" y1="179.6727" x2="300.4886" y2="281.2712" gradientTransform="matrix(1 0 0 1 0 82.238)">
+				<stop  offset="0.2" style="stop-color:#4285F4"/>
+				<stop  offset="0.8" style="stop-color:#1B74E8"/>
+			</linearGradient>
+			<path id="Google_Blue" class="st3" d="M270,138.9l-71.8-41.4c-32-18.4-72.9-7.5-91.4,24.4l-86.2,149
+				c-42.4,73.3-17.3,167,56.2,209.4l54.7,31.5l66.3,38.2l28.8,16.5c-51.1-34.2-67.3-102.7-36.1-156.7l22.3-38.5l81.7-141.2
+				C313,198.2,302.1,157.3,270,138.9z"/>
+		</g>
+	</g>
+</g>
+</svg>

@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Tab | EE</title>
-    <link rel="stylesheet" href="style/!.css">
+    <link rel="stylesheet" href="eelibs/import.css">
     <link rel="stylesheet" href="apps/themes.css">
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="style/weather.css">
-    <link rel="stylesheet" href="style/dropdown.css">
+    <link rel="stylesheet" href="style/settings.css">
+    <link rel="stylesheet" href="style/apps.css">
+    <!--link rel="stylesheet" href="style/modules.css"-->
     <link rel="icon" href="ico.png">
 </head>
-<body>
+<body id="body">
     <!-- Sidebar for app buttons -->
-    <aside class="sidebar">
+    <aside id="sidebar" class="module">
         <button class="app-btn" data-company="ee">
             <img src="./icons/ee.svg" alt="EE">
         </button>
@@ -38,16 +40,16 @@
     </aside>
 
     <!-- Main content -->
-    <main class="main-content all">
+    <main class="main-content all active" id="main">
 
-        <div class="qbar" id="qbar">
+        <div id="qbar" class="module">
             <!-- Button for Dark Theme Toggle -->
             <button id="theme-toggle" class="theme-toggle"><img src="imgcopy/sun.svg"></button>
-            <div class="ais" id="ais">
+            <div id="ais">
                 <a class="ais-ai" href="https://chatgpt.com">
                     <img src="./icons/chatgpt.svg" alt="ChatGPT">
                 </a>
-                <a class="ais-ai" href="https://chat.deepseek.com/">
+                <a class="ais-ai" href="https://chat.deepseek.com">
                     <img src="./icons/deepseek.svg" alt="DeepSeek">
                 </a>
                 <a class="ais-ai" href="https://gemini.google.com">
@@ -62,14 +64,14 @@
                 <a class="ais-ai" href="https://alice.yandex.ru">
                     <img src="./icons/alice.svg" alt="Yandex Alice">
                 </a>
-                <a class="ais-ai" href="https://grok.com/">
+                <a class="ais-ai" href="https://grok.com">
                     <img src="./icons/grok.svg" alt="Grok">
                 </a>
             </div>
         </div>
 
         <!-- ПОГОДА -->
-        <div class="weather-widget" href="https://ee-apps.netlify.app/web/weather/">
+        <div id="weather" class="module weather-widget" href="https://ee-apps.netlify.app/web/weather/">
             <div class="current-weather">
                 <div class="weather-icon" id="weather-icon"></div>
                 <div class="weather-info">
@@ -84,26 +86,180 @@
             </div>
             <div class="city-select">
                 <label for="city-select">Город:</label>
-                <select id="city-select" class="dropdown search-dropdown">
+                <div id="town-select"></div>
+                <select id="city-select" class="dropdown search-dropdown" style="display: none;">
+
+                    <!-- ПМР -->
                     <option value="Tiraspol" data-lat="46.8406" data-lon="29.4744">[ПМР] Тирасполь</option>
                     <option value="Bender" data-lat="46.1833" data-lon="29.0833">[ПМР] Бендеры</option>
-                    <option value="Kiev" data-lat="50.4501" data-lon="30.5236">[Укр] Киев</option>
-                    <option value="Odessa" data-lat="46.4825" data-lon="30.7233">[Укр] Одесса</option>
-                    <option value="Brovary" data-lat="50.4542" data-lon="30.8625">[Укр] Бровары</option>
+                    <option value="Rybnitsa" data-lat="47.7686" data-lon="29.0000">[ПМР] Рыбница</option>
+                    <option value="Dubossary" data-lat="47.2656" data-lon="29.1667">[ПМР] Дубоссары</option>
+
+                    <!-- Молдавия -->
+                    <option value="Kishinev" data-lat="47.0105" data-lon="28.8638">[Молд] Кишинэу</option>
+                    <option value="Beltsy" data-lat="47.7530" data-lon="27.9184">[Молд] Бэлць</option>
+                    <option value="Kagul" data-lat="45.9075" data-lon="28.1944">[Молд] Кахул</option>
+
+                    <!-- Украина (советские названия) -->
+                    <option value="Kiev" data-lat="50.4501" data-lon="30.5236">[Укр] Київ</option>
+                    <option value="Kharkov" data-lat="49.9935" data-lon="36.2304">[Укр] Харків</option>
+                    <option value="Dnepropetrovsk" data-lat="48.4647" data-lon="35.0462">[Укр] Дніпропетровськ</option>
+                    <option value="Donetsk" data-lat="48.0159" data-lon="37.8029">[Укр] Донецьк</option>
+                    <option value="Lugansk" data-lat="48.5740" data-lon="39.3078">[Укр] Луганськ</option>
+                    <option value="Zaporozhye" data-lat="47.8388" data-lon="35.1396">[Укр] Запоріжжя</option>
+                    <option value="Odessa" data-lat="46.4825" data-lon="30.7233">[Укр] Одеса</option>
+                    <option value="Nikolaev" data-lat="46.9750" data-lon="31.9946">[Укр] Миколаїв</option>
+                    <option value="Kherson" data-lat="46.6354" data-lon="32.6169">[Укр] Херсон</option>
+                    <option value="Lvov" data-lat="49.8397" data-lon="24.0297">[Укр] Львів</option>
+                    <option value="Poltava" data-lat="49.5883" data-lon="34.5514">[Укр] Полтава</option>
+                    <option value="Chernigov" data-lat="51.4982" data-lon="31.2893">[Укр] Чернигів</option>
+                    <option value="KrivoyRog" data-lat="47.9105" data-lon="33.3918">[Укр] Кривий Ріг</option>
+                    <option value="Makeyevka" data-lat="48.0708" data-lon="37.9578">[Укр] Макеївка</option>
+                    <option value="Vinnitsa" data-lat="49.2331" data-lon="28.4682">[Укр] Винниця</option>
+                    <option value="Khmelnitsky" data-lat="49.4229" data-lon="26.9871">[Укр] Хмельницький</option>
+                    <option value="Chernovtsy" data-lat="48.2917" data-lon="25.9352">[Укр] Черновці</option>
+                    <option value="Zhitomir" data-lat="50.2546" data-lon="28.6587">[Укр] Житомир</option>
+                    <option value="Sumy" data-lat="50.9077" data-lon="34.7981">[Укр] Суми</option>
+                    <option value="Kirovograd" data-lat="48.5079" data-lon="32.2623">[Укр] Кировоград</option>
+                    <option value="Ternopol" data-lat="49.5535" data-lon="25.5948">[Укр] Тернопіль</option>
+                    <option value="IvanoFrankovsk" data-lat="48.9226" data-lon="24.7111">[Укр] Івано-Франківськ</option>
+                    <option value="Lutsk" data-lat="50.7472" data-lon="25.3254">[Укр] Луцьк</option>
+                    <option value="Uzhgorod" data-lat="48.6208" data-lon="22.2879">[Укр] Ужгород</option>
+                    <option value="Rovno" data-lat="50.6199" data-lon="26.2516">[Укр] Рівне</option>
+
+                    <!-- Крым -->
+                    <option value="Simferopol" data-lat="44.9521" data-lon="34.1024">[Крым] Симферополь</option>
+                    <option value="Sevastopol" data-lat="44.6167" data-lon="33.5254">[Крым] Севастополь</option>
+                    <option value="Yalta" data-lat="44.4952" data-lon="34.1663">[Крым] Ялта</option>
+                    <option value="Kerch" data-lat="45.3567" data-lon="36.4744">[Крым] Керчь</option>
+
+                    <!-- Россия -->
                     <option value="Moscow" data-lat="55.7558" data-lon="37.6173">[Рос] Москва</option>
                     <option value="Leningrad" data-lat="59.9343" data-lon="30.3351">[Рос] Ленинград</option>
+                    <option value="Gorky" data-lat="56.2965" data-lon="43.9361">[Рос] Горький</option>
+                    <option value="Sverdlovsk" data-lat="56.8389" data-lon="60.6057">[Рос] Свердловск</option>
+                    <option value="Kuibyshev" data-lat="53.1959" data-lon="50.1002">[Рос] Куйбышев</option>
+                    <option value="Volgograd" data-lat="48.7080" data-lon="44.5133">[Рос] Волгоград</option>
+                    <option value="Kazan" data-lat="55.7961" data-lon="49.1064">[Рос] Казань</option>
+                    <option value="Chelyabinsk" data-lat="55.1644" data-lon="61.4368">[Рос] Челябинск</option>
+                    <option value="Perm" data-lat="58.0105" data-lon="56.2502">[Рос] Пермь</option>
+                    <option value="Novosibirsk" data-lat="55.0084" data-lon="82.9357">[Рос] Новосибирск</option>
+                    <option value="Omsk" data-lat="54.9885" data-lon="73.3242">[Рос] Омск</option>
+                    <option value="Krasnoyarsk" data-lat="56.0153" data-lon="92.8932">[Рос] Красноярск</option>
+                    <option value="Irkutsk" data-lat="52.2871" data-lon="104.2810">[Рос] Иркутск</option>
+                    <option value="Vladivostok" data-lat="43.1155" data-lon="131.8855">[Рос] Владивосток</option>
+                    <option value="RostovNaDonu" data-lat="47.2224" data-lon="39.7189">[Рос] Ростов-на-Дону</option>
+                    <option value="Ufa" data-lat="54.7355" data-lon="55.9587">[Рос] Уфа</option>
                     <option value="Krasnodar" data-lat="45.0355" data-lon="38.9753">[Рос] Краснодар</option>
-                    <option value="Yekaterinburg" data-lat="56.8389" data-lon="60.6057">[Рос] Екатеринбург</option>
-                    <option value="Kemerovo" data-lat="55.3543" data-lon="86.0789">[Рос] Кемерово</option>
-                    <option value="Novokuznetsk" data-lat="53.7566" data-lon="87.0977">[Рос] Новокузнецк</option>
-                    <option value="Astana" data-lat="51.1694" data-lon="71.4491">[Каз] Астана</option>
-                    <option value="Minsk" data-lat="53.9" data-lon="27.5667">[Бел] Минск</option>
-                    <option value="Bobruisk" data-lat="53.1500" data-lon="29.2333">[Бел] Бобруйск</option>
+                    <option value="Voronezh" data-lat="51.6608" data-lon="39.2003">[Рос] Воронеж</option>
+                    <option value="Saratov" data-lat="51.5336" data-lon="46.0343">[Рос] Саратов</option>
+                    <option value="Tolyatti" data-lat="53.5078" data-lon="49.4204">[Рос] Тольятти</option>
+                    <option value="Izhevsk" data-lat="56.8498" data-lon="53.2045">[Рос] Ижевск</option>
+                    <option value="Yaroslavl" data-lat="57.6261" data-lon="39.8845">[Рос] Ярославль</option>
+                    <option value="Barnaul" data-lat="53.3548" data-lon="83.7698">[Рос] Барнаул</option>
+                    <option value="Vladikavkaz" data-lat="43.0259" data-lon="44.6353">[Рос] Владикавказ</option>
+                    <option value="Murmansk" data-lat="68.9707" data-lon="33.0759">[Рос] Мурманск</option>
+                    <option value="Tula" data-lat="54.1930" data-lon="37.6178">[Рос] Тула</option>
+                    <option value="Kemerovo" data-lat="55.3547" data-lon="86.0873">[Рос] Кемерово</option>
+
+                    <!-- Казахстан (советские названия) -->
+                    <option value="AlmaAta" data-lat="43.2389" data-lon="76.8897">[Каз] Алма-Ата</option>
+                    <option value="Tselinograd" data-lat="51.1694" data-lon="71.4491">[Каз] Целиноград</option>
+                    <option value="Karaganda" data-lat="49.8060" data-lon="73.0850">[Каз] Караганда</option>
+                    <option value="Pavlodar" data-lat="52.2873" data-lon="76.9674">[Каз] Павлодар</option>
+                    <option value="UstKamenogorsk" data-lat="49.9483" data-lon="82.6285">[Каз] Усть-Каменогорск</option>
+                    <option value="Chimkent" data-lat="42.3150" data-lon="69.5850">[Каз] Чимкент</option>
+                    <option value="Semipalatinsk" data-lat="50.4230" data-lon="80.2434">[Каз] Семипалатинск</option>
+                    <option value="Uralsk" data-lat="51.2278" data-lon="51.3866">[Каз] Уральск</option>
+                    <option value="PetropavlovskKZ" data-lat="54.8752" data-lon="69.1628">[Каз] Петропавловск</option>
+                    <option value="Aktyubinsk" data-lat="50.3004" data-lon="57.1546">[Каз] Актюбинск</option>
+
+                    <!-- Белоруссия -->
+                    <option value="Minsk" data-lat="53.9000" data-lon="27.5667">[Бел] Минск</option>
                     <option value="Gomel" data-lat="52.4443" data-lon="30.9754">[Бел] Гомель</option>
+                    <option value="Mogilev" data-lat="53.9168" data-lon="30.3449">[Бел] Могилёв</option>
+                    <option value="Vitebsk" data-lat="55.1848" data-lon="30.2016">[Бел] Витебск</option>
+                    <option value="Grodno" data-lat="53.6694" data-lon="23.8131">[Бел] Гродно</option>
+                    <option value="Brest" data-lat="52.0976" data-lon="23.7341">[Бел] Брест</option>
+                    <option value="Bobruisk" data-lat="53.1384" data-lon="29.2214">[Бел] Бобруйск</option>
+                    <option value="Baranovichi" data-lat="53.1323" data-lon="26.0139">[Бел] Барановичи</option>
+                    <option value="Borisov" data-lat="54.2244" data-lon="28.5108">[Бел] Борисов</option>
+
+                    <!-- Кавказ -->
+                    <option value="Tbilisi" data-lat="41.7151" data-lon="44.8271">[GEO] თბილისი</option>
+                    <option value="Kutaisi" data-lat="42.2679" data-lon="42.6946">[GEO] ქუთაისი</option>
+                    <option value="Yerevan" data-lat="40.1792" data-lon="44.4991">[ARM] Երևան</option>
+                    <option value="Gyumri" data-lat="40.7894" data-lon="43.8475">[ARM] Գյումրի</option>
+                    <option value="Baku" data-lat="40.4093" data-lon="49.8671">[AZE] Bakı</option>
+                    <option value="Ganja" data-lat="40.6828" data-lon="46.3606">[AZE] Gəncə</option>
+
+                    <!-- Прибалтика-->
+                    <option value="Riga" data-lat="56.9496" data-lon="24.1052">[LVA] Rīga</option>
+                    <option value="Daugavpils" data-lat="55.8753" data-lon="26.5358">[LVA] Daugavpils</option>
+                    <option value="Vilnius" data-lat="54.6872" data-lon="25.2797">[LTU] Vilnius</option>
+                    <option value="Kaunas" data-lat="54.8985" data-lon="23.9036">[LTU] Kaunas</option>
+                    <option value="Klaipeda" data-lat="55.7033" data-lon="21.1443">[LTU] Klaipėda</option>
+                    <option value="Tallinn" data-lat="59.4370" data-lon="24.7536">[EST] Tallinn</option>
+                    <option value="Tartu" data-lat="58.3780" data-lon="26.7290">[EST] Tartu</option>
+
+                    <!-- Советская Азия -->
+                    <option value="Tashkent" data-lat="41.2995" data-lon="69.2401">[UZB] Toshkent</option>
+                    <option value="Samarkand" data-lat="39.6270" data-lon="66.9750">[UZB] Samarqand</option>
+                    <option value="Bukhara" data-lat="39.7681" data-lon="64.4556">[UZB] Buxoro</option>
+                    <option value="Dushanbe" data-lat="38.5598" data-lon="68.7870">[TJK] Душанбе</option>
+                    <option value="Khujand" data-lat="40.2833" data-lon="69.6167">[TJK] Хуҷанд</option>
+                    <option value="Ashkhabad" data-lat="37.9601" data-lon="58.3261">[TKM] Aşgabat</option>
+                    <option value="Bishkek" data-lat="42.8746" data-lon="74.5698">[KGZ] Бишкек</option>
+                    <option value="Osh" data-lat="40.5392" data-lon="72.7929">[KGZ] Ош</option>
+
+                    <!-- Восточная Европа -->
+                    <option value="Warszawa" data-lat="52.2297" data-lon="21.0122">[Pol] Warszawa</option>
+                    <option value="Gdansk" data-lat="54.3520" data-lon="18.6466">[Pol] Gdańsk</option>
+                    <option value="Krakow" data-lat="50.0647" data-lon="19.9450">[Pol] Kraków</option>
+                    <option value="Lodz" data-lat="51.7592" data-lon="19.4559">[Pol] Łódź</option>
+                    <option value="Wroclaw" data-lat="51.1079" data-lon="17.0385">[Pol] Wrocław</option>
+                    <option value="Poznan" data-lat="52.4064" data-lon="16.9252">[Pol] Poznań</option>
+
+                    <option value="Praha" data-lat="50.0755" data-lon="14.4378">[Cze] Praha</option>
+                    <option value="Brno" data-lat="49.1951" data-lon="16.6068">[Cze] Brno</option>
+                    <option value="Bratislava" data-lat="48.1486" data-lon="17.1077">[Svk] Bratislava</option>
+                    <option value="Kosice" data-lat="48.7164" data-lon="21.2611">[Svk] Košice</option>
+
+                    <option value="Budapest" data-lat="47.4979" data-lon="19.0402">[Hun] Budapest</option>
+                    <option value="Debrecen" data-lat="47.5316" data-lon="21.6273">[Hun] Debrecen</option>
+                    <option value="Szeged" data-lat="46.2530" data-lon="20.1414">[Hun] Szeged</option>
+
+                    <option value="Bucuresti" data-lat="44.4268" data-lon="26.1025">[Rom] București</option>
+                    <option value="ClujNapoca" data-lat="46.7712" data-lon="23.6236">[Rom] Cluj-Napoca</option>
+                    <option value="Iasi" data-lat="47.1585" data-lon="27.6014">[Rom] Iași</option>
+                    <option value="Timisoara" data-lat="45.7489" data-lon="21.2087">[Rom] Timișoara</option>
+
+                    <option value="Berlin" data-lat="52.5200" data-lon="13.4050">[Deu] Berlin</option>
+                    <option value="Hamburg" data-lat="53.5511" data-lon="9.9937">[Deu] Hamburg</option>
+                    <option value="Munchen" data-lat="48.1351" data-lon="11.5820">[Deu] München</option>
+                    <option value="Koln" data-lat="50.9375" data-lon="6.9603">[Deu] Köln</option>
+                    <option value="Leipzig" data-lat="51.3397" data-lon="12.3731">[Deu] Leipzig</option>
+
+                    <option value="Wien" data-lat="48.2082" data-lon="16.3725">[Aut] Wien</option>
+                    <option value="Graz" data-lat="47.0707" data-lon="15.4395">[Aut] Graz</option>
+
+                    <option value="Beograd" data-lat="44.7866" data-lon="20.4489">[Юго] Белград</option>
+                    <option value="Zagreb" data-lat="45.8150" data-lon="15.9819">[Юго] Загреб</option>
+                    <option value="Sarajevo" data-lat="43.8563" data-lon="18.4131">[Юго] Сараево</option>
+                    <option value="Ljubljana" data-lat="46.0569" data-lon="14.5058">[Юго] Любляна</option>
+                    <option value="Skopje" data-lat="42.0038" data-lon="21.4522">[Юго] Скопье</option>
+
+                    <option value="Sofia" data-lat="42.6977" data-lon="23.3219">[Бъл] София</option>
+                    <option value="Plovdiv" data-lat="42.1354" data-lon="24.7453">[Бъл] Пловдив</option>
+                    <option value="Varna" data-lat="43.2141" data-lon="27.9147">[Бъл] Варна</option>
                 </select>
                 <button id="update-weather"><img src="imgcopy/reload.svg"></button>
             </div>
         </div>
+
+        <button id="settingsBtn" onclick="document.querySelectorAll('.main-content').forEach(mc => mc.classList.remove('active')); document.getElementById('settings').classList.add('active');">
+            <img src="imgcopy/edit2.svg" alt="Settings">
+        </button>
 
         <!-- New container for iframe -->
         <div class="iframe-wrapper" id="iframe-wrapper" style="display: none;">
@@ -127,7 +283,7 @@
                     <input type="text" id="search-bar" placeholder="      Search" autocomplete="off">
 
                     <!-- AI Assistant Button -->
-                    <button id="assistant-btn">
+                    <button id="assistant" class="module">
                         <img id="assistant-icon" src="./icons/gemini.png" alt="AI">
                     </button>
                 </div>
@@ -142,8 +298,49 @@
     </main>
 
 
-    <script src="script.js"></script>
-    <script src="weather.js"></script>
+    <main class="main-content all" id="settings">
+        <button id="backBtn" onclick="document.querySelectorAll('.main-content').forEach(mc => mc.classList.remove('active')); document.getElementById('main').classList.add('active');">
+            <img src="imgcopy/back.svg" alt="Back">
+        </button>
+        
+        <div class="settingsNameCool"><h1>Settings</h1></div>
+        <div class="settings-section">
+            <h2>Modules</h2>
+            <div id="settModules" class="settingsSectionDiv">
+
+            </div>
+        </div>
+        <div class="settings-section">
+            <h2>AI</h2>
+            <div id="settAi" class="settingsSectionDiv">
+
+            </div>
+        </div>
+        <div class="settings-section">
+            <h2>Companies</h2>
+            <div id="settCompanies" class="settingsSectionDiv">
+
+            </div>
+        </div>
+    </main>
+
+    <main class="main-content all apps" id="ee-apps">
+        <button id="backBtn" onclick="spage('main');">
+            <img src="imgcopy/back.svg" alt="Back">
+        </button>
+        
+        <div class="settingsNameCool"><h1>EE Apps</h1></div>
+        <div class="app-grid" id="ee-apps-section">
+            <!-- Apps will be loaded here -->
+        </div>
+    </main>
+
+
+    <script src="eelibs/import.js" type="module"></script>
+    <script src="js/script.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/weather.js"></script>
+    <script src="js/modules.js"></script>
     <script>
         const iframe = document.getElementById('iframe-display');
         iframe.onload = () => {

@@ -1,16 +1,27 @@
+:root {
+    --br: 0.9rem;
+    --brb: 1.2rem;
+}
+
 /* Basic styles */
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: 'onesans2', 'onesans', 'Arial', sans-serif;
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
     transition: background 0.3s ease, color 0.3s ease;
 }
 
 body {
     background: linear-gradient(135deg, #21211A, #1C2125, #1F2120);
     color: white;
+}
+
+* {
+    transition: background 0.3s ease, color 0.3s ease;
+    scrollbar-width: thin;
+    scrollbar-color: var(--text-secondary) var(--background-secondary);
 }
 
 /* Dark theme toggle button */
@@ -33,7 +44,7 @@ body {
 }
 
 /* Quick Bar */
-.qbar {
+#qbar {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -60,7 +71,7 @@ body {
 
 }
 
-.ais {
+#ais {
     width: 100%;
     justify-content: center; /* Центрирование по вертикали */
     transition: background 0.3s ease, color 0.3s ease;
@@ -85,7 +96,7 @@ body {
     }
 
 /* Sidebar styles */
-.sidebar {
+#sidebar {
     width: 40px;
     background: var(--background-secondary);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -106,17 +117,21 @@ body {
 .app-btn img {
     width: 40px;
     height: 40px;
+    background-color: #0000004d;
+    border-radius: var(--br);
 }
 
 /* Main content */
 .main-content {
     flex: 1;
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     position: relative;
 	flex-direction: column;
-	
+}
+.main-content.active {
+    display: flex;
 }
 
 /* YOUR VERSION IS OLD */
@@ -212,6 +227,8 @@ body {
     background-repeat: no-repeat;
     background-position: left 10px center;
     background-color: #2b2b2b;
+    margin: 0.5rem;
+    border-radius: var(--brb);
 }
 
  #search-bar:focus {
@@ -220,7 +237,8 @@ body {
 } 
 
 /* AI Assistant button */
-#assistant-btn {
+#assistant {
+    display: block;
     background: none;
     border: none;
     cursor: pointer;
@@ -345,4 +363,106 @@ body {
     position: relative; /* Контейнер для позиционирования */
     width: 100%; /* Или задайте конкретные размеры */
     height: 100vh; /* Высота на весь экран или заданная */
+    min-height: max-content;
+}
+
+ html body .module:not(.mactive) {
+    display: none;
+}
+
+#settingsBtn, #backBtn {
+    position: absolute;
+    top: 1rem;
+    right: calc(20px + 40px + 1rem); /* Справа от кнопки темы */
+    background: var(--background-secondary);
+    color: var(--text-primary);
+    width: 40px;
+    aspect-ratio: 1;
+}
+#backBtn {
+    left: 1rem;
+}
+
+.main-content {
+    transition: width 0.3s ease, color 0.3s ease;
+}
+
+#sidebar {
+    display: flex !important;
+    transition: all 0.3s ease, color 0.3s ease;
+}
+#sidebar:not(.mactive) {
+    width: 0px;
+    min-width: 0px;
+    padding: 20px 0;
+    opacity: 0;
+}
+
+
+
+
+
+
+/* Контейнер */
+.oneui-switch {
+  --switch-width: 46px;
+  --switch-height: 26px;
+  --thumb-size: 18px;
+  --thumb-active-size: 21px; /* Чуть больше при включении */
+  --bg-off: #e0e0e0;
+  --bg-on: #0381fe; /* Фирменный синий Samsung */
+  
+  position: relative;
+  display: inline-block;
+  width: var(--switch-width);
+  height: var(--switch-height);
+}
+
+/* Скрываем дефолтный чекбокс */
+.oneui-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Фон переключателя */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--bg-off);
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 34px;
+}
+
+/* Ползунок (шарик) */
+.slider:before {
+  content: "";
+  position: absolute;
+  height: var(--thumb-size);
+  width: var(--thumb-size);
+  left: 4px;
+  bottom: 4px;
+  background-color: #8c8c8c; /* Серый в выключенном состоянии */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+}
+
+/* Состояние: Включено (Меняем фон) */
+input:checked + .slider {
+  background-color: var(--bg-on);
+}
+
+/* Состояние: Включено (Двигаем и увеличиваем шарик) */
+input:checked + .slider:before {
+  background-color: white;
+  transform: translateX(calc(var(--switch-width) - var(--thumb-active-size) - 8px));
+  height: var(--thumb-active-size);
+  width: var(--thumb-active-size);
+  bottom: 2.5px; /* Корректируем центровку из-за размера */
+}
+
+/* Эффект нажатия (Active state) */
+.oneui-switch:active .slider:before {
+  width: 24px; /* Шарик немного растягивается при тапе */
 }
