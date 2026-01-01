@@ -181,29 +181,27 @@ let apps = {
         icon: "img/company/microsoft.svg",
         apps: [
             // === / Office / 365 ===
-            { name: "365", link: "https://www.office.com", icon: "microsoft/365.svg" },
+            { name: "365", link: "https://m365.cloud.microsoft", icon: "microsoft/365.svg" },
             { name: "Office", link: "https://www.office.com", icon: "microsoft/office.svg" },
 
-            { name: "Word", link: "https://www.office.com/launch/word", icon: "microsoft/word.svg" },
-            { name: "Excel", link: "https://www.office.com/launch/excel", icon: "microsoft/excel.svg" },
-            { name: "PowerPoint", link: "https://www.office.com/launch/powerpoint", icon: "microsoft/powerpoint.svg" },
-            { name: "OneNote", link: "https://www.onenote.com", icon: "microsoft/onenote.svg" },
-            { name: "Outlook", link: "https://outlook.live.com", icon: "microsoft/outlook.svg" },
+            { name: "Word", link: "https://word.cloud.microsoft", icon: "microsoft/word.svg" },
+            { name: "Excel", link: "https://excel.cloud.microsoft", icon: "microsoft/excel.svg" },
+            { name: "PowerPoint", link: "https://powerpoint.cloud.microsoft", icon: "microsoft/powerpoint.svg" },
+            { name: "OneNote", link: "https://onenote.cloud.microsoft", icon: "microsoft/onenote.svg" },
+            { name: "Outlook", link: "https://outlook.cloud.microsoft", icon: "microsoft/outlook.svg" },
             { name: "Access", link: "https://www.microsoft.com/access", icon: "microsoft/access.svg" },
             { name: "Visio", link: "https://www.microsoft.com/visio", icon: "microsoft/visio.svg" },
 
             { name: "OneDrive", link: "https://onedrive.live.com", icon: "microsoft/onedrive.svg" },
-            { name: "To Do", link: "https://to-do.microsoft.com/tasks/", icon: "microsoft/todo.svg" },
+            { name: "To Do", link: "https://to-do.live.com/tasks", icon: "microsoft/todo.svg" },
             { name: "Forms", link: "https://forms.office.com", icon: "microsoft/forms.svg" },
             { name: "Sway", link: "https://sway.office.com", icon: "microsoft/sway.svg" },
-            { name: "Loop", link: "https://loop.microsoft.com", icon: "microsoft/loop.svg" },
+            { name: "Loop", link: "https://loop.cloud.microsoft", icon: "microsoft/loop.svg" },
 
             // === Коммуникации ===
-            { name: "Teams", link: "https://teams.microsoft.com", icon: "microsoft/teams.svg" },
-            { name: "Skype", link: "https://web.skype.com", icon: "microsoft/skype.svg" },
+            { name: "Teams", link: "https://teams.live.com/v2", icon: "microsoft/teams.svg" },
 
             // === Бизнес и корпоративные решения ===
-            { name: "Business", link: "https://www.microsoft.com/business", icon: "microsoft/business.svg" },
             { name: "Dynamics 365", link: "https://dynamics.microsoft.com", icon: "microsoft/dynamics365.svg" },
             { name: "Power Apps", link: "https://make.powerapps.com", icon: "microsoft/powerapps.svg" },
             { name: "Power BI", link: "https://powerbi.microsoft.com", icon: "microsoft/powerbi.svg" },
@@ -213,8 +211,7 @@ let apps = {
 
             // === Разработка ===
             { name: "Visual Studio", link: "https://visualstudio.microsoft.com", icon: "microsoft/visualstudio.svg" },
-            { name: "Visual Studio Code", link: "https://code.visualstudio.com", icon: "microsoft/visualstudiocode.svg" },
-            { name: "Insider", link: "https://insider.microsoft.com", icon: "microsoft/insider.svg" },
+            { name: "Visual Studio Code", link: "https://vscode.dev", icon: "microsoft/visualstudiocode.svg" },
 
             // === Поиск, браузер, магазин ===
             { name: "Edge", link: "https://www.microsoft.com/edge", icon: "microsoft/edge.svg" },
@@ -254,7 +251,6 @@ let apps = {
             // === Коммуникации ===
             { name: "Meet", link: "https://meet.google.com", icon: "google/meet.svg" },
             { name: "Chat", link: "https://chat.google.com", icon: "google/chat.svg" },
-            { name: "Duo", link: "https://duo.google.com", icon: "google/duo.svg" },
 
             // === Медиа и карты ===
             { name: "YouTube", link: "https://www.youtube.com", icon: "google/youtube.svg" },
@@ -265,7 +261,7 @@ let apps = {
             { name: "News", link: "https://news.google.com", icon: "google/news.svg" },
 
             // === Поиск, AI и перевод ===
-            { name: "Search", link: "https://www.google.com", icon: "google/search.svg" },
+            { name: "Search", link: "https://www.google.com", icon: "google/google.svg" },
             { name: "Translate", link: "https://translate.google.com", icon: "google/translate.svg" },
             { name: "Gemini", link: "https://gemini.google.com", icon: "google/gemini.svg" },
 
@@ -288,10 +284,11 @@ let apps = {
             // === Разработка ===
             { name: "Developers", link: "https://developers.google.com", icon: "google/developers.svg" },
             { name: "Colab", link: "https://colab.research.google.com", icon: "google/colab.webp" },
-            { name: "Apps Script", link: "https://script.google.com", icon: "google/appsscript.svg" },
+            { name: "Apps Script", link: "https://script.google.com", icon: "google/script.png" },
+            { name: "Play Console", link: "https://play.google.com/console", icon: "google/console.svg" },
 
             // === Обучение и поддержка ===
-            { name: "for Education", link: "https://edu.google.com", icon: "google/education.svg" },
+            { name: "for Education", link: "https://edu.google.com", icon: "google/google.svg" },
             { name: "Safety Center", link: "https://safety.google", icon: "google/safety.svg" }
         ],
     },
@@ -323,7 +320,7 @@ let apps = {
 
             // === Карты, транспорт, навигация ===
             { name: "Карты", link: "https://maps.yandex.ru", icon: "yandex/maps.svg" },
-            { name: "Навигатор", link: "https://navigator.yandex.ru", icon: "yandex/maps.svg" },
+            { name: "Навигатор", link: "https://navigator.yandex.ru", icon: "yandex/navigator.svg" },
             { name: "Транспорт", link: "https://transport.yandex.ru", icon: "yandex/maps.svg" },
 
             // === Медиа и развлечения ===
@@ -336,7 +333,7 @@ let apps = {
             { name: "Маркет", link: "https://market.yandex.ru", icon: "yandex/market.svg" },
             { name: "Еда", link: "https://eda.yandex.ru", icon: "yandex/eats.svg" },
             { name: "Лавка", link: "https://lavka.yandex.ru", icon: "yandex/delivery.svg" },
-            { name: "Go", link: "https://go.yandex", icon: "yandex/delivery.svg" },
+            { name: "Go", link: "https://go.yandex", icon: "yandex/go.svg" },
 
             // === Бизнес и реклама ===
             { name: "Бизнес", link: "https://business.yandex.ru", icon: "yandex/business.svg" },
@@ -635,6 +632,11 @@ function loadApps(company) {
         </div>
         `;
         document.getElementById('body').appendChild(workWith);
+        document.querySelectorAll('#backBtn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                spage('main');
+            });
+        });
     }
     
     // Затем загружаем приложения в секцию

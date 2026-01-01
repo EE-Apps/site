@@ -6,6 +6,7 @@
     <title>Periodic Table | Таблица Менделеева</title>
     <link rel="icon" href="ico2.svg" type="image/svg+xml">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="eelibs/import.css">
 </head>
 <body>
     <div class="container">
@@ -66,6 +67,7 @@
                 <span>Actinides</span>
             </div>
         </div>
+        <div id="content">
         <div class="periodic-table-container">
             <div id="periodicTable" class="periodic-table">
                 <!-- Will be populated by JavaScript -->
@@ -74,8 +76,10 @@
         <div id="elementDetails" class="element-details">
             <!-- Element details will appear here -->
         </div>
+        </div>
     </div>
     <script src="elements.js"></script>
     <script src="app.js"></script>
+    <script src="eelibs/import.js" type="module"></script>
 </body>
 </html>
