@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Tab | EE</title>
+    <title>New Tab</title>
+
     <link rel="stylesheet" href="eelibs/import.css">
+    <link rel="stylesheet" href="eelibs/fonts.css">
     <link rel="stylesheet" href="apps/themes.css">
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="style/weather.css">
     <link rel="stylesheet" href="style/settings.css">
     <link rel="stylesheet" href="style/apps.css">
+    <link rel="stylesheet" href="style/pins.css">
     <!--link rel="stylesheet" href="style/modules.css"-->
     <link rel="icon" href="ico.png">
 </head>
@@ -261,6 +264,15 @@
             <img src="imgcopy/edit2.svg" alt="Settings">
         </button>
 
+        <button id="timeDiv">
+            <div class="time-container">
+                <b id="timeHours"></b>
+                <p id="timeMinutes"></p>
+                <p id="timSeconds" style="display: none;"></p>
+            </div>
+            <b id="date"></b>
+        </button>
+
         <!-- New container for iframe -->
         <div class="iframe-wrapper" id="iframe-wrapper" style="display: none;">
             <iframe id="iframe-display" src="" frameborder="0"></iframe>
@@ -294,7 +306,20 @@
                     <a class="dev-link">This is dev-version</a>
                 </div>
             </div>
-        </div>
+            <div id="pins" class="module">
+                <button id="editPinsBtn">
+                    <img src="imgcopy/edit.svg" alt="Edit Pins">
+                </button>
+                <div class="pinitem"><img src="img/company/ee/calc.svg"><p>Calc</p></div>
+                <div class="pinitem"><img src="img/company/ee/calc.svg"><p>Calc</p></div>
+                <div class="pinitem"><img src="img/company/ee/calc.svg"><p>Calc</p></div>
+                <div class="pinitem"><img src="img/company/ee/calc.svg"><p>Calc</p></div>
+                <div class="pinitem"><img src="img/company/ee/calc.svg"><p>Calc</p></div>
+                <div class="pinitem"><img src="img/company/ee/calc.svg"><p>Calc</p></div>
+                <div class="pinitem"><img src="img/company/ee/calc.svg"><p>Calc</p></div>
+                <div class="pinitem"><img src="img/company/ee/calc.svg"><p>Calc</p></div>
+                <div class="pinitem"><img src="img/company/ee/calc.svg"><p>Calc</p></div>
+            </div>
     </main>
 
 
@@ -302,24 +327,116 @@
         <button id="backBtn-settings">
             <img src="imgcopy/back.svg" alt="Back">
         </button>
+        <button id="twoBtn-settings">
+            <img src="img/ui/code.svg" alt="Settings on right">
+        </button>
         
         <div class="settingsNameCool"><h1>Settings</h1></div>
-        <div class="settings-section">
-            <h2>Modules</h2>
+        <div class="settings-section" id="settModulesDiv">
+            <div class="settings-header">
+                <button class="hideSettSection" data-section="settModules">
+                    <img src="img/ui/arrow/down.svg" alt="Hide">
+                </button>
+                <h2>Modules</h2>
+            </div>
             <div id="settModules" class="settingsSectionDiv">
 
             </div>
         </div>
         <div class="settings-section">
-            <h2>AI</h2>
+            <div class="settings-header">
+                <button class="hideSettSection" data-section="settAi">
+                    <img src="img/ui/arrow/down.svg" alt="Hide">
+                </button>
+                <h2>AI</h2>
+            </div>
             <div id="settAi" class="settingsSectionDiv">
 
             </div>
         </div>
         <div class="settings-section">
-            <h2>Companies</h2>
+            <div class="settings-header">
+                <button class="hideSettSection" data-section="settCompanies">
+                    <img src="img/ui/arrow/down.svg" alt="Hide">
+                </button>
+                <h2>Companies</h2>
+            </div>
             <div id="settCompanies" class="settingsSectionDiv">
 
+            </div>
+        </div>
+        <div class="settings-section">
+            <div class="settings-header">
+                <button class="hideSettSection" data-section="settClock">
+                    <img src="img/ui/arrow/down.svg" alt="Hide">
+                </button>
+                <h2>Clock</h2>
+            </div>
+            <div id="settClock" class="settingsSectionDiv">
+                <div class="settingsBlock">
+                    <label for="clockFormatSelect">Clock Format:</label>
+                    <select id="clockFormatSelect" class="settings-select">
+                        <option value="12">12-hour</option>
+                        <option value="24">24-hour</option>
+                    </select>
+                </div>
+                <div class="settingsBlock">
+                    <label for="showSecondsToggle">Show Seconds:</label>
+                    <input type="checkbox" id="showSecondsToggle">
+                </div>
+                <div class="settingsBlock">
+                    <label for="showDateToggle">Show Date:</label>
+                    <input type="checkbox" id="showDateToggle">
+                </div>
+                <div class="settingsBlock">
+                    <label for="dateFormatSelect">Date Format:</label>
+                    <select id="dateFormatSelect" class="settings-select">
+                        <option value="DDMMYYYY">DD/MM/YYYY</option>
+                        <option value="MMDDYYYY">MM/DD/YYYY</option>
+                        <option value="YYYYMMDD">YYYY/MM/DD</option>
+                    </select>
+                </div>
+                <div class="settingsBlock">
+                    <label for="timeZoneSelect">Time Zone:</label>
+                    <select id="timeZoneSelect" class="settings-select">
+                        <option value="local">Local Time</option>
+                        <option value="UTC">UTC</option>
+                        <!-- Additional time zones can be added here -->
+                    </select>
+                </div>
+                <div class="settingsBlock">
+                    <label for="showDayOfWeekToggle">Show Day of the Week:</label>
+                    <input type="checkbox" id="showDayOfWeekToggle">
+                </div>
+                <div class="settingsBlock">
+                    <label for="leadingZeroToggle">Leading Zero for Hours:</label>
+                    <input type="checkbox" id="leadingZeroToggle">
+                </div>
+                <div class="settingsBlock">
+                    <label for="amPmToggle">AM/PM Indicator:</label>
+                    <input type="checkbox" id="amPmToggle">
+                </div>
+                <div class="settingsBlock">
+                    <label for="showYearToggle">Show Year:</label>
+                    <input type="checkbox" id="showYearToggle">
+                </div>
+                <div class="settingsBlock">
+                    <label for="monthAsTextToggle">Month as Text:</label>
+                    <input type="checkbox" id="monthAsTextToggle">
+                </div>
+                <div class="settingsBlock">
+                    <label for="dateSeparatorSelect">Date Separator:</label>
+                    <select id="dateSeparatorSelect" class="settings-select">
+                        <option value="/">/</option>
+                        <option value="-">-</option>
+                        <option value=".">.</option>
+                        <option value=" ">Space</option>
+                    </select>
+                </div>
+                <div class="settingsBlock">
+                    <label for="jucheCalendarToggle">Juche calendar:</label>
+                    <input type="checkbox" id="jucheCalendarToggle">
+                </div>
             </div>
         </div>
     </main>
@@ -329,6 +446,8 @@
     <script src="js/script.js"></script>
     <script src="js/index.js"></script>
     <script src="js/weather.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/pins.js"></script>
     <script src="js/modules.js"></script>
     <script>
         const iframe = document.getElementById('iframe-display');

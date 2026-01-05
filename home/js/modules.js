@@ -79,7 +79,7 @@ function renderModules() {
             const aiLink = document.createElement('a');
             aiLink.className = 'ais-ai';
             aiLink.href = aiSetting.link;
-            aiLink.target = '_blank';
+            //aiLink.target = '_blank';
             aiLink.rel = 'noopener noreferrer';
             const aiImg = document.createElement('img');
             aiImg.src = `./icons/${aiKey}.${aiSetting.ext? aiSetting.ext : 'svg'}`;

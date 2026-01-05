@@ -11,11 +11,17 @@
 .settings-section, .settingsSectionDiv {
     width: calc(100% - 40px);
 }
+.settingsSectionDiv {
+    overflow-y: hidden;
+    transition: all 0.3s ease;
+    min-height: 0px;
+}
 
 #settings.active {
     max-height: 100dvh;
     overflow-y: scroll;
     min-height: unset;
+    color: var(--text-primary);
 }
 
 .settingsNameCool {
@@ -38,4 +44,47 @@
     width: 100%;
     margin-bottom: 20px;
     font-size: larger;
+}
+
+.light #settingsBtn img, .light #theme-toggle img, .light #backBtn-settings img {
+    filter: invert(1);
+}
+
+.settings-header {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+.hideSettSection {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    min-width: 30px;
+    aspect-ratio: 1;
+}
+.hideSettSection img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    transition: all 0.3s ease;
+}
+
+
+
+
+.twoPages {
+    .main-content {
+        overflow-x: scroll;
+    }
+    #settings {
+        border-left: 1px solid var(--bc);
+        min-width: 250px;
+        width: 300px;
+        max-width: 40dvw;
+    }
 }

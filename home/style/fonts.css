@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Rounded:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+
+@font-face {
+    font-family: 'os';
+    src: url(onesans.ttf);
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font-family: "onesans2", "Comfortaa", sans-serif;
+}
+
+#timeDiv h1, #timeDiv h2 {
+    font-family: 'Nunito', 'Quicksand', 'Poppins', sans-serif;
+}

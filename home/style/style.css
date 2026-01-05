@@ -39,7 +39,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background 0.3s ease, color 0.3s ease;
+    transition: var(--transition);
     z-index: 10;
 }
 
@@ -56,7 +56,7 @@ body {
     cursor: pointer;
     width: 40px;
     justify-content: center; /* Центрирование по вертикали */
-    transition: background 0.3s ease, color 0.3s ease;
+    transition: var(--transition);
     z-index: 10;
     display: flex; /* Используется flexbox */
     flex-direction: column; /* Расположение элементов в колонку */
@@ -74,7 +74,7 @@ body {
 #ais {
     width: 100%;
     justify-content: center; /* Центрирование по вертикали */
-    transition: background 0.3s ease, color 0.3s ease;
+    transition: var(--transition);
     z-index: 10;
     display: flex; /* Используется flexbox */
     flex-direction: column; /* Расположение элементов в колонку */
@@ -290,7 +290,7 @@ body {
     justify-content: center;
     padding: 10px;
     border-radius: var(--br);
-    transition: transform 0.2s;
+    transition: var(--transition);
     background: var(--background-secondary);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border: 1px solid #ccc;
@@ -366,11 +366,11 @@ body {
     min-height: max-content;
 }
 
- html body .module:not(.mactive) {
+html body .module:not(.mactive) {
     display: none;
 }
 
-#settingsBtn, #backBtn {
+#settingsBtn, #backBtn, #backBtn-settings, #twoBtn-settings {
     position: absolute;
     top: 1rem;
     right: calc(20px + 40px + 1rem); /* Справа от кнопки темы */
@@ -379,8 +379,11 @@ body {
     width: 40px;
     aspect-ratio: 1;
 }
-#backBtn {
+#backBtn, #backBtn-settings {
     left: 1rem;
+}
+#twoBtn-settings {
+    right: 1rem;
 }
 
 .main-content {
@@ -465,4 +468,43 @@ input:checked + .slider:before {
 /* Эффект нажатия (Active state) */
 .oneui-switch:active .slider:before {
   width: 24px; /* Шарик немного растягивается при тапе */
+}
+
+#timeDiv {
+    position: absolute;
+    background: none;
+    top: 15dvh;
+    color: var(--text-primary);
+    font-size: 2rem;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px;
+    transition: var(--transition);
+    z-index: 10;
+    flex-direction: column;
+    text-decoration: none;
+    pointer-events: none;
+    gap: 1rem;
+}
+#timeDiv h1, #timeDiv h2, #timeDiv h3, #timeDiv b, #timeDiv p {
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+.time-container {
+    display: inline-flex;
+    gap: 0px;
+    flex-direction: row;
+    align-items: baseline;
+    font-size: larger;
+}
+#timeHours {
+    /*font-size: 4rem !important;*/
+    font-weight: bold;
+    font-weight: 900;
+}
+#date {
+    font-size: 1.5rem;
 }

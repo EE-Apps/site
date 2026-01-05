@@ -16,11 +16,26 @@ const defaultSettings = {
         location: [0, 0],
         unit: "C"
     },
+    clock: {
+        clockFormat: "24",
+        showSeconds: false,
+        showDate: true,
+        dateFormat: "DDMMYYYY",
+        timeZone: "local",
+        showDayOfWeek: true,
+        leadingZero: true,
+        amPm: false,
+        showYear: true,
+        monthAsText: false,
+        dateSeparator: "/",
+        jucheCalendar: false,
+    },
     modules: {
         weather: false,
         qbar: true,
         assistant: true,
         sidebar: true,
+        pins: true,
     },
     ai: {
         chatgpt: {
@@ -148,6 +163,136 @@ function deepMerge(target, source) {
 
 // Initialize settings variable
 let settings;
+
+// Function to format time based on settings
+function formatTime() {
+    const now = new Date();
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    let seconds = now.getSeconds();
+    
+    // Handle time zone conversion
+    let displayDate = now;
+    if (settings.clock.timeZone === 'UTC') {
+        displayDate = new Date(now.toLocaleString('en-US', { timeZone: 'UTC' }));
+        hours = displayDate.getHours();
+        minutes = displayDate.getMinutes();
+        seconds = displayDate.getSeconds();
+    }
+    
+    // Handle 12/24 hour format
+    let ampm = '';
+    if (settings.clock.clockFormat === '12') {
+        ampm = hours >= 12 ? ' PM' : ' AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+    }
+    
+    // Add leading zeros if needed
+    const hoursStr = settings.clock.leadingZero ? String(hours).padStart(2, '0') : String(hours);
+    const minutesStr = String(minutes).padStart(2, '0');
+    const secondsStr = String(seconds).padStart(2, '0');
+    
+    return {
+        hours: hoursStr,
+        minutes: minutesStr,
+        seconds: secondsStr,
+        ampm: ampm
+    };
+}
+
+// Function to format date based on settings
+function formatDate() {
+    const now = new Date();
+    
+    // Handle time zone conversion
+    let displayDate = now;
+    if (settings.clock.timeZone === 'UTC') {
+        displayDate = new Date(now.toLocaleString('en-US', { timeZone: 'UTC' }));
+    }
+    
+    let dateStr = '';
+    
+    // Add date if enabled
+    if (settings.clock.showDate) {
+        const day = String(displayDate.getDate()).padStart(2, '0');
+        const month = String(displayDate.getMonth() + 1).padStart(2, '0');
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                           'July', 'August', 'September', 'October', 'November', 'December'];
+        const monthText = monthNames[displayDate.getMonth()];
+        let year = displayDate.getFullYear();
+        if (settings.clock.jucheCalendar) year = year - 1911;
+        
+        let monthValue = settings.clock.monthAsText ? monthText : month;
+        const sep = settings.clock.dateSeparator;
+        
+        switch (settings.clock.dateFormat) {
+            case 'DDMMYYYY':
+                dateStr = `${day}${sep}${monthValue}${settings.clock.showYear ? sep : ''}${settings.clock.showYear ? year : ''}`;
+                break;
+            case 'MMDDYYYY':
+                dateStr = `${monthValue}${sep}${day}${settings.clock.showYear ? sep : ''}${settings.clock.showYear ? year : ''}`;
+                break;
+            case 'YYYYMMDD':
+                dateStr = `${settings.clock.showYear ? year : ''}${settings.clock.showYear ? sep : ''}${monthValue}${sep}${day}`;
+                break;
+        }
+        
+        // Add year option for date format
+        if (!settings.clock.showYear && settings.clock.dateFormat) {
+            dateStr = dateStr.replace(/\/\d{4}/, '').replace(/\s\d{4}/, '');
+        }
+        
+        // Add day of week if enabled
+        if (settings.clock.showDayOfWeek) {
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const dayName = days[displayDate.getDay()];
+            dateStr = `${dayName}, ${dateStr}`;
+        }
+    }
+    
+    return dateStr;
+}
+
+// Function to update the time display
+function updateTimeDisplay() {
+    const time = formatTime();
+    
+    // Update hours
+    const timeHours = document.getElementById('timeHours');
+    if (timeHours) {
+        timeHours.textContent = time.hours + ':';
+    }
+    
+    // Update minutes
+    const timeMinutes = document.getElementById('timeMinutes');
+    if (timeMinutes) {
+        timeMinutes.textContent = time.minutes;
+        if (settings.clock.showSeconds) {
+            timeMinutes.textContent += ':';
+        }
+        if (settings.clock.clockFormat === '12' && settings.clock.amPm) {
+            timeMinutes.textContent += time.ampm;
+        }
+    }
+    
+    // Update seconds
+    const timSeconds = document.getElementById('timSeconds');
+    if (timSeconds) {
+        if (settings.clock.showSeconds) {
+            timSeconds.style.display = 'inline';
+            timSeconds.textContent = time.seconds;
+        } else {
+            timSeconds.style.display = 'none';
+        }
+    }
+    
+    // Update date
+    const dateDiv = document.getElementById('date');
+    if (dateDiv) {
+        dateDiv.textContent = formatDate();
+    }
+}
 
 // Load settings on page load
 loadSettingsFromStorage();
@@ -647,7 +792,7 @@ function loadApps(company) {
             const appLink = document.createElement('a');
             appLink.className = 'app-item';
             appLink.href = app.link;
-            appLink.target = '_blank';
+            //appLink.target = '_blank';
             appLink.rel = 'noopener noreferrer';
             appLink.innerHTML = `
             <img src="img/company/${app.icon}" alt="${app.name}" class="app-icon"/>
@@ -699,5 +844,146 @@ document.addEventListener('DOMContentLoaded', () => {
             const contentBody = contentDocument.body;
             iframe.style.height = contentBody.scrollHeight + 'px';
         };
+    }
+
+    const timeDiv = document.getElementById('time');
+    const dateDiv = document.getElementById('date');
+    if (timeDiv || dateDiv) {
+        setInterval(() => {
+            updateTimeDisplay();
+        }, 1000);
+        updateTimeDisplay(); // Initial call
+    }
+    
+    // Clock format settings
+    const clockFormatSelect = document.getElementById('clockFormatSelect');
+    if (clockFormatSelect) {
+        clockFormatSelect.value = settings.clock.clockFormat;
+        clockFormatSelect.addEventListener('change', (e) => {
+            settings.clock.clockFormat = e.target.value;
+            saveSettingsToStorage();
+            updateTimeDisplay();
+        });
+    }
+    
+    // Show seconds toggle
+    const showSecondsToggle = document.getElementById('showSecondsToggle');
+    if (showSecondsToggle) {
+        showSecondsToggle.checked = settings.clock.showSeconds;
+        showSecondsToggle.addEventListener('change', (e) => {
+            settings.clock.showSeconds = e.target.checked;
+            saveSettingsToStorage();
+            updateTimeDisplay();
+        });
+    }
+    
+    // Show date toggle
+    const showDateToggle = document.getElementById('showDateToggle');
+    if (showDateToggle) {
+        showDateToggle.checked = settings.clock.showDate;
+        showDateToggle.addEventListener('change', (e) => {
+            settings.clock.showDate = e.target.checked;
+            saveSettingsToStorage();
+            updateTimeDisplay();
+        });
+    }
+    
+    // Date format select
+    const dateFormatSelect = document.getElementById('dateFormatSelect');
+    if (dateFormatSelect) {
+        dateFormatSelect.value = settings.clock.dateFormat;
+        dateFormatSelect.addEventListener('change', (e) => {
+            settings.clock.dateFormat = e.target.value;
+            saveSettingsToStorage();
+            updateTimeDisplay();
+        });
+    }
+    
+    // Time zone select
+    const timeZoneSelect = document.getElementById('timeZoneSelect');
+    if (timeZoneSelect) {
+        timeZoneSelect.value = settings.clock.timeZone;
+        timeZoneSelect.addEventListener('change', (e) => {
+            settings.clock.timeZone = e.target.value;
+            saveSettingsToStorage();
+            updateTimeDisplay();
+        });
+    }
+    
+    // Show day of week toggle
+    const showDayOfWeekToggle = document.getElementById('showDayOfWeekToggle');
+    if (showDayOfWeekToggle) {
+        showDayOfWeekToggle.checked = settings.clock.showDayOfWeek;
+        showDayOfWeekToggle.addEventListener('change', (e) => {
+            settings.clock.showDayOfWeek = e.target.checked;
+            saveSettingsToStorage();
+            updateTimeDisplay();
+        });
+    }
+    
+    // Leading zero toggle
+    const leadingZeroToggle = document.getElementById('leadingZeroToggle');
+    if (leadingZeroToggle) {
+        leadingZeroToggle.checked = settings.clock.leadingZero;
+        leadingZeroToggle.addEventListener('change', (e) => {
+            settings.clock.leadingZero = e.target.checked;
+            saveSettingsToStorage();
+            updateTimeDisplay();
+        });
+    }
+    
+    // AM/PM toggle
+    const amPmToggle = document.getElementById('amPmToggle');
+    if (amPmToggle) {
+        amPmToggle.checked = settings.clock.amPm;
+        amPmToggle.addEventListener('change', (e) => {
+            settings.clock.amPm = e.target.checked;
+            saveSettingsToStorage();
+            updateTimeDisplay();
+        });
+    }
+    
+    // Show year toggle
+    const showYearToggle = document.getElementById('showYearToggle');
+    if (showYearToggle) {
+        showYearToggle.checked = settings.clock.showYear;
+        showYearToggle.addEventListener('change', (e) => {
+            settings.clock.showYear = e.target.checked;
+            saveSettingsToStorage();
+            updateTimeDisplay();
+        });
+    }
+    
+    // Month as text toggle
+    const monthAsTextToggle = document.getElementById('monthAsTextToggle');
+    if (monthAsTextToggle) {
+        monthAsTextToggle.checked = settings.clock.monthAsText;
+        monthAsTextToggle.addEventListener('change', (e) => {
+            settings.clock.monthAsText = e.target.checked;
+            saveSettingsToStorage();
+            updateTimeDisplay();
+        });
+    }
+
+    // Juche calendar toggle
+    const jucheCalendarToggle = document.getElementById('jucheCalendarToggle');
+    if (jucheCalendarToggle) {
+        jucheCalendarToggle.checked = settings.clock.jucheCalendar;
+        jucheCalendarToggle.addEventListener('change', (e) => {
+            settings.clock.jucheCalendar = e.target.checked;
+            saveSettingsToStorage();
+            updateTimeDisplay();
+        });
+    }
+    
+    // Date separator select
+    const dateSeparatorSelect = document.getElementById('dateSeparatorSelect');
+    if (dateSeparatorSelect) {
+        dateSeparatorSelect.value = settings.clock.dateSeparator;
+        dateSeparatorSelect.addEventListener('change', (e) => {
+            settings.clock.dateSeparator = e.target.value;
+            saveSettingsToStorage();
+            updateTimeDisplay();
+        });
     }
 });

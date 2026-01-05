@@ -16,6 +16,8 @@
     --accent-hover: #6bacd8;
     --accent-background: #3498dbb0;
     --accent-background-hover: #6bacd8b0;
+    --transitions: 0.3 ease;
+    --transition: all var(--transitions);
 
     --height: 16px;
 }
@@ -168,15 +170,15 @@ input[type="radio"] {
     -webkit-appearance: none;
     -moz-appearance: none;
     cursor: pointer;
-    width: 22px;
-    height: 22px;
-    margin: 6px;
+    width: 25px;
     border: 2px solid var(--bc);
     border-radius: 6px;
     background-color: #fff;
     display: inline-block;
     vertical-align: middle;
+    aspect-ratio: 1;
     transition: background-color 0.25s, border-color 0.25s, box-shadow 0.2s;
+    min-height: 10px;
 }
 
 /* При наведении */
