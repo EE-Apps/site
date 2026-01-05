@@ -1,5 +1,5 @@
 // alert("1917")
-let thisversion = "1.6.1";
+let thisversion = "1.7.0";
 const searchEngines = {
     google: {
         url: "https://www.google.com/search?q=",

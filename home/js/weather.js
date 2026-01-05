@@ -187,8 +187,8 @@ function loadSelectedCity() {
 document.getElementById("update-weather").addEventListener("click", () => {
     const selectElement = document.getElementById("city-select");
     const selectedOption = selectElement.options[selectElement.selectedIndex];
-    const lat = selectedOption.getAttribute("data-lat");
-    const lon = selectedOption.getAttribute("data-lon");
+    const lat = Number(JSON.parse(localStorage.weatherData).lat);
+    const lon = Number(JSON.parse(localStorage.weatherData).lon);
     if (lat && lon) {
         saveSelectedCity(lat, lon);
         updateWeather(lat, lon);
@@ -249,6 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { value: ['47.7530', '27.9184'], label: '[Молд] Бэлць', img: 'img/flag/md.svg' },
     { value: ['45.9075', '28.1944'], label: '[Молд] Кахул', img: 'img/flag/md.svg' },
     { value: ['50.4501', '30.5236'], label: '[Укр] Київ', img: 'img/flag/ua.svg' },
+    { value: ['50.5110', '30.7909'], label: '[Укр] Бровари', img: 'img/flag/ua.svg' },
     { value: ['49.9935', '36.2304'], label: '[Укр] Харків', img: 'img/flag/ua.svg' },
     { value: ['48.4647', '35.0462'], label: '[Укр] Дніпропетровськ', img: 'img/flag/ua.svg' },
     { value: ['48.0159', '37.8029'], label: '[Укр] Донецьк', img: 'img/flag/ua.svg' },
@@ -380,6 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const cWeatherTown = createCustomDropdown(document.getElementById('town-select'), cities, { placeholder: 'Town', searchable: true });
+    window.cWeatherTown = cWeatherTown;
     
     // Загружаем сохранённый город из localStorage
     const savedCity = loadSelectedCity();

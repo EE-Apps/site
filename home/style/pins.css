@@ -4,7 +4,7 @@
     padding: 1rem;
     border-radius: var(--br);
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     gap: 1rem;
     position: relative;
     overflow: auto;
@@ -20,7 +20,9 @@
 }
 
 #pins > .pinitem {
-    flex: 1;
+    /*flex: 1; */
+    max-width: 5rem;
+    min-width: 5rem;
 }
 
 #editPinsBtn {

@@ -92,6 +92,7 @@ function renderModules() {
     const sidebar = document.getElementById('sidebar');
     sidebar.innerHTML = ''; // Clear previous content
     Object.keys(apps).forEach(company => {
+        if (['apple','amazon','samsung','huawei','adobe','meta'].includes(company)) return;
         if (!settings.company[company]) return; // Skip if module is disabled
         const companyItem = document.createElement('div');
         companyItem.className = 'app-btn';

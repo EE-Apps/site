@@ -563,20 +563,11 @@ let apps = {
             // === Основные калькуляторы ===
             { name: "Graphing Calculator", link: "https://www.desmos.com/calculator", icon: "desmos/graphics.png" },
             { name: "Scientific Calculator", link: "https://www.desmos.com/scientific", icon: "desmos/scalc.png" },
-            { name: "Four Function Calculator", link: "https://www.desmos.com/fourfunction", icon: "desmos/fourfunction.png" },
+            { name: "Four Function Calculator", link: "https://www.desmos.com/fourfunction", icon: "desmos/calc.png" },
 
             // === Геометрия и математика ===
             { name: "Geometry Tool", link: "https://www.desmos.com/geometry", icon: "desmos/geometry.png" },
             { name: "3D Calculator", link: "https://www.desmos.com/3d", icon: "desmos/3d.png" },
-
-            // === Обучение и классы ===
-            { name: "Desmos Classroom", link: "https://teacher.desmos.com", icon: "desmos/classroom.png" },
-            { name: "Student Activities", link: "https://student.desmos.com", icon: "desmos/student.png" },
-
-            // === Аккаунт и ресурсы ===
-            { name: "Desmos Account", link: "https://www.desmos.com/account", icon: "desmos/account.png" },
-            { name: "Desmos Help", link: "https://help.desmos.com", icon: "desmos/help.png" },
-            { name: "Desmos Blog", link: "https://blog.desmos.com", icon: "desmos/blog.png" }
         ],
     },
     apple: {
