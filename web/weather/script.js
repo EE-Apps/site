@@ -269,8 +269,8 @@ document.addEventListener("DOMContentLoaded", () => {
         { value: 'Krakow', label: '[POL] Kraków', img: '../../home/img/flag/pl.svg', lat: 50.0647, lon: 19.9450 },
         { value: 'Prague', label: '[CZE] Praha', img: '../../home/img/flag/cz.svg', lat: 50.0755, lon: 14.4378 },
         { value: 'Brno', label: '[CZE] Brno', img: '../../home/img/flag/cz.svg', lat: 49.1951, lon: 16.6068 },
-        { value: 'Bratislava', label: '[SVK] Bratislava', img: '../../home/img/flag/sk.svg', lat: 48.1486, lon: 17.1077 },
-        { value: 'Kosice', label: '[SVK] Košice', img: '../../home/img/flag/sk.svg', lat: 48.7164, lon: 21.2611 },
+        { value: 'Bratislava', label: '[SVK] Bratislava', img: '../../home/img/flag/cz.svg', lat: 48.1486, lon: 17.1077 },
+        { value: 'Kosice', label: '[SVK] Košice', img: '../../home/img/flag/cz.svg', lat: 48.7164, lon: 21.2611 },
         { value: 'Budapest', label: '[HUN] Budapest', img: '../../home/img/flag/hu.svg', lat: 47.4979, lon: 19.0402 },
         { value: 'Debrecen', label: '[HUN] Debrecen', img: '../../home/img/flag/hu.svg', lat: 47.5316, lon: 21.6273 },
         { value: 'Bucharest', label: '[ROU] București', img: '../../home/img/flag/ro.svg', lat: 44.4328, lon: 26.1043 },
@@ -287,7 +287,16 @@ document.addEventListener("DOMContentLoaded", () => {
         { value: 'Sofia', label: '[BGR] София', img: '../../home/img/flag/bg.svg', lat: 42.6977, lon: 23.3219 },
         { value: 'Plovdiv', label: '[BGR] Пловдив', img: '../../home/img/flag/bg.svg', lat: 42.1354, lon: 24.7453 },
         { value: 'Ulaanbaatar', label: '[MNG] Улаанбаатар', img: '../../home/img/flag/mn.svg', lat: 47.8864, lon: 106.9057 },
-        { value: 'Erdenet', label: '[MNG] Эрдэнэт', img: '../../home/img/flag/mn.svg', lat: 49.0340, lon: 104.0567 },
+        { value: 'Erdenet', label: '[MNG] Эрдэнэт', img: '../../home/img/flag/mn.svg', lat: 49.0340, lon: 104.0567 },{ value: 'Istanbul', label: '[TR] İstanbul', img: '../../home/img/flag/tr.svg', lat: 41.0082, lon: 28.9784 },
+        { value: 'Ankara', label: '[TUR] Ankara', img: '../../home/img/flag/tr.svg', lat: 39.9334, lon: 32.8597 },
+        { value: 'Izmir', label: '[TUR] İzmir', img: '../../home/img/flag/tr.svg', lat: 38.4192, lon: 27.1287 },
+        { value: 'Bursa', label: '[TUR] Bursa', img: '../../home/img/flag/tr.svg', lat: 40.1828, lon: 29.0660 },
+        { value: 'Adana', label: '[TUR] Adana', img: '../../home/img/flag/tr.svg', lat: 37.0017, lon: 35.3289 },
+        { value: 'Gaziantep', label: '[TUR] Gaziantep', img: '../../home/img/flag/tr.svg', lat: 37.0662, lon: 37.3833 },
+        { value: 'Trabzon', label: '[TUR] Trabzon', img: '../../home/img/flag/tr.svg', lat: 41.0027, lon: 39.7178 },
+        { value: 'Carsibasi', label: '[TUR] Çarşibaşı', img: '../../home/img/flag/tr.svg', lat: 41.1680, lon: 39.1120 },
+        { value: 'Kovanli', label: '[TUR] Kovanlı', img: '../../home/img/flag/tr.svg', lat: 37.9500, lon: 38.4500 },
+        { value: 'Antalya', label: '[TUR] Antalya', img: '../../home/img/flag/tr.svg', lat: 36.8969, lon: 30.7133 },
     ];
 
     const dropdown = createCustomDropdown(

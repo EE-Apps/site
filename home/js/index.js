@@ -14,7 +14,9 @@ const defaultSettings = {
     weather: {
         town: '',
         location: [0, 0],
-        unit: "C"
+        unit: "C",
+        background: false,
+        pageBackground: false,
     },
     clock: {
         clockFormat: "24",

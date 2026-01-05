@@ -145,3 +145,17 @@ body.dark-theme .theme-toggle {
     top: 0;
     width: 150%;
 }
+
+#weather, .weather-weather {
+    background-size: cover !important;
+    background-position: center !important;
+    background-blend-mode: color-burn !important;
+}
+.weather-weather #weather {
+    background: var(--background-primary) !important;
+}
+.weather-weather #timeDiv {
+    background-color: var(--background-primary);
+    border-radius: var(--br);
+    padding: 1rem 0.5rem;
+}
