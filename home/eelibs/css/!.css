@@ -22,6 +22,12 @@
     --height: 16px;
 }
 
+* {
+    transition: background 0.3s ease, color 0.3s ease;
+    scrollbar-width: thin;
+    scrollbar-color: var(--text-secondary) var(--background-secondary);
+}
+
 @import url("elib/orange.css");
 
 option {

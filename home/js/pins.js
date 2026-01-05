@@ -112,7 +112,7 @@ function createPinElement(pin, index) {
     } else {
         // Normal mode: clickable link
         pinDiv.innerHTML = `
-            <a href="${pin.link}" target="_blank" rel="noopener noreferrer" class="pin-link">
+            <a href="${pin.link}" rel="noopener noreferrer" class="pin-link">
                 <img src="${pin.icon}" alt="${pin.name}" onerror="this.src='img/ui/check/bookmark.svg'">
                 <p>${pin.name}</p>
             </a>

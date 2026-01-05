@@ -1,113 +1,39 @@
-// URL API
-let NOWapiUrl = "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=Europe%2FMoscow&forecast_days=1";
-
-// Получение элементов DOM
+// DOM
 const NOWtemperatureElement = document.getElementById("temperature");
 const NOWwindSpeedElement = document.getElementById("wind-speed");
 const NOWhumidityElement = document.getElementById("humidity");
 const NOWpressureElement = document.getElementById("pressure");
 
-// Массив для сопоставления кодов погоды с фоновыми изображениями
 const backgroundWeatherIcons = {
-    0: "sun",					// Clear sky
-    1: "cloudy",				// Partly cloudy
-    2: "cloudy",				// Cloudy
-    3: "cloudy",				// Cloudy
-    45: "fog",					// Fog
-    48: "fog",					// Fog
-    51: "rain",					// Light rain
-    53: "rain",					// Moderate rain
-    55: "rain",					// Moderate rain
-    56: "rain",					// Freezing rain
-    57: "rain",					// Freezing rain
-    61: "rain",					// Showers
-    63: "rain",					// Moderate rain
-    65: "rain",					// Heavy rain
-    66: "rain",					// Freezing rain
-    67: "rain",					// Freezing rain
-    71: "rain",					// Light snow
-    73: "snow",					// Moderate snow
-    75: "snow",					// Heavy snow
-    77: "snow",					// Snow showers
-    80: "rain",					// Rain showers
-    81: "rain",					// Heavy rain showers
-    82: "rain",					// Extreme rain showers
-    85: "snow",					// Light snow showers
-    86: "snow",					// Heavy snow showers
-    95: "thunderstorm",			// Thunderstorm
-    96: "thunderstorm",			// Thunderstorm
-    99: "thunderstorm",			// Thunderstorm
+    0: "sun", 1: "cloudy", 2: "cloudy", 3: "cloudy",
+    45: "fog", 48: "fog",
+    51: "rain", 53: "rain", 55: "rain",
+    56: "rain", 57: "rain",
+    61: "rain", 63: "rain", 65: "rain",
+    66: "rain", 67: "rain",
+    71: "snow", 73: "snow", 75: "snow", 77: "snow",
+    80: "rain", 81: "rain", 82: "rain",
+    85: "snow", 86: "snow",
+    95: "thunderstorm", 96: "thunderstorm", 99: "thunderstorm",
 };
 
-// Функция для перевода давления из гПа в мм рт. ст.
-function NOWconvertPressureToMmHg(hPa) {
-    return (hPa * 0.75006375541921).toFixed(1);
-}
+const hPaToMm = hPa => (hPa * 0.75006375541921).toFixed(1);
+const kmhToMs = kmh => (kmh / 3.6).toFixed(1);
 
-// Функция для перевода скорости ветра из км/ч в м/с
-function NOWconvertWindSpeedToMps(kmh) {
-    return (kmh / 3.6).toFixed(1);
-}
+/**
+ * Использует объект current из общего ответа Open-Meteo
+ */
+function NOWrenderCurrent(current) {
+    if (!current) return;
 
-// Функция для получения данных и обновления элементов
-async function NOWupdateWeatherData(lat, lon) {
-    console.log("NOWupdateAll");
+    NOWtemperatureElement.textContent = `${current.temperature_2m}°`;
+    NOWwindSpeedElement.textContent = `${kmhToMs(current.wind_speed_10m)} м/с`;
+    NOWhumidityElement.textContent =
+        current.relative_humidity_2m != null ? `${current.relative_humidity_2m}%` : "н/д";
+    NOWpressureElement.textContent =
+        current.surface_pressure != null
+            ? `${hPaToMm(current.surface_pressure)} мм рт. ст.`
+            : "н/д";
 
-    // Формируем URL с координатами
-    const NOWapiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=weather_code,temperature_2m,relative_humidity_2m,apparent_temperature,is_day,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=Europe%2FMoscow&forecast_days=1`;
-
-    // Проверка наличия данных в localStorage
-    const savedWeatherData = localStorage.getItem('currentWeatherData');
-    console.log("load from LS");
-
-    if (savedWeatherData && !navigator.onLine) {
-        // Если данные есть в localStorage и нет интернета, показываем сохраненные данные
-        const savedData = JSON.parse(savedWeatherData);
-        NOWtemperatureElement.textContent = `${savedData.temperature_2m}°`;
-        NOWwindSpeedElement.textContent = `${NOWconvertWindSpeedToMps(savedData.wind_speed_10m)} м/с`;
-        NOWhumidityElement.textContent = `${savedData.relative_humidity_2m || "н/д"}%`;
-        NOWpressureElement.textContent = `${NOWconvertPressureToMmHg(savedData.surface_pressure) || "н/д"} мм рт. ст.`;
-
-        // Устанавливаем фон из сохраненных данных
-        setBackground(savedData.weather_code);
-
-        return; // Выходим, если данные загружены из localStorage
-    }
-
-    // Если интернет есть, выполняем запрос
-    if (navigator.onLine) {
-        try {
-            const NOWresponse = await fetch(NOWapiUrl);
-            if (!NOWresponse.ok) {
-                throw new Error(`HTTP error! Status: ${NOWresponse.status}`);
-            }
-
-            const NOWdata = await NOWresponse.json();
-            const NOWcurrentWeather = NOWdata.current;
-
-            // Проверка наличия данных
-            if (NOWcurrentWeather) {
-                NOWtemperatureElement.textContent = `${NOWcurrentWeather.temperature_2m}°`;
-                NOWwindSpeedElement.textContent = `${NOWconvertWindSpeedToMps(NOWcurrentWeather.wind_speed_10m)} м/с`;
-                NOWhumidityElement.textContent = `${NOWcurrentWeather.relative_humidity_2m || "н/д"}%`;
-                NOWpressureElement.textContent = `${NOWconvertPressureToMmHg(NOWcurrentWeather.surface_pressure) || "н/д"} мм рт. ст.`;
-
-                // Устанавливаем фон в зависимости от текущего кода погоды
-                console.log(NOWcurrentWeather);
-                console.log(NOWcurrentWeather.weather_code);
-                setBackground(backgroundWeatherIcons[NOWcurrentWeather.weather_code] || "default.png");
-
-                // Сохраняем данные в localStorage
-                localStorage.setItem('currentWeatherData', JSON.stringify(NOWcurrentWeather));
-                console.log("save on LS");
-            } else {
-                console.error("Нет данных о текущей погоде");
-            }
-        } catch (NOWerror) {
-            console.error("Ошибка при получении данных о погоде:", NOWerror);
-        }
-    } else {
-        // Если интернет отсутствует, показываем сообщение
-        console.log("Нет подключения к интернету. Показаны данные из локального хранилища.");
-    }
+    setBackground(backgroundWeatherIcons[current.weather_code] || "default");
 }

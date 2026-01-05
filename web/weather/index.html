@@ -4,16 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Прогноз погоды</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="scroll.css">
+    <!--link rel="stylesheet" href="css/styles.css"-->
+    <link rel="stylesheet" href="css/neoweather.css">
+    <link rel="stylesheet" href="css/scroll.css">
+    <link rel="stylesheet" href="css/backgrounds.css">
+    <link rel="stylesheet" href="css/time.css">
+    <link rel="stylesheet" href="../../home/eelibs/import.css">
 </head>
 <body>
-    <div class="container">
+    <div id="container">
 
         <div class="div-now">
             <!-- <img src="back/rain.png" class="div-back-img"> -->
+            <div id="nowOverlay"><div id="nowBack"></div></div>
             <div class="bar">
-                <select id="city-select" class="city-select">
+                <div id="city-select-custom"></div>
+                <!--select id="city-select" class="city-select">
                     <option value="Tiraspol" data-lat="46.8406" data-lon="29.4744">[ПМР] Тирасполь</option>
                     <option value="Bender" data-lat="46.1833" data-lon="29.0833">[ПМР] Бендеры</option>
                     <option value="Kiev" data-lat="50.4501" data-lon="30.5236">[Укр] Киев</option>
@@ -29,22 +35,22 @@
                     <option value="Minsk" data-lat="53.9" data-lon="27.5667">[Бел] Минск</option>
                     <option value="Bobruisk" data-lat="53.1500" data-lon="29.2333">[Бел] Бобруйск</option>
                     <option value="Gomel" data-lat="52.4443" data-lon="30.9754">[Бел] Гомель</option>
-                </select>
-                <button class="settings" id="settings">⚙️</button>
+                </select-->
+                <!--button class="settings" id="settings">⚙️</button-->
             </div>
-            <a class="temperature" id="temperature">   </a>
-            <div class="div-detalis" id="div-detalis">
+            <h1 id="temperature"></h1>
+            <div id="div-detalis">
                 <div class="detalis" id="water">
                     <img src="water.png" class="detalis-ico" />
-                    <a class="detalis-text" id="humidity">%</a>
+                    <p class="detalis-text" id="humidity">%</p>
                 </div>
                 <div class="detalis" id="wind">
                     <img src="wind.png" class="detalis-ico" />
-                    <a class="detalis-text" id="wind-speed">м/с</a>
+                    <p class="detalis-text" id="wind-speed">м/с</p>
                 </div>
                 <div class="detalis" id="mmrrst">
                     <img src="mmrtst.png" class="detalis-ico" />
-                    <a class="detalis-text" id="pressure">мм рт ст</a>
+                    <p class="detalis-text" id="pressure">мм рт ст</p>
                 </div>
             </div>
         </div>
@@ -52,26 +58,18 @@
         <!-- Почасовой прогноз (48 часов) -->
         <div class="div-hours cards" id="div-hours">
             <div class="scroll-container" id="hours-container">
-                <div class="card hide" id="hour-1">
-                    <a class="c-time" id="time-1">8:00</a>
-                    <img class="c-img" src="sun.svg" />
-                    <a class="c-temp" id="temp-1">5°</a>
-                </div>
             </div>
         </div>
 
         <!-- Подневной прогноз (на сегодня и ближайшие 10 дней) -->
         <div class="div-detalis cards" id="div-days">
             <div class="scroll-container" id="days-container">
-                <div class="card hide" id="day-1">
-                    <a class="c-time" id="day-name-1">ПН</a>
-                    <img class="c-img" src="sun.svg" />
-                    <a class="c-temp" id="day-temp-1">1° - 15°</a>
-                </div>
             </div>
         </div>
     </div>
 
+    <script src="../../home/eelibs/import.js" type="module"></script>
+    <script src="js/scroll.js"></script>
     <script src="script.js"></script>
     <script src="now.js"></script>
 </body>

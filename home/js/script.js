@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Event listeners
 searchEngineSelect.addEventListener("change", updateSearchSettings);
-assistantBtn.addEventListener("click", () => window.open(getAssistantUrl(), "_blank"));
+assistantBtn.addEventListener("click", () => window.open(getAssistantUrl()));
 themeToggle.addEventListener("click", toggleTheme);
 searchBar.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
