@@ -219,34 +219,34 @@ const weatherIcons = {
 };
 
 const weatherNames = {
-    0: "Ясно",
-    1: "Частичная облачность",
-    2: "Облачно",
-    3: "Пасмурно",
-    45: "Туман",
-    48: "Морозный туман",
-    51: "Лёгкий моросящий дождь",
-    53: "Моросящий дождь",
-    55: "Сильный моросящий дождь",
-    56: "Лёгкий ледяной дождь",
-    57: "Сильный ледяной дождь",
-    61: "Лёгкий дождь",
-    63: "Умеренный дождь",
-    65: "Сильный дождь",
-    66: "Лёгкий ледяной дождь",
-    67: "Сильный ледяной дождь",
-    71: "Лёгкий снегопад",
-    73: "Умеренный снегопад",
-    75: "Сильный снегопад",
-    77: "Снежные зерна",
-    80: "Лёгкий ливень",
-    81: "Умеренный ливень",
-    82: "Сильный ливень",
-    85: "Лёгкий снег",
-    86: "Сильный снег",
-    95: "Гроза",
-    96: "Гроза с небольшим градом",
-    99: "Гроза с сильным градом",
+    0: "Clear / Ясно",
+    1: "Partly cloudy / Частичная облачность",
+    2: "Cloudy / Облачно",
+    3: "Cloudy / Пасмурно",
+    45: "Fog / Туман",
+    48: "Frosty fog / Морозный туман",
+    51: "Light drizzle / Лёгкий моросящий дождь",
+    53: "Drizzling rain / Моросящий дождь",
+    55: "Heavy drizzling rain / Сильный моросящий дождь",
+    56: "Light freezing rain / Лёгкий ледяной дождь",
+    57: "Heavy freezing rain / Сильный ледяной дождь",
+    61: "Light rain / Лёгкий дождь",
+    63: "Moderate rain / Умеренный дождь",
+    65: "Heavy rain / Сильный дождь",
+    66: "Light freezing rain / Лёгкий ледяной дождь",
+    67: "Heavy freezing rain / Сильный ледяной дождь",
+    71: "Light snowfall / Лёгкий снегопад",
+    73: "Moderate snowfall / Умеренный снегопад",
+    75: "Heavy snowfall / Сильный снегопад",
+    77: "Snow grains / Снежные зерна",
+    80: "Light shower / Лёгкий ливень",
+    81: "Moderate shower / Умеренный ливень",
+    82: "Heavy rain / Сильный ливень",
+    85: "Light snow / Лёгкий снег",
+    86: "Heavy snow / Сильный снег",
+    95: "Thunderstorm / Гроза",
+    96: "Thunderstorm with small hail / Гроза с небольшим градом",
+    99: "Thunderstorm with heavy hail / Гроза с сильным градом",
 };
 
 /* ============================
@@ -338,8 +338,44 @@ async function fetchWeather(lat, lon) {
     return data.current;
 }
 
+function updateWeatherBackgrounds() {
+    const mainEl = document.getElementById('main');
+    const weatherEl = document.getElementById('weather');
+
+    if (!mainEl || !weatherEl) return;
+
+    // helper: чистим weather-* классы
+    const clearWeatherClasses = el => {
+        const toRemove = [...el.classList].filter(
+            c => c.startsWith('weather-') && c !== 'weather-widget'
+        );
+        if (toRemove.length) el.classList.remove(...toRemove);
+    };
+
+    // всегда сначала чистим оба контейнера
+    clearWeatherClasses(mainEl);
+    clearWeatherClasses(weatherEl);
+
+    // если фон погоды выключен полностью — выходим
+    if (!settings.weather.background && !settings.weather.pageBackground) return;
+
+    // выбираем цель
+    const target = settings.weather.pageBackground
+        ? mainEl
+        : weatherEl;
+
+    const icon = backgroundWeatherIcons?.[weather?.weather_code];
+    if (!icon) return;
+
+    target.classList.add(
+        `weather-${icon}`,
+        'weather-weather'
+    );
+}
+
 async function updateWeather(lat, lon, cityName) {
     const weather = await fetchWeather(lat, lon);
+    window.weather = weather;
     if (!weather) return;
 
     elements.temperature.textContent = `${Math.round(weather.temperature_2m)}°C`;
@@ -349,29 +385,7 @@ async function updateWeather(lat, lon, cityName) {
     elements.weatherIcon.style.backgroundImage =
         `url('${getWeatherIcon(weather.weather_code)}')`;
     
-    let weatherElement = null; // Лучше использовать null для объектов
-
-    if (settings.weather.pageBackground) {
-        weatherElement = document.getElementById('main');
-    } else if (settings.weather.background) {
-        weatherElement = document.getElementById('weather');
-    }
-
-    if (weatherElement) {
-        // 1. Создаем массив из классов, чтобы избежать проблем с изменением коллекции во время цикла
-        const classesToRemove = Array.from(weatherElement.classList).filter(className => 
-            className.startsWith('weather-') && className !== 'weather-widget'
-        );
-
-        // 2. Удаляем найденные классы
-        if (classesToRemove.length > 0) {
-            weatherElement.classList.remove(...classesToRemove);
-        }
-
-        // 3. Добавляем новые классы
-        const newIconClass = `weather-${backgroundWeatherIcons[weather.weather_code]}`;
-        weatherElement.classList.add(newIconClass, 'weather-weather');
-    }
+    updateWeatherBackgrounds()
 
     saveWeatherData(cityName, weather);
 }
@@ -458,5 +472,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         updateWeather(cityObj.lat, cityObj.lon, cityObj.value);
     });
+
+    
+    makeWeatherReactive(settings);
 });
 

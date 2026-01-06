@@ -122,6 +122,87 @@ const defaultSettings = {
     }
 };
 
+const settingsSchema = {
+    clock: {
+        title: "Clock",
+        items: [
+            {
+                type: "select",
+                key: "clockFormat",
+                label: "Clock Format",
+                options: {
+                    "12": "12-hour",
+                    "24": "24-hour"
+                }
+            },
+            { type: "toggle", key: "showSeconds", label: "Show Seconds" },
+            { type: "toggle", key: "showDate", label: "Show Date" },
+            {
+                type: "select",
+                key: "dateFormat",
+                label: "Date Format",
+                options: {
+                    "DDMMYYYY": "DD/MM/YYYY",
+                    "MMDDYYYY": "MM/DD/YYYY",
+                    "YYYYMMDD": "YYYY/MM/DD"
+                }
+            },
+            {
+                type: "select",
+                key: "timeZone",
+                label: "Time Zone",
+                options: {
+                    local: "Local Time",
+                    UTC: "UTC"
+                    // дополнительные таймзоны можно добавить
+                }
+            },
+            { type: "toggle", key: "showDayOfWeek", label: "Show Day of the Week" },
+            { type: "toggle", key: "leadingZero", label: "Leading Zero for Hours" },
+            { type: "toggle", key: "amPm", label: "AM/PM Indicator" },
+            { type: "toggle", key: "showYear", label: "Show Year" },
+            { type: "toggle", key: "monthAsText", label: "Month as Text" },
+            {
+                type: "select",
+                key: "dateSeparator",
+                label: "Date Separator",
+                options: {
+                    "/": "/",
+                    "-": "-",
+                    ".": ".",
+                    " ": "Space"
+                }
+            },
+            { type: "toggle", key: "jucheCalendar", label: "Juche calendar" }
+        ]
+    },
+
+    weather: {
+        title: "Weather",
+        items: [
+            {
+                type: "toggle",
+                key: "background",
+                label: "Weather Background"
+            },
+            {
+                type: "toggle",
+                key: "pageBackground",
+                label: "Page Background"
+            },
+            {
+                type: "select",
+                key: "unit",
+                label: "Temperature Unit",
+                options: {
+                    "C": "Celsius",
+                    "F": "Fahrenheit"
+                }
+            }
+        ]
+    }
+};
+
 // Function to load settings from localStorage
 function loadSettingsFromStorage() {
     const savedSettings = localStorage.getItem('appSettings');
@@ -295,11 +376,6 @@ function updateTimeDisplay() {
         dateDiv.textContent = formatDate();
     }
 }
-
-// Load settings on page load
-loadSettingsFromStorage();
-
-
 
 let appsOpen = 'none';
 
@@ -800,8 +876,80 @@ function loadApps(company) {
     document.getElementById(`${company}-apps`).classList.add('active');
 }
 
+function generateSettingsUI(containerId, schema, settings) {
+    const container = document.getElementById(containerId);
+    //container.innerHTML = "";
+
+    Object.entries(schema).forEach(([sectionKey, section]) => {
+        const sectionEl = document.createElement("div");
+        sectionEl.className = "settings-section";
+
+        sectionEl.innerHTML = `
+            <div class="settings-header">
+                <button class="hideSettSection" data-section="sett-${sectionKey}">
+                    <img src="img/ui/arrow/down.svg">
+                </button>
+                <h2>${section.title}</h2>
+            </div>
+            <div id="sett-${sectionKey}" class="settingsSectionDiv"></div>
+        `;
+
+        const body = sectionEl.querySelector(".settingsSectionDiv");
+
+        section.items.forEach(item => {
+            body.appendChild(createSettingItem(sectionKey, item, settings));
+        });
+
+        container.appendChild(sectionEl);
+    });
+}
+
+function createSettingItem(sectionKey, item, settings) {
+    const value = settings[sectionKey][item.key];
+    const block = document.createElement("div");
+    block.className = "settingsBlock";
+
+    if (item.type === "toggle") {
+        block.innerHTML = `
+            <label>${item.label}:</label>
+            <label class="oneui-switch">
+                <input type="checkbox" ${value ? "checked" : ""}>
+                <span class="slider"></span>
+            </label>
+        `;
+
+        block.querySelector("input").addEventListener("change", e => {
+            settings[sectionKey][item.key] = e.target.checked;
+            saveSettingsToStorage();
+        });
+    }
+
+    if (item.type === "select") {
+        const options = Object.entries(item.options)
+            .map(([v, l]) =>
+                `<option value="${v}" ${v === value ? "selected" : ""}>${l}</option>`
+            ).join("");
+
+        block.innerHTML = `
+            <label>${item.label}:</label>
+            <select class="settings-select">${options}</select>
+        `;
+
+        block.querySelector("select").addEventListener("change", e => {
+            settings[sectionKey][item.key] = e.target.value;
+            saveSettingsToStorage();
+        });
+    }
+
+    return block;
+}
+
 // Event listeners for page navigation (replaces inline onclick handlers)
 document.addEventListener('DOMContentLoaded', () => {
+
+    loadSettingsFromStorage();
+    generateSettingsUI("settings", settingsSchema, settings);
+
     // Settings button handler
     const settingsBtn = document.getElementById('settingsBtn');
     if (settingsBtn) {
@@ -980,3 +1128,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
+/* ============================
+   Пинать фоны
+============================ */
+function makeWeatherReactive(settings) {
+    settings.weather = new Proxy(settings.weather, {
+        set(target, prop, value) {
+            if (target[prop] === value) return true;
+
+            target[prop] = value;
+            updateWeatherBackgrounds(); // 👈 пинаем обновление
+
+            return true;
+        }
+    });
+}
+function makeClockReactive(settings) {
+    settings.clock = new Proxy(settings.clock, {
+        set(target, prop, value) {
+            if (target[prop] === value) return true;
+
+            target[prop] = value;
+            updateTimeDisplay(); // 👈 пинаем обновление
+
+            return true;
+        }
+    });
+}

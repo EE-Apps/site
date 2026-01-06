@@ -80,16 +80,16 @@
                 <div class="weather-icon" id="weather-icon"></div>
                 <div class="weather-info">
                     <h2 id="temperature">--°C</h2>
-                    <p id="description">Загрузка...</p>
+                    <p id="description">Loading...</p>
                 </div>
             </div>
             <div class="additional-info">
-                <p>Ветер: <span id="wind-speed">--</span> м/с</p>
-                <p>Влажность: <span id="humidity">--</span>%</p>
+                <p>Wind: <span id="wind-speed">--</span> m/s</p>
+                <p>Humidity: <span id="humidity">--</span>%</p>
                 <!--p>Давление: <span id="pressure">--</span> мм рт. ст.</!p-->
             </div>
             <div class="city-select">
-                <label for="city-select">Город:</label>
+                <label for="city-select">City:</label>
                 <div id="town-select"></div>
                 <select id="city-select" class="dropdown search-dropdown" style="display: none;">
 
@@ -355,104 +355,6 @@
             </div>
             <div id="settCompanies" class="settingsSectionDiv">
 
-            </div>
-        </div>
-        <div class="settings-section">
-            <div class="settings-header">
-                <button class="hideSettSection" data-section="settClock">
-                    <img src="img/ui/arrow/down.svg" alt="Hide">
-                </button>
-                <h2>Clock</h2>
-            </div>
-            <div id="settClock" class="settingsSectionDiv">
-                <div class="settingsBlock">
-                    <label for="clockFormatSelect">Clock Format:</label>
-                    <select id="clockFormatSelect" class="settings-select">
-                        <option value="12">12-hour</option>
-                        <option value="24">24-hour</option>
-                    </select>
-                </div>
-                <div class="settingsBlock">
-                    <label for="showSecondsToggle">Show Seconds:</label>
-                    <label class="oneui-switch">
-                        <input type="checkbox" id="showSecondsToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="settingsBlock">
-                    <label for="showDateToggle">Show Date:</label>
-                    <label class="oneui-switch">
-                        <input type="checkbox" id="showDateToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="settingsBlock">
-                    <label for="dateFormatSelect">Date Format:</label>
-                    <select id="dateFormatSelect" class="settings-select">
-                        <option value="DDMMYYYY">DD/MM/YYYY</option>
-                        <option value="MMDDYYYY">MM/DD/YYYY</option>
-                        <option value="YYYYMMDD">YYYY/MM/DD</option>
-                    </select>
-                </div>
-                <div class="settingsBlock">
-                    <label for="timeZoneSelect">Time Zone:</label>
-                    <select id="timeZoneSelect" class="settings-select">
-                        <option value="local">Local Time</option>
-                        <option value="UTC">UTC</option>
-                        <!-- Additional time zones can be added here -->
-                    </select>
-                </div>
-                <div class="settingsBlock">
-                    <label for="showDayOfWeekToggle">Show Day of the Week:</label>
-                    <label class="oneui-switch">
-                        <input type="checkbox" id="showDayOfWeekToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="settingsBlock">
-                    <label for="leadingZeroToggle">Leading Zero for Hours:</label>
-                    <label class="oneui-switch">
-                        <input type="checkbox" id="leadingZeroToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="settingsBlock">
-                    <label for="amPmToggle">AM/PM Indicator:</label>
-                    <label class="oneui-switch">
-                        <input type="checkbox" id="amPmToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="settingsBlock">
-                    <label for="showYearToggle">Show Year:</label>
-                    <label class="oneui-switch">
-                        <input type="checkbox" id="showYearToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="settingsBlock">
-                    <label for="monthAsTextToggle">Month as Text:</label>
-                    <label class="oneui-switch">
-                        <input type="checkbox" id="monthAsTextToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="settingsBlock">
-                    <label for="dateSeparatorSelect">Date Separator:</label>
-                    <select id="dateSeparatorSelect" class="settings-select">
-                        <option value="/">/</option>
-                        <option value="-">-</option>
-                        <option value=".">.</option>
-                        <option value=" ">Space</option>
-                    </select>
-                </div>
-                <div class="settingsBlock">
-                    <label for="jucheCalendarToggle">Juche calendar:</label>
-                    <label class="oneui-switch">
-                        <input type="checkbox" id="jucheCalendarToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
             </div>
         </div>
     </main>

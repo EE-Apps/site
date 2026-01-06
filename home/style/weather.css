@@ -139,6 +139,8 @@ body.dark-theme .theme-toggle {
 #town-select .custom-dd .custom-dd__control {
     height: 100%;
     padding: 0;
+    background-color: var(--background-secondary);
+    padding-left: 1rem;
 }
 #town-select .custom-dd__menu {
     bottom: unset;
@@ -158,4 +160,13 @@ body.dark-theme .theme-toggle {
     background-color: var(--background-primary);
     border-radius: var(--br);
     padding: 1rem 0.5rem;
+}
+
+@font-face {
+    font-family: 'eeclock';
+    src: url(eeclock.ttf);
+}
+@font-face {
+    font-family: 'eeclock-light';
+    src: url(eeclock-light.ttf);
 }
