@@ -103,9 +103,12 @@ function renderHourly(hourly) {
         if (ts < now) return;
 
         const hour = new Date(t).getHours().toString().padStart(2, "0");
+        const day = new Date(t).getDate();
+        const month = new Date(t).getMonth();
         const card = document.createElement("div");
         card.className = `card time-${hour}`;
         card.innerHTML = `
+            <p class="c-time">${day != new Date().getDate() ? day : ''}${month != new Date().getMonth() ? '.' : ''}${month != new Date().getMonth() ? month : ''}</p>
             <p class="c-time">${hour}:00</p>
             <img class="c-img" src="${weatherIcons[hourly.weather_code[i]]}">
             <p class="c-temp">${Math.round(hourly.temperature_2m[i])}°C</p>
