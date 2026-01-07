@@ -32,6 +32,20 @@ const weatherIcons = {
         99: "ico/thunderstorm.svg",         // Thunderstorm
 };
 
+const getShortLang = () => {
+    const lang = navigator.language || "en"; // по умолчанию английский
+    return lang.split('-')[0]; // обрезаем "ru-RU" до "ru"
+};
+
+const currentLang = getShortLang();
+
+if (currentLang === 'ru') {
+    console.log("Привет мир!");
+} else {
+    console.log("Hello world!");
+}
+const isRuLang = (currentLang == 'ru' || currentLang == 'uk' || currentLang == 'by' || currentLang == 'kz') ? true : false;
+
 /* ---------- FETCH ---------- */
 
 async function fetchWeather(lat, lon) {
@@ -107,7 +121,8 @@ function renderDaily(daily) {
     if (!container) return;
 
     container.innerHTML = "";
-    const days = ["ВС","ПН","ВТ","СР","ЧТ","ПТ","СБ"];
+    let days = ["ВС","ПН","ВТ","СР","ЧТ","ПТ","СБ"];
+    if (!isRuLang) days = ["SUN","MON","TUE","WED","THU","FRI","SAT"]
 
     daily.time.forEach((t, i) => {
         const card = document.createElement("div");

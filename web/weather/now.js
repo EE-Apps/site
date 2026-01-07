@@ -29,10 +29,10 @@ function NOWrenderCurrent(current) {
     NOWtemperatureElement.textContent = `${current.temperature_2m}°`;
     NOWwindSpeedElement.textContent = `${kmhToMs(current.wind_speed_10m)} м/с`;
     NOWhumidityElement.textContent =
-        current.relative_humidity_2m != null ? `${current.relative_humidity_2m}%` : "н/д";
+        current.relative_humidity_2m != null ? `${current.relative_humidity_2m}%` : (isRuLang ? 'н/д' : 'unknow');
     NOWpressureElement.textContent =
         current.surface_pressure != null
-            ? `${hPaToMm(current.surface_pressure)} мм рт. ст.`
+            ? `${hPaToMm(current.surface_pressure)} ${isRuLang ? 'мм рт. ст.' : 'mmHg Art.'}`
             : "н/д";
 
     setBackground(backgroundWeatherIcons[current.weather_code] || "default");
