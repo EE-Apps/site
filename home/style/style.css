@@ -388,6 +388,7 @@ html body .module:not(.mactive) {
 
 .main-content {
     transition: width 0.3s ease, color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 #sidebar {
