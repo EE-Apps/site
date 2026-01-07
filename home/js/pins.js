@@ -4,7 +4,7 @@ const defaultPins = [
     { name: "RegEx101", link: "https://regex101.com/", icon: "https://regex101.com/static/assets/favicon.ico", position: 1 },
     { name: "Base64 decode/encode", link: "https://jam.dev/utilities/base-64-encoder", icon: "https://storage.googleapis.com/jam-assets/jam-logo.webp", position: 2 },
     { name: "Diffchecker", link: "https://www.diffchecker.com/", icon: "https://www.diffchecker.com/static/images/diffchecker.svg", position: 3 },
-    { name: "Weather", link: "http://ee-apps.netlify.app/web/weather/index.html", icon: "img/company/ee/weather.png", position: 4 },
+    { name: "Weather", link: "http://ee-apps.github.io/web/weather/index.html", icon: "img/company/ee/weather.png", position: 4 },
     { name: "GitHub", link: "https://github.com", icon: "img/company/microsoft/github.svg", position: 5 },
 ];
 
