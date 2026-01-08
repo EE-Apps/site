@@ -1,7 +1,7 @@
 @media (orientation: portrait) {
     #ais {
-        margin-left: 2.5rem;
         flex-direction: row;
+        justify-content: flex-start
     }
     #qbar {
         top: unset;
