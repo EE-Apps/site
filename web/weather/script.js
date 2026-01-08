@@ -323,7 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { placeholder: "Город", searchable: true }
     );
 
-    const saved = localStorage.getItem("selectedCity");
+    const saved = JSON.parse(localStorage.getItem("appSettings")).weather.townName ;
     if (saved) dropdown.setValue(saved);
 
     function applyCity(value) {
@@ -331,7 +331,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!city) return;
         globalLat = city.lat;
         globalLon = city.lon;
-        localStorage.setItem("selectedCity", value);
+        let appSettings = JSON.parse(localStorage.getItem("appSettings"));
+        appSettings.weather.townName = value;
+        localStorage.setItem("appSettings", JSON.stringify(appSettings));
         updateAll();
     }
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>Voice EE</title>
+    <link rel="stylesheet" href="../../home/eelibs/import.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<div class="header">
+    <h2>Voice EE</h2>
+    <canvas id="recordViz"></canvas>
+</div>
+<div class="page active" id="precord">
+    <div class="row">
+        <button id="start">▶</button>
+        <button id="stop" disabled>⏹</button>
+        <button id="mark" disabled>🔖</button>
+        <button id="pause" disabled>⏸</button>
+    </div>
+    <div style="margin-bottom: 15px;">
+        <input type="text" id="recordName" placeholder="Название записи (необязательно)">
+    </div>
+</div>
+
+<div class="page" id="plist">
+    <h3>📼 Записи</h3>
+    <div id="records"></div>
+</div>
+
+<nav id="controls">
+    <button class="navBtn" data-page="record">R</button>
+    <button class="navBtn" data-page="list">L</button>
+</nav>
+
+</body>
+<script src="js/script.js"></script>
+<script src="../../home/eelibs/import.js" type="module"></script>
+</html>
