@@ -15,4 +15,11 @@
     #settingsBtn {
         right: 1rem;
     }
+    .search-container {
+        width: 95%;
+    }
+    #search-bar {
+        margin-left: 0;
+        margin-right: 0;
+    }
 }
