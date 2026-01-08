@@ -1,0 +1,18 @@
+@media (orientation: portrait) {
+    #ais {
+        margin-left: 2.5rem;
+        flex-direction: row;
+    }
+    #qbar {
+        top: unset;
+        bottom: 4rem;
+        right: 10px;
+        width: unset;
+        max-width: calc(100% - 3rem);
+        overflow-x: scroll;
+        flex-direction: row;
+    }
+    #settingsBtn {
+        right: 1rem;
+    }
+}
