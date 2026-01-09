@@ -29,6 +29,9 @@ let transcript = "";        // текущая транскрипция
 let currentRecordingName = ""; // название текущей записи
 let userLocation = null;       // геолокация пользователя
 
+let recordTime = 0;      // сколько реально записано (сек)
+let lastFrameTime = 0;
+
 /* =======================
    UI
 ======================= */
@@ -87,6 +90,10 @@ startBtn.onclick = async () => {
     stream = await getUserMediaSafe();
     audioCtx = new AudioContext();
 
+    startTime = performance.now();
+    lastFrameTime = startTime;
+    recordTime = 0;
+
     const src = audioCtx.createMediaStreamSource(stream);
     analyser = audioCtx.createAnalyser();
     analyser.fftSize = 1024;
@@ -99,6 +106,7 @@ startBtn.onclick = async () => {
     startTime = performance.now();
     recording=true;
     isPaused = false;
+    document.getElementById('mBtns').classList.add('active');
 
     mediaRecorder.ondataavailable=e=>chunks.push(e.data);
     mediaRecorder.onstop=saveRecording;
@@ -150,13 +158,15 @@ stopBtn.onclick = () => {
     recordNameInput.disabled=false;
     recordNameInput.value = "";
     pauseBtn.textContent = "⏸";
+
+    document.getElementById('mBtns').classList.remove('active');
 };
 
 /* =======================
    MARKERS
 ======================= */
 markBtn.onclick=()=>{
-    markers.push({ time: (performance.now()-startTime)/1000 });
+    markers.push({ time: recordTime });
 };
 
 /* =======================
@@ -212,32 +222,38 @@ function startSpeechRecognition() {
 function drawRecording() {
     if (!recording) return;
 
-    const buffer = new Float32Array(analyser.fftSize);
-    analyser.getFloatTimeDomainData(buffer);
+    const now = performance.now();
+    const delta = (now - lastFrameTime) / 1000;
+    lastFrameTime = now;
 
-    if(!isPaused){
+    if (!isPaused) {
+        recordTime += delta;
+
+        const buffer = new Float32Array(analyser.fftSize);
+        analyser.getFloatTimeDomainData(buffer);
+
         let sum = 0;
-        for (let i = 0; i < buffer.length; i++) sum += buffer[i]*buffer[i];
-        const rms = Math.sqrt(sum/buffer.length);
+        for (let i = 0; i < buffer.length; i++)
+            sum += buffer[i] * buffer[i];
 
-        const gain = 6;
-        samples.push(Math.min(1,rms*gain));
+        const rms = Math.sqrt(sum / buffer.length);
+        samples.push(Math.min(1, rms * 6));
     }
 
     drawWave(recCtx, recCanvas, samples, markers, null);
-
     requestAnimationFrame(drawRecording);
 }
 
 /* =======================
    WAVE DRAW
 ======================= */
-function drawWave(ctx, canvas, data, markers, playPos) {
+function drawWave(ctx, canvas, data, markers, playPos){
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
     const mid = canvas.height / 2;
     const scale = canvas.height * 0.45;
 
+    // ==== ВОЛНА ====
     ctx.strokeStyle = "#4caf50";
     ctx.beginPath();
     data.forEach((v,i)=>{
@@ -248,15 +264,33 @@ function drawWave(ctx, canvas, data, markers, playPos) {
     });
     ctx.stroke();
 
+    // ==== ШКАЛА ВРЕМЕНИ ====
+    ctx.strokeStyle = "#999";
+    ctx.fillStyle = "#999";
+    ctx.font = "12px sans-serif";
+    ctx.textAlign = "center";
+    const duration = getDuration(data);
+    const step = 5; // каждые 5 секунд
+    for(let t=0;t<=duration;t+=step){
+        const x = (t/duration)*canvas.width;
+        ctx.beginPath();
+        ctx.moveTo(x,0);
+        ctx.lineTo(x,10);
+        ctx.stroke();
+        ctx.fillText(formatTime(t), x, 22);
+    }
+
+    // ==== МАРКЕРЫ ====
     ctx.strokeStyle = "#ff9800";
     markers.forEach(m=>{
-        const x = (m.time / getDuration(data)) * canvas.width;
+        const x = (m.time / duration) * canvas.width;
         ctx.beginPath();
         ctx.moveTo(x,0);
         ctx.lineTo(x,canvas.height);
         ctx.stroke();
     });
 
+    // ==== ТЕКУЩАЯ ПОЗИЦИЯ ВОСПРОИЗВЕДЕНИЯ ====
     if(playPos!==null){
         ctx.strokeStyle = "#f44336";
         const x = playPos*canvas.width;
@@ -265,6 +299,54 @@ function drawWave(ctx, canvas, data, markers, playPos) {
         ctx.lineTo(x,canvas.height);
         ctx.stroke();
     }
+}
+
+function formatTime(t){
+    const m = Math.floor(t/60);
+    const s = Math.floor(t%60);
+    return `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+recCanvas.onclick = (e)=>{
+    if(!playbackAudio) return;
+    const rect = recCanvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const ratio = x / recCanvas.width;
+    playbackAudio.currentTime = ratio * playbackAudio.duration;
+};
+
+function addMarkersUI(markers, audio){
+    const markersDiv = document.createElement('div');
+    markersDiv.className = "markers";
+
+    markers.forEach((m, idx)=>{
+        const container = document.createElement('div');
+        container.style.display = "inline-block";
+        container.style.marginRight = "6px";
+
+        const input = document.createElement('input');
+        input.type = "number";
+        input.min = 0;
+        input.step = 0.1;
+        input.value = m.time.toFixed(2);
+        input.style.width = "50px";
+
+        input.onchange = ()=>{
+            const newTime = parseFloat(input.value);
+            if(!isNaN(newTime) && newTime >= 0 && newTime <= audio.duration){
+                m.time = newTime;
+                drawWave(recCtx, recCanvas, samples, markers, audio.paused ? null : audio.currentTime/audio.duration);
+            }
+        };
+
+        container.appendChild(document.createTextNode("🔖"));
+        container.appendChild(input);
+        container.appendChild(document.createTextNode("s"));
+
+        markersDiv.appendChild(container);
+    });
+
+    return markersDiv;
 }
 
 function getDuration(data){ return data.length/60; }
@@ -296,113 +378,123 @@ async function saveRecording(){
 ======================= */
 function addRecordUI(obj, recordId){
     const div = document.createElement('div');
-    div.className="record";
+    div.className = "record";
     div.dataset.recordId = recordId;
 
-    // Название записи (редактируемое)
+    // ===== Название записи (редактируемое) =====
     const nameDiv = document.createElement('div');
-    
     const nameInput = document.createElement('input');
     nameInput.type = 'text';
     nameInput.value = obj.name || `Запись №${recordId}`;
-    nameInput.onchange = () => {
-        updateRecordName(recordId, nameInput.value);
-    };
+    nameInput.onchange = () => updateRecordName(recordId, nameInput.value);
     nameDiv.appendChild(nameInput);
     div.appendChild(nameDiv);
 
-    // Метаданные
+    // ===== Метаданные =====
     const metaDiv = document.createElement('div');
-    
     if (obj.dateTime) {
         const date = new Date(obj.dateTime);
-        const dateStr = date.toLocaleString('ru-RU', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+        const dateStr = date.toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
         const dateSpan = document.createElement('div');
         dateSpan.innerHTML = `📅 ${dateStr}`;
         metaDiv.appendChild(dateSpan);
     }
-    
     if (obj.location) {
         const locSpan = document.createElement('div');
         locSpan.innerHTML = `📍 ${obj.location.latitude.toFixed(4)}, ${obj.location.longitude.toFixed(4)}`;
         locSpan.style.cursor = 'pointer';
         locSpan.title = 'Нажмите, чтобы открыть на карте';
-        locSpan.onclick = () => {
-            window.open(`https://www.google.com/maps?q=${obj.location.latitude},${obj.location.longitude}`, '_blank');
-        };
+        locSpan.onclick = () => window.open(`https://www.google.com/maps?q=${obj.location.latitude},${obj.location.longitude}`, '_blank');
         metaDiv.appendChild(locSpan);
     }
-    
     if (obj.duration) {
         const durationSpan = document.createElement('div');
         const minutes = Math.floor(obj.duration / 60);
         const seconds = Math.floor(obj.duration % 60);
-        durationSpan.innerHTML = `⏱️ ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        durationSpan.innerHTML = `⏱️ ${minutes}:${seconds.toString().padStart(2,'0')}`;
         metaDiv.appendChild(durationSpan);
     }
-    
-    // Показываем метаданные только если они есть
     if (metaDiv.children.length > 0) {
         metaDiv.className = 'metaData';
         div.appendChild(metaDiv);
     }
 
+    // ===== Аудио =====
     const audio = document.createElement('audio');
     audio.src = URL.createObjectURL(obj.wav);
-    audio.controls=true;
+    audio.controls = true;
     div.appendChild(audio);
 
-    // Транскрипция
+    // ===== Транскрипция =====
     const transcriptDiv = document.createElement('div');
     transcriptDiv.className = 'transcript';
-    if (obj.transcript && obj.transcript.trim()) {
-        transcriptDiv.innerHTML = `<strong>Текст:</strong> ${obj.transcript}`;
-    } else {
-        transcriptDiv.innerHTML = '<em style="color: #999;">Транскрипция отсутствует</em>';
-    }
+    transcriptDiv.innerHTML = obj.transcript && obj.transcript.trim()
+        ? `<strong>Текст:</strong> ${obj.transcript}`
+        : '<em style="color: #999;">Транскрипция отсутствует</em>';
     div.appendChild(transcriptDiv);
 
-    // Закладки (маркеры)
+    // ===== Редактируемые маркеры =====
     if (obj.markers && obj.markers.length > 0) {
-        const markersDiv = document.createElement('div');
-        markersDiv.className = 'markers';
-        
-        obj.markers.forEach((m,i)=>{
-            const markDiv = document.createElement('span');
-            markDiv.className="marker";
-            markDiv.textContent=`🔖 ${m.time.toFixed(2)}s`;
-            markDiv.onclick=()=>{
-                if(Number.isFinite(audio.duration))
-                    audio.currentTime=Math.min(m.time,audio.duration);
+        const markersUI = document.createElement('div');
+        markersUI.className = "markers";
+
+        obj.markers.forEach((m, idx) => {
+            const container = document.createElement('div');
+            container.style.display = "inline-block";
+            container.style.marginRight = "6px";
+
+            const input = document.createElement('input');
+            input.type = "number";
+            input.min = 0;
+            input.step = 0.1;
+            input.value = m.time.toFixed(2);
+            input.style.width = "50px";
+
+            input.onchange = () => {
+                const newTime = parseFloat(input.value);
+                if (!isNaN(newTime) && newTime >= 0 && newTime <= audio.duration) {
+                    m.time = newTime;
+                    drawWave(recCtx, recCanvas, obj.samples, obj.markers, audio.paused ? null : audio.currentTime / audio.duration);
+                }
             };
-            markersDiv.appendChild(markDiv);
+
+            container.appendChild(document.createTextNode("🔖"));
+            container.appendChild(input);
+            container.appendChild(document.createTextNode("s"));
+
+            markersUI.appendChild(container);
         });
-        
-        div.appendChild(markersDiv);
+
+        div.appendChild(markersUI);
     }
 
-    audio.addEventListener('play', ()=>{
-        document.querySelectorAll('#records audio').forEach(a=>{
-            if(a!==audio && !a.paused) a.pause();
+    // ===== Воспроизведение и синхронизация с Canvas =====
+    audio.addEventListener('play', () => {
+        document.querySelectorAll('#records audio').forEach(a => {
+            if (a !== audio && !a.paused) a.pause();
         });
         playbackAudio = audio;
         playbackMarkers = obj.markers || [];
         startPlaybackVisualization(audio, obj.samples, obj.markers || []);
+        startPlaybackVisualization(audio, obj.samples, obj.markers || []);
     });
 
-    audio.addEventListener('pause', ()=>{
-        if(playbackAnimationId) cancelAnimationFrame(playbackAnimationId);
+    audio.addEventListener('pause', () => {
+        if (playbackAnimationId) cancelAnimationFrame(playbackAnimationId);
     });
-    audio.addEventListener('ended', ()=>{
-        if(playbackAnimationId) cancelAnimationFrame(playbackAnimationId);
+    audio.addEventListener('ended', () => {
+        if (playbackAnimationId) cancelAnimationFrame(playbackAnimationId);
         drawWave(recCtx, recCanvas, obj.samples, obj.markers || [], null);
     });
+
+    // ===== Клик по Canvas для перемотки =====
+    recCanvas.onclick = (e) => {
+        if (!playbackAudio) return;
+        const rect = recCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const ratio = x / recCanvas.width;
+        playbackAudio.currentTime = ratio * playbackAudio.duration;
+    };
 
     recordsDiv.prepend(div);
 }

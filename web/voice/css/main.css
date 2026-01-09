@@ -8,6 +8,7 @@ button {
     padding:6px 12px;
     margin:4px;
     border-radius: var(--br);
+    transition: all 0.3s ease;
 }
 canvas {
     width:100%;
@@ -49,12 +50,12 @@ canvas {
     color:#fff;
     border:1px solid #444;
 }
-.row {
+#mBtns {
     display: flex;
     gap: 1rem;
     flex-wrap: nowrap
 }
-.row button {
+#mBtns button {
     width: 4rem;
     aspect-ratio: 1;
 }
@@ -115,4 +116,25 @@ body {
 
 .navBtn {
     aspect-ratio: 1;
+    padding: 1rem;
+}
+
+#start, #pause {
+    background-color: var(--accent-background);
+}
+
+#mBtns:not(.active) {
+    #pause {
+        display: none;
+    }
+    #stop {
+        width: 0;
+        min-width: 0;
+        opacity: 0;
+    }
+}
+#mBtns.active {
+    #start {
+        display: none;
+    }
 }

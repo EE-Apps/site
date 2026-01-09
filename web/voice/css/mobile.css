@@ -19,7 +19,7 @@
     body {
         justify-content: space-between;
     }
-    .row button {
+    #mBtns button {
         width: 15dvw;
         aspect-ratio: 1;
         font-size: 2rem;
@@ -28,5 +28,9 @@
         width: 80dvw;
         height: 5rem;
         font-size: 2rem;
+    }
+
+    .page {
+        margin-bottom: calc(15dvw + 4rem);
     }
 }
