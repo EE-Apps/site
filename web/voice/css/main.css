@@ -77,6 +77,8 @@ canvas {
     justify-content: center;
     padding: 1rem;
     background-color: var(--background-secondary-great);
+    height: calc(70px - 2rem);
+    padding: 0.5rem;
 }
 
 .transcript {
@@ -110,13 +112,10 @@ body {
 .header {
     /*height: 222px;*/
 }
-#controls {
-    height: calc(70px - 2rem);
-}
 
 .navBtn {
     aspect-ratio: 1;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
 }
 
 #start, #pause {
@@ -137,4 +136,8 @@ body {
     #start {
         display: none;
     }
+}
+
+.page {
+    margin-bottom: calc(80px);
 }

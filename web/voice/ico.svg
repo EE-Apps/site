@@ -1,0 +1,38 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="113.73774" height="113.73774" viewBox="0,0,113.73774,113.73774" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <linearGradient id="mainGrad" x1="62" y1="44" x2="130" y2="122" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.447102, 0, 0, 0.447102, 270.387181, 184.848664)">
+      <stop stop-color="#c68856"></stop>
+      <stop offset="0.48" stop-color="#2C2C32"></stop>
+      <stop offset="1" stop-color="#1E1E24"></stop>
+    </linearGradient>
+    <linearGradient id="strokeGrad" x1="64" y1="46" x2="128" y2="120" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.668657, 0, 0, 0.668657, 175.372989, 112.478202)">
+      <stop stop-color="#FFFFFF" stop-opacity="0.35"></stop>
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.08"></stop>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.0"></stop>
+    </linearGradient>
+    
+    <linearGradient bx:pinned="true" id="color-0">
+      <title>gran</title>
+      <stop style="stop-color: #e34e4e;" offset="0"></stop>
+      <stop style="stop-color: #502c2c;" offset="1"></stop>
+    </linearGradient>
+
+    <linearGradient id="color-0-0" href="#color-0" gradientUnits="userSpaceOnUse" 
+                    x1="183.1" y1="123.1" 
+                    x2="296.8" y2="180.0">
+    </linearGradient>
+  </defs>
+  
+  <g transform="translate(-183.13113,-123.13113)">
+    <g stroke-miterlimit="10">
+      <path d="M296.86887,180c0,41.45482 -15.41147,56.86887 -56.86887,56.86887c-41.4574,0 -56.86887,-15.41405 -56.86887,-56.86887c0,-41.45482 15.41146,-56.86887 56.86887,-56.86887c41.4574,0 56.86887,15.41405 56.86887,56.86887z" stroke-width="1" style="fill-rule: nonzero; stroke-opacity: 0.43; paint-order: stroke; fill: url(#color-0-0);" stroke="none"></path>
+      <rect x="216.83" y="141.9" width="45.469" height="52.155" rx="34" fill="url(#mainGrad)" style="stroke-width: 1; stroke-opacity: 0.43;"></rect>
+      <rect x="224.854" y="194.056" width="29.421" height="17.385" rx="8" fill="#1A1A1A" style="stroke-width: 1; stroke-opacity: 0.43;"></rect>
+      <rect x="228.866" y="194.056" width="21.397" height="21.397" rx="16" fill="url(#mainGrad)" style="stroke-width: 1; stroke-opacity: 0.43;"></rect>
+      <rect x="218.167" y="143.238" width="42.794" height="49.481" rx="32" stroke-width="4" style="stroke-width: 4; stroke-opacity: 0.43;" stroke="url(#strokeGrad)"></rect>
+      <circle cx="239.564" cy="167.309" r="6.687" fill="#FF3B30" style="stroke-width: 1; stroke-opacity: 0.43;"></circle>
+      <circle cx="239.564" cy="167.309" r="9.361" fill="#FF3B30" fill-opacity="0.22" style="stroke-width: 1; stroke-opacity: 0.43;"></circle>
+      <ellipse cx="239.564" cy="167.978" rx="20.06" ry="21.397" fill="#000000" opacity="0.15" style="stroke-width: 1; stroke-opacity: 0.43;"></ellipse>
+    </g>
+  </g>
+</svg>

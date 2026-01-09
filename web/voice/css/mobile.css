@@ -7,10 +7,12 @@
         height: 15dvw;
         font-size: 2rem;
         aspect-ratio: 2;
+        padding: 1rem;
     }
     #controls {
         height: unset;
         gap: 1rem;
+        padding: 1rem;
     }
     #precord {
         height: 100%;
