@@ -62,11 +62,28 @@ const recordNameInput = document.getElementById('recordName');
    CANVAS SCALE
 ======================= */
 function resizeCanvas(c){
-    c.width = c.clientWidth;
-    c.height = c.clientHeight;
+    const width = c.clientWidth;
+    const height = c.clientHeight;
+
+    c.width = width;
+    c.height = height;
+
+    // ==== Увеличение масштаба для мобильных ====
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    if(isMobile){
+        const scale = window.devicePixelRatio || 2; // увеличиваем в 2 раза для плотных экранов
+        c.width = width * scale;
+        c.height = height * scale;
+        c.style.width = width + "px";
+        c.style.height = height * scale + "px";
+        recCtx.setTransform(scale, 0, 0, scale, 0, 0); // масштабируем рисование
+    } else {
+        recCtx.setTransform(1, 0, 0, 1, 0, 0); // сброс для ПК
+    }
 }
 resizeCanvas(recCanvas);
-window.onresize=()=>resizeCanvas(recCanvas);
+window.onresize = () => resizeCanvas(recCanvas);
+
 
 /* =======================
    GEOLOCATION
