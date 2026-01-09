@@ -2,17 +2,30 @@
    SAFE getUserMedia
 ======================= */
 async function getUserMediaSafe() {
-    if (navigator.mediaDevices?.getUserMedia)
-        return navigator.mediaDevices.getUserMedia({ audio:true });
-    if (navigator.getUserMedia)
-        return new Promise((r,j)=>navigator.getUserMedia({audio:true},r,j));
+    // 1. Современные браузеры
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        return navigator.mediaDevices.getUserMedia({ audio: true });
+    }
+
+    // 2. Старые браузеры (webkit / moz)
+    const getUserMediaLegacy = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia;
+    if (getUserMediaLegacy) {
+        return new Promise((resolve, reject) => {
+            getUserMediaLegacy.call(navigator, { audio: true }, resolve, reject);
+        });
+    }
+
+    // 3. Нет поддержки
     throw new Error("getUserMedia unsupported");
 }
+
+// ==== 1. Глобальный AudioContext для всех действий ====
+let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 /* =======================
    GLOBALS
 ======================= */
-let mediaRecorder, stream, analyser, audioCtx;
+let mediaRecorder, stream, analyser;
 let chunks=[], markers=[], samples=[];
 let startTime=0;
 let recording=false;
@@ -84,43 +97,46 @@ function getUserLocation() {
    RECORD
 ======================= */
 startBtn.onclick = async () => {
-    // Получаем геолокацию
-    userLocation = await getUserLocation();
-    
-    stream = await getUserMediaSafe();
-    audioCtx = new AudioContext();
+    // ==== 1. Resume AudioContext для мобильных ====
+    if(audioCtx.state === 'suspended') await audioCtx.resume();
 
-    startTime = performance.now();
-    lastFrameTime = startTime;
-    recordTime = 0;
+    userLocation = await getUserLocation();
+    stream = await getUserMediaSafe();
 
     const src = audioCtx.createMediaStreamSource(stream);
     analyser = audioCtx.createAnalyser();
     analyser.fftSize = 1024;
     src.connect(analyser);
 
-    mediaRecorder = new MediaRecorder(stream);
-    chunks=[]; markers=[]; samples=[];
+    // ==== 2. Fallback MIME для iOS ====
+    const mimeType = 
+        MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' :
+        MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : '';
+
+    mediaRecorder = new MediaRecorder(stream, { type: mimeType });
+
+    chunks = []; markers = []; samples = [];
     transcript = "";
     currentRecordingName = recordNameInput.value.trim() || `Запись ${new Date().toLocaleString('ru-RU')}`;
     startTime = performance.now();
-    recording=true;
+    lastFrameTime = startTime;
+    recordTime = 0;
+    recording = true;
     isPaused = false;
     document.getElementById('mBtns').classList.add('active');
 
-    mediaRecorder.ondataavailable=e=>chunks.push(e.data);
-    mediaRecorder.onstop=saveRecording;
+    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+    mediaRecorder.onstop = saveRecording;
     mediaRecorder.start();
 
-    // Запускаем распознавание речи в реальном времени
     startSpeechRecognition();
-
     drawRecording();
-    startBtn.disabled=true;
-    stopBtn.disabled=false;
-    markBtn.disabled=false;
-    pauseBtn.disabled=false;
-    recordNameInput.disabled=true;
+
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+    markBtn.disabled = false;
+    pauseBtn.disabled = false;
+    recordNameInput.disabled = true;
     pauseBtn.textContent = "⏸";
 };
 
@@ -307,13 +323,18 @@ function formatTime(t){
     return `${m}:${s.toString().padStart(2,'0')}`;
 }
 
-recCanvas.onclick = (e)=>{
+recCanvas.addEventListener('click', e => {
     if(!playbackAudio) return;
     const rect = recCanvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
-    const ratio = x / recCanvas.width;
-    playbackAudio.currentTime = ratio * playbackAudio.duration;
-};
+    playbackAudio.currentTime = (x / recCanvas.width) * playbackAudio.duration;
+});
+recCanvas.addEventListener('touchstart', e => {
+    if(!playbackAudio) return;
+    const rect = recCanvas.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
+    playbackAudio.currentTime = (x / recCanvas.width) * playbackAudio.duration;
+});
 
 function addMarkersUI(markers, audio){
     const markersDiv = document.createElement('div');
@@ -502,12 +523,16 @@ function addRecordUI(obj, recordId){
 /* =======================
    PLAYBACK VISUALIZATION
 ======================= */
+
 function startPlaybackVisualization(audio, samplesData, markers){
     const ctx = recCtx;
     const canvas = recCanvas;
 
+    // ==== 4. Resume AudioContext перед воспроизведением ====
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+
     if(!audio.playbackCtx){
-        audio.playbackCtx = new AudioContext();
+        audio.playbackCtx = audioCtx; // используем глобальный AudioContext
         audio.playbackSource = audio.playbackCtx.createMediaElementSource(audio);
         audio.playbackAnalyser = audio.playbackCtx.createAnalyser();
         audio.playbackAnalyser.fftSize = 1024;
@@ -523,8 +548,6 @@ function startPlaybackVisualization(audio, samplesData, markers){
         if(!audio.paused && !audio.ended)
             playbackAnimationId = requestAnimationFrame(draw);
     }
-
-    if(audio.playbackCtx.state === 'suspended') audio.playbackCtx.resume();
 
     draw();
 }
