@@ -153,6 +153,26 @@ function renderDaily(daily) {
     });
 });
 
+function getAppSettings() {
+    let settings = JSON.parse(localStorage.getItem("appSettings"));
+
+    if (!settings || typeof settings !== "object") {
+        settings = {
+            weather: {
+                townName: null
+            }
+        };
+        localStorage.setItem("appSettings", JSON.stringify(settings));
+    }
+
+    if (!settings.weather) {
+        settings.weather = { townName: null };
+        localStorage.setItem("appSettings", JSON.stringify(settings));
+    }
+
+    return settings;
+}
+
 /* ---------- CUSTOM DROPDOWN ---------- */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -323,7 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { placeholder: "Город", searchable: true }
     );
 
-    const saved = JSON.parse(localStorage.getItem("appSettings")).weather.townName ;
+    const saved = getAppSettings().weather.townName;
     if (saved) dropdown.setValue(saved);
 
     function applyCity(value) {
