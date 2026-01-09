@@ -65,21 +65,18 @@ function resizeCanvas(c){
     const width = c.clientWidth;
     const height = c.clientHeight;
 
-    c.width = width;
-    c.height = height;
+    const scale = window.devicePixelRatio || 1; // DPI масштаб
+    c.width = width * scale;
+    c.height = height * scale * scale;
 
-    // ==== Увеличение масштаба для мобильных ====
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    if(isMobile){
-        const scale = window.devicePixelRatio || 2; // увеличиваем в 2 раза для плотных экранов
-        c.width = width * scale;
-        c.height = height * scale;
-        c.style.width = width + "px";
-        c.style.height = height * scale + "px";
-        recCtx.setTransform(scale, 0, 0, scale, 0, 0); // масштабируем рисование
-    } else {
-        recCtx.setTransform(1, 0, 0, 1, 0, 0); // сброс для ПК
-    }
+    // CSS остаётся как есть
+    c.style.width = width + "px";
+    c.style.height = height * scale + "px";
+
+    // Сбрасываем трансформацию
+    recCtx.setTransform(1, 0, 0, 1, 0, 0);
+    // Масштабируем контекст для чёткости
+    recCtx.scale(scale, scale);
 }
 resizeCanvas(recCanvas);
 window.onresize = () => resizeCanvas(recCanvas);
@@ -283,14 +280,18 @@ function drawRecording() {
 function drawWave(ctx, canvas, data, markers, playPos){
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    const mid = canvas.height / 2;
-    const scale = canvas.height * 0.45;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+
+    const mid = height / 2;           // середина по вертикали
+    const scale = height * 0.45;      // масштаб волны
 
     // ==== ВОЛНА ====
     ctx.strokeStyle = "#4caf50";
+    ctx.lineWidth = 2;
     ctx.beginPath();
     data.forEach((v,i)=>{
-        const x = i / data.length * canvas.width;
+        const x = i / data.length * width;
         const y = mid - v*scale;
         if(i===0) ctx.moveTo(x,y);
         else ctx.lineTo(x,y);
@@ -305,7 +306,7 @@ function drawWave(ctx, canvas, data, markers, playPos){
     const duration = getDuration(data);
     const step = 5; // каждые 5 секунд
     for(let t=0;t<=duration;t+=step){
-        const x = (t/duration)*canvas.width;
+        const x = (t/duration)*width;
         ctx.beginPath();
         ctx.moveTo(x,0);
         ctx.lineTo(x,10);
@@ -315,24 +316,27 @@ function drawWave(ctx, canvas, data, markers, playPos){
 
     // ==== МАРКЕРЫ ====
     ctx.strokeStyle = "#ff9800";
+    ctx.lineWidth = 1.5;
     markers.forEach(m=>{
-        const x = (m.time / duration) * canvas.width;
+        const x = (m.time / duration) * width;
         ctx.beginPath();
         ctx.moveTo(x,0);
-        ctx.lineTo(x,canvas.height);
+        ctx.lineTo(x,height);
         ctx.stroke();
     });
 
     // ==== ТЕКУЩАЯ ПОЗИЦИЯ ВОСПРОИЗВЕДЕНИЯ ====
     if(playPos!==null){
         ctx.strokeStyle = "#f44336";
-        const x = playPos*canvas.width;
+        ctx.lineWidth = 2;
+        const x = playPos*width;
         ctx.beginPath();
         ctx.moveTo(x,0);
-        ctx.lineTo(x,canvas.height);
+        ctx.lineTo(x,height);
         ctx.stroke();
     }
 }
+
 
 function formatTime(t){
     const m = Math.floor(t/60);
