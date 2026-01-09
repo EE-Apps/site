@@ -5,6 +5,16 @@
     <title>Voice EE</title>
     <link rel="stylesheet" href="../../home/eelibs/import.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    
+    <link rel="icon" href="ico.png">
+    <link rel="manifest" href="pwa.json">
+    <meta name="theme-color" content="#121212">
+    <script>
+    if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+    }
+    </script>
 </head>
 <body>
 <div class="header">
@@ -12,14 +22,14 @@
     <canvas id="recordViz"></canvas>
 </div>
 <div class="page active" id="precord">
+    <div style="margin-bottom: 15px;">
+        <input type="text" id="recordName" placeholder="Название записи (необязательно)">
+    </div>
     <div class="row">
         <button id="start">▶</button>
         <button id="stop" disabled>⏹</button>
         <button id="mark" disabled>🔖</button>
         <button id="pause" disabled>⏸</button>
-    </div>
-    <div style="margin-bottom: 15px;">
-        <input type="text" id="recordName" placeholder="Название записи (необязательно)">
     </div>
 </div>
 

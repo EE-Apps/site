@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather EE</title>
-    <link rel="icon" href="icon.png">
+    <link rel="icon" href="ico.png">
     <!--link rel="stylesheet" href="css/styles.css"-->
     <link rel="stylesheet" href="css/neoweather.css">
     <link rel="stylesheet" href="css/scroll.css">
@@ -12,6 +12,14 @@
     <link rel="stylesheet" href="css/time.css">
     <link rel="stylesheet" href="css/mobile.css">
     <link rel="stylesheet" href="../../home/eelibs/import.css">
+
+    <link rel="manifest" href="pwa.json">
+    <meta name="theme-color" content="#121212">
+    <script>
+    if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+    }
+    </script>
 </head>
 <body>
     <div id="container">

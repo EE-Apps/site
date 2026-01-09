@@ -1,0 +1,32 @@
+@media (orientation: portrait) {
+    :root {
+        --br: 1.2rem;
+    }
+
+    .navBtn {
+        height: 15dvw;
+        font-size: 2rem;
+        aspect-ratio: 2;
+    }
+    #controls {
+        height: unset;
+        gap: 1rem;
+    }
+    #precord {
+        height: 100%;
+        margin-bottom: calc(2rem + 15dvw);
+    }
+    body {
+        justify-content: space-between;
+    }
+    .row button {
+        width: 15dvw;
+        aspect-ratio: 1;
+        font-size: 2rem;
+    }
+    #recordName {
+        width: 80dvw;
+        height: 5rem;
+        font-size: 2rem;
+    }
+}
